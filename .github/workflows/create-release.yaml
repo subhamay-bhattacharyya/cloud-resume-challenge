@@ -1,0 +1,41 @@
+name: Create
+run-name: Merge Pull Request run by ${{ github.actor }} on ${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths-ignore:
+      - 'README.md'
+      - '.github/**'
+      - 'CODEOWNERS'
+      - 'LICENSE'
+      - 'VERSION'
+      - 'CHANGELOG.md'
+      - 'CODE_OF_CONDUCT.md'
+      - 'CONTRIBUTING.md'
+      - '*.sh'
+      - '*.txt'
+      - '*.json'
+      - '.gitignore'
+      - '.editorconfig'
+      - '.pre-commit-config.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  actions: read
+
+jobs:
+
+  create-release:
+    name: Create Release
+    uses: subhamay-bhattacharyya-gha/tf-release-wf/.github/workflows/create-release.yaml@feature/GHA-0002-initial-release
+    with:
+      environment: "ci"
+      terraform-dir: "tf"
+    secrets:
+      aws-role-arn: ${{ secrets.AWS_ROLE_ARN }}
+      infracost-api-key: ${{ secrets.INFRACOST_API_KEY }}
+      infracost-gist-id: ${{ secrets.INFRACOST_GIST_ID }}

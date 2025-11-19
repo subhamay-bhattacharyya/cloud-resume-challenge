@@ -1,0 +1,28 @@
+{
+  "name": "Terraform Tools Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "/usr/local/bin/install-tools.sh --tools=all > /tmp/post-create.log 2>&1",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "hashicorp.terraform",
+        "ms-azuretools.vscode-docker",
+        "GitHub.copilot",
+        "ms-python.python",
+        "mechatroner.rainbow-csv",
+        "vscode.json-language-features",
+        "ms-vscode.vscode-node-azure-pack"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.21"
+    }
+  }
+}

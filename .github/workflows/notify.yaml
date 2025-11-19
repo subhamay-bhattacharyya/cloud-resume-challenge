@@ -1,0 +1,14 @@
+name: Trigger Slack Notification
+run-name: Trigger Slack Notification run by ${{ github.actor }} on ${{ github.ref_name }}
+
+on:
+  pull_request:
+    types: [opened]
+  issues:
+    types: [opened]
+
+jobs:
+  notify:
+    uses: subhamay-bhattacharyya-gha/slack-notification-wf/.github/workflows/slack-notify.yaml@feature/GHA-0002-initial-release
+    secrets:
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK_URL }}

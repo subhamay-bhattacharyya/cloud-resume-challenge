@@ -1,0 +1,39 @@
+name: Setup Environments
+run-name: Setup Environments in ${{ github.ref_name }} by ${{ github.actor }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      ci-environment:
+        description: "AWS Account Name for CI Environment."
+        required: true
+        default: "devl-ou-a"
+      devl-environment:
+        description: "AWS Account Name for Development Environment."
+        required: true
+        default: "devl-ou-a"
+      test-environment:
+        description: "AWS Account Name for Test Environment."
+        required: true
+        default: "test-ou-a"
+      prod-environment:
+        description: "AWS Account Name for Production Environment."
+        required: true
+        default: "prod-ou-a"
+      aws-region:
+        description: "AWS region where the services will be deployed."
+        required: true
+        default: "us-east-1"
+
+jobs:
+  setup:
+    name: Setup
+    uses: subhamay-bhattacharyya-gha/setup-aws-environments-wf/.github/workflows/setup-environments.yaml@feature/GHA-0006-create-env-variables-and
+    with:
+      ci-environment: ${{ github.event.inputs.ci-environment }}
+      devl-environment: ${{ github.event.inputs.devl-environment }}
+      test-environment: ${{ github.event.inputs.test-environment }}
+      prod-environment: ${{ github.event.inputs.prod-environment }}
+      aws-region: ${{ github.event.inputs.aws-region }}
+    secrets:
+      GH_PAT: ${{ secrets.GH_PAT }}

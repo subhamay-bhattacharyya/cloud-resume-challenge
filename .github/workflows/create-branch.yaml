@@ -1,0 +1,22 @@
+name: Auto Create Branch on Issue Assignment
+run-name: Create Feature Branch by ${{ github.actor }} on ${{ github.ref_name }}
+
+on:
+  issues:
+    types: [assigned]
+
+permissions:
+  contents: write
+  issues: write
+  
+jobs:
+  create-feature-branch:
+    name: "Create Feature Branch"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: subhamay-bhattacharyya-gha/create-branch-action@main
+        with:
+          title-length: 25
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          use-project-prefix: 'false'
+          branch-prefix: 'SBTF'

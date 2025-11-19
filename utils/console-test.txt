@@ -1,0 +1,7 @@
+# --- Terraform Console Test Examples (run with `terraform console`)
+# tostring(local.bucket_versioning) == "false"
+# local.bucket_name_valid
+# local.project_name_valid
+# local.environment_name_valid
+# local.encryption_config_valid
+# local.intelligent_tiering_config_valid
