@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume - Subhamay Bhattacharyya</title>
+
+  <style>
+    :root{
+      --text:#111;
+      --muted:#666;
+      --rule:#d9d9d9;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background:#f3f3f3;
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--text);
+      line-height:1.45;
+    }
+    .page{
+      max-width:900px;
+      margin:24px auto;
+      background:#fff;
+      padding:36px 40px;
+      border:1px solid #eee;
+      border-radius:6px;
+    }
+
+    /* Header */
+    .name{
+      font-size:40px;
+      font-weight:800;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      margin:0 0 18px 0;
+    }
+    .top-rule{
+      border-top:1px solid var(--rule);
+      margin:8px 0 20px;
+    }
+
+    /* Layout */
+    .layout{
+      display:grid;
+      grid-template-columns: 28% 72%;
+      gap:28px;
+    }
+    .left{
+      padding-right:18px;
+      border-right:1px solid var(--rule);
+    }
+
+    /* Section styles */
+    .section{ margin-bottom:22px; }
+    .section-title{
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      margin:0 0 10px 0;
+      padding-bottom:6px;
+      border-bottom:2px solid var(--text);
+      display:inline-block;
+    }
+    .label{
+      font-size:12px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+      margin-top:10px;
+    }
+    .value{
+      font-size:14px;
+      margin-top:4px;
+      word-break:break-word;
+    }
+
+    .skills{
+      list-style:none;
+      padding:0;
+      margin:6px 0 0 0;
+      font-size:14px;
+    }
+    .skills li{ margin:6px 0; }
+
+    /* Right column typography */
+    .profile-text{
+      font-size:14px;
+      color:#222;
+      margin:4px 0 0 0;
+    }
+
+    .job{
+      margin-bottom:18px;
+    }
+    .job-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:14px;
+      font-weight:700;
+    }
+    .job-meta{
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+    .bullets{
+      margin:8px 0 0 18px;
+      padding:0;
+      font-size:14px;
+    }
+    .bullets li{ margin:6px 0; }
+
+    .edu-item{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .edu-title{
+      font-weight:700;
+      font-size:14px;
+      margin:0;
+    }
+    .edu-meta{
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    @media (max-width:700px){
+      .layout{ grid-template-columns:1fr; }
+      .left{ border-right:none; padding-right:0; border-bottom:1px solid var(--rule); padding-bottom:18px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <h1 class="name">Subhamay<br/>Bhattacharyya</h1>
+    <div class="top-rule"></div>
+
+    <section class="layout">
+      <!-- LEFT COLUMN -->
+      <aside class="left">
+        <div class="section">
+          <h2 class="section-title">Details</h2>
+          <div class="label">Email</div>
+          <div class="value">subhamayb@yahoo.com</div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Skills</h2>
+          <ul class="skills">
+            <li>Critical Thinking</li>
+            <li>Financial Analysis</li>
+            <li>Collaboration</li>
+            <li>Equity Research</li>
+            <li>Economic Analysis</li>
+            <li>Statistical Tools</li>
+            <li>Market Trends</li>
+            <li>Financial Strategy</li>
+            <li>Client Presentations</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- RIGHT COLUMN -->
+      <section class="right">
+        <div class="section">
+          <h2 class="section-title">Profile</h2>
+          <p class="profile-text">
+            Dedicated, hardworking, and committed to becoming a dependable and valuable team member.
+            Seasoned and passionate Financial Analyst with experience evaluating and improving financial
+            systems for well known organisations.
+          </p>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Employment History</h2>
+
+          <div class="job">
+            <div class="job-head">
+              <div>Financial Analyst Intern, Morgan Stanley</div>
+              <div>New York City</div>
+            </div>
+            <div class="job-meta">Jun 2023 — Aug 2023</div>
+            <ul class="bullets">
+              <li>Supported the equity research team in creating financial models for prospective investments.</li>
+              <li>Assisted in the preparation of client presentations and collaborated on a project which evaluated market trends in emerging technologies.</li>
+              <li>Conducted competitive analysis, delivering insights which contributed to strategy development.</li>
+            </ul>
+          </div>
+
+          <div class="job">
+            <div class="job-head">
+              <div>Research Assistant, Harvard Economics Department</div>
+              <div>Cambridge, MA</div>
+            </div>
+            <div class="job-meta">Sept 2022 — May 2023</div>
+            <ul class="bullets">
+              <li>Collaborated with Prof. Jane Doe on a project analysing the economic impacts of Brexit on UK SMEs.</li>
+              <li>Utilised statistical tools to analyse datasets and contributed to a paper which was later published in a renowned economic journal.</li>
+              <li>Organised seminars and workshops, coordinating with guest speakers and ensuring smooth logistics.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Education</h2>
+          <div class="edu-item">
+            <div>
+              <p class="edu-title">Bachelor of Arts in Economics, Harvard University</p>
+              <div class="edu-meta">Sept 2020 — Present</div>
+            </div>
+            <div class="edu-meta">Cambridge</div>
+          </div>
+        </div>
+
+      </section>
+    </section>
+  </main>
+</body>
+</html>
