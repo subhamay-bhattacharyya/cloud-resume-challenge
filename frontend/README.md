@@ -30,4 +30,32 @@ This is how the unaltered generated HTML looks like:
 - UTF-8 will support most languages
 - I will includ ethe viewport meta tag width=device-width so mobile styling scales normally
 - I'll extract extract my style into its own stylesheet after I am happy with the HTML markup.
-- For the HTML page I'll use 4 space tabs as I follow Python
+- For the HTML page I'll use 4 space tabs as I follow Python.
+
+## Serve Static Website Locally
+
+We need to serve our static website locally so we can start using stylesheets externally from our HTML page in a Cloud Developer Environment (CDE)
+
+> This is not necessary for local development.
+
+Node js and http-server will be setup via devcontainer during the codespace startup process.
+
+## Command to start the http-server
+
+```text
+cd /workspaces/cloud-resume-challenge/frontend/public
+http-server -p 8080
+```
+
+
+## Command to stop the http-server
+```text
+# Change to workspace root first
+cd /workspaces/cloud-resume-challenge
+
+# Kill the http-server process
+pkill -f http-server
+
+# Now start it correctly
+http-server frontend/public -p 8080
+```

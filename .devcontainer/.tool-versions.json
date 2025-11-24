@@ -9,5 +9,7 @@
   "trivy": "0.51.1",
   "infracost": "0.10.30",
   "tfupdate": "0.8.1",
-  "hcledit": "0.2.5"
+  "hcledit": "0.2.5",
+  "nodejs": "20",
+  "http-server": "14.1.1"
 }

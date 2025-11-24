@@ -123,8 +123,30 @@ if should_run terraform-docs; then
   add_summary terraform-docs "$TERRADOCS_VERSION"
 fi
 
-# Remaining tools untouched...
-# (you can keep Terragrunt, TFLint, tfsec, etc. blocks as-is from your last version)
+# Node.js
+if should_run nodejs; then
+  log_step "Installing Node.js"
+  version=$(get_expected_version nodejs)
+  version="${version:-20}"
+  
+  if ! $DRY_RUN; then
+    run_cmd "Download NodeSource setup script" curl -fsSL https://deb.nodesource.com/setup_${version}.x -o nodesource_setup.sh
+    run_cmd "Run NodeSource setup" sudo -E bash nodesource_setup.sh
+    run_cmd "Install Node.js" sudo apt-get install -y nodejs
+    rm -f nodesource_setup.sh
+  fi
+  
+  NODE_VERSION=$(node -v 2>/dev/null | sed 's/v//')
+  add_summary nodejs "$NODE_VERSION"
+fi
+
+# http-server (npm package)
+if should_run http-server; then
+  log_step "Installing http-server"
+  run_cmd "Install http-server globally" sudo npm install -g http-server
+  HTTPSERVER_VERSION=$(http-server --version 2>/dev/null || echo "installed")
+  add_summary http-server "$HTTPSERVER_VERSION"
+fi
 
 # Write summary
 if ! $DRY_RUN; then
