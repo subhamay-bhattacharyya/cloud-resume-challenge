@@ -1,0 +1,202 @@
+/* Load fonts */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito+Sans:wght@200;300;400;600;700&display=swap");
+
+/* ---------- Base / page ---------- */
+:root {
+  --text: #111;
+  --muted: #666;
+  --rule: #d9d9d9;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f3f3f3;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+/* Two-column resume surface */
+.page {
+  max-width: 900px;
+  margin: 24px auto;
+  background: #fff;
+  padding: 36px 40px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+
+  display: grid;
+  grid-template-columns: 28% 72%;
+  column-gap: 28px;
+}
+
+/* Header spans full width */
+.header, .top-rule { grid-column: 1 / -1; }
+
+/* ---------- Header ---------- */
+.header-title {
+  margin: 0 0 8px 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.contact-info {
+  font-size: 13.5px;
+  font-family: "Nunito Sans", sans-serif;
+  color: var(--muted);
+}
+
+.contact-info a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.contact-info a:hover {
+  border-bottom-color: var(--muted);
+}
+
+.top-rule {
+  border-top: 1px solid var(--rule);
+  margin: 12px 0 20px;
+}
+
+/* ---------- Section titles ---------- */
+.section { margin-bottom: 22px; }
+
+.section-title,
+.certification-title {
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* underline first two letters */
+.underline-two {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 3px;
+}
+.underline-two::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+
+/* ---------- Left column ---------- */
+.left {
+  padding-right: 18px;
+  border-right: 1px solid var(--rule);
+}
+
+.skills,
+.certifications {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0 0;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 2px;
+}
+.skills li,
+.certifications li { margin: 6px 0; }
+
+/* ---------- Right column ---------- */
+.right { padding-left: 2px; }
+
+.profile-text {
+  font-size: 14px;
+  font-family: "Nunito Sans", sans-serif;
+  color: #222;
+  margin: 0;
+}
+
+/* ---------- Employment ---------- */
+.job { margin-top: 8px; margin-bottom: 16px; }
+
+.job-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  width: 100%;
+  align-items: baseline;
+  column-gap: 20px;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 14px;
+}
+
+.designation {
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.employer {
+  text-align: right;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.job-meta {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.project {
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.project-meta {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.activities {
+  margin: 6px 0 0 18px;
+  padding: 0;
+  font-size: 14px;
+}
+.activities li { margin: 6px 0; }
+
+/* ---------- Education ---------- */
+.edu-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.edu-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.edu-meta {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 700px) {
+  .page { grid-template-columns: 1fr; }
+  .left {
+    border-right: none;
+    padding-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+  }
+}
