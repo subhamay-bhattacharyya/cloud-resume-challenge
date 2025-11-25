@@ -148,6 +148,38 @@ if should_run http-server; then
   add_summary http-server "$HTTPSERVER_VERSION"
 fi
 
+# Google Cloud SDK
+if should_run gcloud; then
+  log_step "Installing Google Cloud SDK"
+  
+  if ! $DRY_RUN; then
+    run_cmd "Add gcloud apt key" curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    run_cmd "Add gcloud repository" echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    run_cmd "Update apt" sudo apt-get update -y
+    run_cmd "Install gcloud" sudo apt-get install -y google-cloud-cli
+  fi
+  
+  GCLOUD_VERSION=$(gcloud version --format="value(version)" 2>/dev/null || echo "installed")
+  add_summary gcloud "$GCLOUD_VERSION"
+fi
+
+# Azure CLI
+if should_run azurecli; then
+  log_step "Installing Azure CLI"
+  
+  if ! $DRY_RUN; then
+    run_cmd "Install Azure CLI dependencies" sudo apt-get update && sudo apt-get install -y ca-certificates curl apt-transport-https lsb-release gnupg
+    run_cmd "Download Microsoft signing key" curl -sLS https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg
+    run_cmd "Set key permissions" sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
+    run_cmd "Add Azure CLI repository" echo "deb [arch=\$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ \$(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+    run_cmd "Update apt" sudo apt-get update -y
+    run_cmd "Install Azure CLI" sudo apt-get install -y azure-cli
+  fi
+  
+  AZCLI_VERSION=$(az version --output json 2>/dev/null | jq -r '."azure-cli"' || echo "installed")
+  add_summary azurecli "$AZCLI_VERSION"
+fi
+
 # Write summary
 if ! $DRY_RUN; then
   echo "$SUMMARY_JSON" | jq . > "$SUMMARY_FILE"
