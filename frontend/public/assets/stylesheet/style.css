@@ -1,0 +1,289 @@
+/* ---------- Base / page ---------- */
+:root{
+  --text:#111;
+  --muted:#666;
+  --rule:#d9d9d9;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:#f3f3f3;
+  font-family: "Nunito Sans", sans-serif;
+  color:var(--text);
+  line-height:1.45;
+}
+
+main{
+  max-width:900px;
+  margin:24px auto;
+  background:#fff;
+  padding:36px 40px;
+  border:1px solid #eee;
+  border-radius:6px;
+  display:grid;
+  grid-template-columns: 28% 72%;
+  column-gap:28px;
+  row-gap:0;
+}
+
+/* Place header and top line across both columns */
+header, .top-rule{
+  grid-column:1 / -1;
+}
+
+/* ---------- Header ---------- */
+header h1{
+  margin:0 0 8px 0;
+  font-size:40px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.contact-info{
+  font-size:13.5px;
+  color:var(--muted);
+}
+
+.contact-info a{
+  color:inherit;
+  text-decoration:none;
+  border-bottom:1px solid transparent;
+}
+.contact-info a:hover{
+  border-bottom-color:var(--muted);
+}
+
+.top-rule{
+  border-top:1px solid var(--rule);
+  margin:12px 0 20px;
+}
+
+/* ---------- Columns ---------- */
+.left{
+  padding-right:18px;
+  border-right:1px solid var(--rule);
+}
+
+.right{
+  padding-left:2px;
+}
+
+/* ---------- Sections ---------- */
+.section{
+  margin-bottom:22px;
+}
+
+.section-title,
+.certification-title{
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin:0 0 10px 0;
+  padding-bottom:6px;
+  display:inline-block;
+}
+
+.label{
+  font-size:12px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:700;
+  margin-top:10px;
+}
+
+.value{
+  font-size:14px;
+  margin-top:4px;
+  word-break:break-word;
+}
+
+/* underline first two letters */
+.underline-two {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 3px;
+}
+.underline-two::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #000;
+}
+
+/* ---------- Divider ---------- */
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #e5e5e5;   /* very light gray */
+    margin: 10px 0;              /* spacing above/below */
+    opacity: 0.5;                /* faint appearance */
+}
+
+/* ---------- Lists (skills/certs) ---------- */
+.skills,
+.certifications{
+  list-style:none;
+  padding:0;
+  margin:6px 0 0 0;
+  font-size:14px;
+}
+
+.skills li,
+.certifications li{
+  margin:6px 0;
+}
+
+/* ---------- Profile ---------- */
+.profile-text{
+  font-size:14px;
+  color:#222;
+  margin:4px 0 0 0;
+}
+
+/* ---------- Employment ---------- */
+.job{
+  margin-bottom:18px;
+}
+
+.job-head {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    gap: 2px;                 /* spacing between lines */
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 9.5 px;
+}
+.job-row {
+    display: flex;
+    justify-content: space-between;   /* left + right alignment */
+    align-items: baseline;
+    width: 100%;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 9.5px;
+    margin-bottom: 4px;               /* spacing below the row */
+}
+
+.job-row .designation {
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.job-row .employer {
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.job-head .location
+{
+    font-size: 8.5px;
+    color: #666;
+    text-align: right;
+}
+
+.job-head .duration {
+    font-size: 8.5px;
+    color: #666;
+    text-align: right;
+}
+
+.project-row {
+    display: flex;
+    justify-content: space-between;   /* left + right alignment */
+    align-items: baseline;
+    width: 100%;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+.project-name {
+    font-weight: 300;
+    text-align: left;
+    white-space: nowrap;              /* prevent wrapping */
+}
+
+.project-duration {
+    font-weight: 300;
+    text-align: right;
+    white-space: nowrap;
+    color: #666;
+}
+
+.divider{
+  font-family: monospace;
+  color:var(--rule);
+  margin:6px 0 8px;
+  letter-spacing:0.5px;
+}
+
+.divider-bold{
+  font-family: monospace;
+  color: var(--rule);
+  margin: 16px 0 8px;
+  letter-spacing:0.5px;
+}
+
+.project{
+  font-size:13.5px;
+  font-weight:700;
+  margin-top:2px;
+}
+
+.project-duration{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.project-activities,
+.activities{
+  margin:8px 0 0 18px;
+  padding:0;
+  font-size:14px;
+}
+
+.project-activities li,
+.activities li{
+  margin:6px 0;
+}
+
+/* ---------- Education ---------- */
+.edu-item{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.edu-title{
+  font-weight:700;
+  font-size:14px;
+  margin:0;
+}
+
+.edu-meta{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:700px){
+  main{
+    grid-template-columns:1fr;
+  }
+  .left{
+    border-right:none;
+    padding-right:0;
+    border-bottom:1px solid var(--rule);
+    padding-bottom:18px;
+    margin-bottom:18px;
+  }
+}

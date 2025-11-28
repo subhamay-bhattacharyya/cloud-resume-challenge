@@ -123,8 +123,66 @@ if should_run terraform-docs; then
   add_summary terraform-docs "$TERRADOCS_VERSION"
 fi
 
-# Remaining tools untouched...
-# (you can keep Terragrunt, TFLint, tfsec, etc. blocks as-is from your last version)
+# Node.js
+if should_run nodejs; then
+  log_step "Installing Node.js"
+  version=$(get_expected_version nodejs)
+  version="${version:-20}"
+  
+  if ! $DRY_RUN; then
+    run_cmd "Download NodeSource setup script" curl -fsSL https://deb.nodesource.com/setup_${version}.x -o nodesource_setup.sh
+    run_cmd "Run NodeSource setup" sudo -E bash nodesource_setup.sh
+    run_cmd "Install Node.js" sudo apt-get install -y nodejs
+    rm -f nodesource_setup.sh
+  fi
+  
+  NODE_VERSION=$(node -v 2>/dev/null | sed 's/v//')
+  add_summary nodejs "$NODE_VERSION"
+fi
+
+# http-server (npm package)
+if should_run http-server; then
+  log_step "Installing http-server"
+  run_cmd "Install http-server globally" sudo npm install -g http-server
+  HTTPSERVER_VERSION=$(http-server --version 2>/dev/null || echo "installed")
+  add_summary http-server "$HTTPSERVER_VERSION"
+fi
+
+# Google Cloud SDK
+if should_run gcloud; then
+  log_step "Installing Google Cloud SDK"
+  
+  if ! $DRY_RUN; then
+    run_cmd "Add gcloud apt key" curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    log_step "Add gcloud repository"
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list > /dev/null
+    echo -e "${GREEN}✅ Success: Add gcloud repository${NC}"
+    run_cmd "Update apt" sudo apt-get update -y
+    run_cmd "Install gcloud" sudo apt-get install -y google-cloud-cli
+  fi
+  
+  GCLOUD_VERSION=$(gcloud version --format="value(version)" 2>/dev/null || echo "installed")
+  add_summary gcloud "$GCLOUD_VERSION"
+fi
+
+# Azure CLI
+if should_run azurecli; then
+  log_step "Installing Azure CLI"
+  
+  if ! $DRY_RUN; then
+    run_cmd "Install Azure CLI dependencies" sudo apt-get update && sudo apt-get install -y ca-certificates curl apt-transport-https lsb-release gnupg
+    run_cmd "Download Microsoft signing key" curl -sLS https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg
+    run_cmd "Set key permissions" sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
+    log_step "Add Azure CLI repository"
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list > /dev/null
+    echo -e "${GREEN}✅ Success: Add Azure CLI repository${NC}"
+    run_cmd "Update apt" sudo apt-get update -y
+    run_cmd "Install Azure CLI" sudo apt-get install -y azure-cli
+  fi
+  
+  AZCLI_VERSION=$(az version --output json 2>/dev/null | jq -r '."azure-cli"' || echo "installed")
+  add_summary azurecli "$AZCLI_VERSION"
+fi
 
 # Write summary
 if ! $DRY_RUN; then
