@@ -15,7 +15,7 @@ flowchart TD
   WIP --> Bind
 ```
 
-### 1.1 the Active GCP Project
+### 1.1 Set the Active GCP Project
 
 ```bash
 gcloud config set project YOUR_PROJECT_ID
