@@ -341,6 +341,6 @@ cloud-resume-challenge-<cloud service provider>
 ## 10. Per-Cloud Documentation
 
 - See:
-  - [`aws/README.md`](./aws/README.md)
-  - [`gcp/README.md`](./gcp/README.md)
-  - [`azure/README.md`](./azure/README.md)
+  - [`aws/infra/README.md`](./infra/aws/README.md)
+  - [`gcp/infra/README.md`](./infra/gcp/README.md)
+  - [`azure/infra/README.md`](./infra/azure/README.md)
