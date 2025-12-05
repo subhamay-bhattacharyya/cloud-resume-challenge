@@ -1,10 +1,10 @@
-terraform { 
-  cloud { 
-    
-    organization = "subhamay-bhattacharyya-crc" 
+terraform {
+  cloud {
 
-    workspaces { 
-      name = "cloud-resume-challenge-azure" 
-    } 
-  } 
+    organization = "subhamay-bhattacharyya-crc"
+
+    workspaces {
+      name = "cloud-resume-challenge-azure"
+    }
+  }
 }

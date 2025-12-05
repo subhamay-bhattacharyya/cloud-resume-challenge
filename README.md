@@ -157,7 +157,7 @@ flowchart LR
   - `aws/` – AWS-specific Terraform modules and stacks
   - `gcp/` – GCP-specific Terraform modules and stacks
   - `azure/` – Azure-specific Terraform modules and stacks
-  - `frontenv/` – Conatins the HTML codes for the Resume
+  - `frontend/` – Conatins the HTML codes for the Resume
 
 ## 4. Prerequisites
 
