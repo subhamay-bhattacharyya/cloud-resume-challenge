@@ -80,7 +80,7 @@ should_run() {
 # OS dependencies
 log_step "Installing OS dependencies"
 run_cmd "Install OS dependencies" sudo apt-get update -y && sudo apt-get install -y \
-  curl unzip git jq gnupg software-properties-common ca-certificates lsb-release tar build-essential
+  curl unzip git jq gnupg software-properties-common ca-certificates lsb-release tar build-essential apt-transport-https
 
 # Terraform (manual installation)
 if should_run terraform; then
@@ -126,18 +126,30 @@ fi
 # Node.js
 if should_run nodejs; then
   log_step "Installing Node.js"
-  version=$(get_expected_version nodejs)
-  version="${version:-20}"
   
   if ! $DRY_RUN; then
-    run_cmd "Download NodeSource setup script" curl -fsSL https://deb.nodesource.com/setup_${version}.x -o nodesource_setup.sh
-    run_cmd "Run NodeSource setup" sudo -E bash nodesource_setup.sh
-    run_cmd "Install Node.js" sudo apt-get install -y nodejs
-    rm -f nodesource_setup.sh
+    # Check if nodejs is already installed from base image
+    if command -v node &> /dev/null; then
+      log_step "Node.js already installed, ensuring npm is available"
+      # Install npm separately if nodejs exists but npm doesn't
+      if ! command -v npm &> /dev/null; then
+        run_cmd "Install npm" sudo apt-get update && sudo apt-get install -y npm
+      fi
+    else
+      # Fresh installation from NodeSource
+      version=$(get_expected_version nodejs)
+      version="${version:-20}"
+      run_cmd "Download NodeSource setup script" curl -fsSL https://deb.nodesource.com/setup_${version}.x -o nodesource_setup.sh
+      run_cmd "Run NodeSource setup" sudo -E bash nodesource_setup.sh
+      run_cmd "Install Node.js and npm" sudo apt-get install -y nodejs
+      rm -f nodesource_setup.sh
+    fi
   fi
   
   NODE_VERSION=$(node -v 2>/dev/null | sed 's/v//')
+  NPM_VERSION=$(npm -v 2>/dev/null || echo "not installed")
   add_summary nodejs "$NODE_VERSION"
+  add_summary npm "$NPM_VERSION"
 fi
 
 # http-server (npm package)
