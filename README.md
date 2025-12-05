@@ -1,18 +1,165 @@
 # infra/README.md
 
-## 1. Overview
+
+# ![CRC](https://cloudresumechallenge.dev/images/logo.svg) Cloud Resume Challenge
+
+**This project is my implementation of the Cloud Resume Challenge — a multi-cloud, infrastructure-as-code driven resume website that demonstrates real-world skills in AWS, GCP, Azure, CI/CD automation, serverless architecture, and DevOps tooling. It combines a modern web frontend with cloud-native services, GitHub Actions pipelines, OIDC-based secure deployments, and fully automated IaC workflows, serving as both a technical portfolio piece and a comprehensive showcase of end-to-end cloud engineering.**
+
+---
+
+## 1. **Tools, Services & Technologies Used**
+
+This project implements the **Cloud Resume Challenge** using a modern **multi-cloud** and **IaC-driven** architecture. The design integrates cloud services, CI/CD automation, and a fully portable development environment for consistent workflows.
+
+### **Cloud Services**
+
+* **AWS:** S3 (static hosting), Route 53 (DNS), IAM, API Gateway, Lambda, DynamoDB
+* **GCP:** Google Cloud Storage
+* **Azure:** Azure Blob Storage
+
+### **DevOps & Automation**
+
+* **GitHub:** Source control, GitHub Actions for CI/CD, and **OIDC** for secure, secretless authentication to cloud providers
+* **HCP Terraform:** Centralized remote state management
+
+### **Infrastructure as Code**
+
+* **Terraform** (primary IaC)
+* **Terragrunt** (multi-environment orchestration)
+* **Ansible** and **AWS CloudFormation** for additional automation needs
+
+### **Application Stack**
+
+* **HTML5**, **React**, **Node.js** powering the resume portal UI and workflows
+
+### **DevContainer Tools**
+
+* **IaC:** terraform, terragrunt, terraform-docs, tfupdate, hcledit
+* **Security:** tflint, tfsec, terrascan, trivy, infracost
+* **CLIs:** awscli, gcloud, azurecli, nodejs, http-server
+
+This architecture demonstrates multi-cloud design, modern DevOps practices, and a fully automated IaC workflow — providing a scalable, secure, and reproducible environment for the Cloud Resume Challenge.
+
+---
+
+```mermaid
+mindmap
+  root((Cloud Resume Challenge))
+    Cloud Providers
+      AWS
+        S3
+        Route53(DNS Route53)
+        IAM(Identity and Access)
+        APIGW(API Gateway)
+        Lambda
+        DynamoDB
+      GCP
+        GCS(Google Cloud Storage)
+      Azure
+        AzureBlob(Azure Blob Storage)
+    DevOps and Infra
+      GitHub
+        Repository
+        GitHubActions(GitHub Actions CI/CD)
+        OIDC(Workload Identity Federation)
+      HCP(HCP Terraform)
+        RemoteState(Remote State Management)
+    Infrastructure as Code
+      Terraform
+      Ansible
+      CloudFormation(AWS CloudFormation)
+    Application Stack
+      ResumePortal
+        HTML5
+        React
+        NodeJS(Node.js)
+    Devcontainer
+      IaC_Tools
+        terraform
+        terragrunt
+        terraform-docs
+        tfupdate
+        hcledit
+      Security_and_Scanning
+        tflint
+        tfsec
+        terrascan
+        trivy
+        infracost
+      CLIs_and_Runtimes
+        awscli
+        gcloud
+        azurecli
+        nodejs
+        http-server
+```
+
+## 2. OIDC Architecture (GitHub → AWS / GCP / Azure)
+GitHub Actions uses OpenID Connect (OIDC) to authenticate to AWS, GCP, and Azure without storing long-lived cloud credentials in GitHub.
+At runtime, the workflow requests a short-lived OIDC token from GitHub, which each cloud provider validates through a pre-configured trust relationship (AWS OIDC IdP + IAM role, GCP Workload Identity Pool + Service Account, Azure Federated Credentials + Service Principal).
+The workflow then receives temporary credentials scoped to that identity and uses them to deploy infrastructure and update the Cloud Resume resources across all three clouds.
+
+```mermaid
+flowchart LR
+
+  %% Actors
+  Dev(Developer) -->|git push / PR| GHA[GitHub Actions Workflow]
+
+  subgraph GitHub
+    GHA
+    OIDC[GitHub OIDC Token Service]
+  end
+
+  GHA -->|Request OIDC token| OIDC
+  OIDC -->|JWT/OIDC token| GHA
+
+  %% AWS
+  subgraph AWS
+    AWSIdP[OIDC Identity Provider]
+    AWSRole["IAM Role (web identity)"]
+    AWSRes["WS Resources (S3, Lambda, DynamoDB)"]
+  end
+
+  %% GCP
+  subgraph GCP
+    GCPPool[Workload Identity Pool]
+    GCPSA[Workload Identity Service Account]
+    GCPRes["GCP Resources (GCS, etc.)"]
+  end
+
+  %% Azure
+  subgraph Azure
+    AzFed[Federated Credentials]
+    AzSP[Service Principal]
+    AzRes["Azure Resources (Blob, etc.)"]
+  end
+
+  %% Trust Relationships (Configured Once)
+  OIDC --> AWSIdP
+  OIDC --> GCPPool
+  OIDC --> AzFed
+
+  %% Runtime Flow Using OIDC Token
+  GHA -->|Exchange OIDC token| AWSRole
+  AWSRole --> AWSRes
+
+  GHA -->|Exchange OIDC token| GCPSA
+  GCPSA --> GCPRes
+```
+
+## 3. Repository Overview
 
 - **Purpose**
   - Centralized infrastructure IaC for all cloud providers (AWS, GCP, Azure)
   - Managed via Terraform with HashiCorp Cloud (Terraform Cloud)
 - **Repo Structure (infra)**
+  - `.devcontainer/` – Dev container configuration for infra development
   - `aws/` – AWS-specific Terraform modules and stacks
   - `gcp/` – GCP-specific Terraform modules and stacks
   - `azure/` – Azure-specific Terraform modules and stacks
-  - `.devcontainer/` – Dev container configuration for infra development
   - `frontenv/` – Conatins the HTML codes for the Resume
 
-## 2. Prerequisites
+## 4. Prerequisites
 
 - **Accounts/Access**
   - GitHub account with access to this monorepo
@@ -24,22 +171,17 @@
   - `tfc-agent` *(if applicable)*
   - `docker` / `docker desktop` (for devcontainer) -->
 
-## 3. HashiCorp Cloud / Terraform Cloud Setup
+## 5. HashiCorp Cloud / Terraform Cloud Setup
 
-### 3.1 Create Terraform Cloud Organization & Projects
+### 5.1 Create Terraform Cloud Organization & Projects
 
-- Steps (high-level):
+- Steps:
   - Create **organization**
     ![](infra/assets/images/terraform-cloud-create-org.jpg)
 
   - Create **project**
     ![](infra/assets/images/terraform-cloud-create-project.jpg)
   
-  - Create **workspaces** per cloud environment:
-    - `cloud-resume-challenge-aws`
-    - `cloud-resume-challenge-gcp`
-    - `cloud-resume-challengeazure`
-    ![](infra/assets/images/terraform-cloud-create-workspaces.jpg)
 
   - Set **execution mode** to `Local`
     ![](infra/assets/images/terraform-cloud-workspace-execution-mode.jpg)
@@ -49,18 +191,39 @@
     ![](infra/assets/images/terraform-cloud-generate-api-token.jpg)
 
     ![](infra/assets/images/terraform-cloud-api-token.jpg)
-### 3.2 Workspaces & Remote Backend Configuration
+### 5.2 Workspaces & Remote Backend Configuration
 
 - Standard naming conventions for workspaces
+```
+cloud-resume-challenge-<cloud service provider>
+```
+  - Created **workspaces** per cloud environment:
+    - `cloud-resume-challenge-aws`
+    - `cloud-resume-challenge-gcp`
+    - `cloud-resume-challengeazure`
+    ![](infra/assets/images/terraform-cloud-create-workspaces.jpg)
+
 - Backend block structure (example):
   - Organization name
   - Workspace name
-- Reference to per-provider backend examples:
-  - AWS: `aws/backend.tf`
-  - GCP: `gcp/backend.tf`
-  - Azure: `azure/backend.tf`
+  ```hcl
+  terraform { 
+    cloud { 
+      
+      organization = "subhamay-bhattacharyya-crc" 
 
-### 3.3 Terraform Cloud API Tokens
+      workspaces { 
+        name = "cloud-resume-challenge-aws" 
+      } 
+    } 
+  }
+  ```
+- Reference to per-provider backend examples:
+  - AWS: [`aws/tf/backend.tf`](./aws/tf/bckend.tf) 
+  - GCP: [`gcp/tf/backend.tf`](./gcp/tf/backend.tf)
+  - Azure: [`azure/tf/backend.tf`](./azure/tf/backend.tf)
+
+### 5.3 Terraform Cloud API Tokens
 
 - **User API Token** vs **Team/Org Token**
 - Where tokens are used:
@@ -71,27 +234,42 @@
   - Devcontainer env variables / `.env` (not committed)
   - Local OS keychain *(optional)*
 
-## 4. DevContainer Setup (Recommended)
+## 6. DevContainer Setup 
 
-### 4.1 DevContainer Overview
+### 6.1 DevContainer Overview
 
 - Location: `.devcontainer/`
 - Base image & tools:
-  - Terraform, Terraform-docs
-  - AWS/GCP/Azure CLIs
-  - `tflint`, `checkov`, `infracost` *(if applicable)*
+  ## Tool Versions
+  | Tool            | Version   |
+  |-----------------|-----------|
+  | terraform       | 1.14.0    |
+  | awscli          | 2.15.0    |
+  | terraform-docs  | 0.12.0    |
+  | terragrunt      | v0.57.4   |
+  | terrascan       | 1.18.4    |
+  | tflint          | 0.50.3    |
+  | tfsec           | 1.28.5    |
+  | trivy           | 0.51.1    |
+  | infracost       | 0.10.30   |
+  | tfupdate        | 0.8.1     |
+  | hcledit         | 0.2.5     |
+  | nodejs          | 20        |
+  | http-server     | 14.1.1    |
+  | gcloud          | latest    |
+  | azurecli        | latest    |
 
-### 4.2 How to Open in DevContainer
 
-- Steps:
-  - Clone repo
-  - Open in VS Code
-  - Reopen in container (Dev Containers extension)
-- First-run expectations:
-  - Automatic installation of tools
-  - Automatic loading of Terraform Cloud token (if configured)
+### 6.2 How to Open in DevContainer
 
-### 4.3 Configuring Terraform Cloud Token in DevContainer
+- **Using GitHub Codespaces**: Open the repository in GitHub Codespaces, which will automatically launch the devcontainer
+- **Using VS Code locally**: 
+  - Install the Dev Containers extension
+  - Open the repository in VS Code
+  - Click "Reopen in Container" when prompted (or use Command Palette: "Dev Containers: Reopen in Container")
+- **Using Docker CLI**: Navigate to the repository root and run `docker compose -f .devcontainer/docker-compose.yml up`
+
+### 6.3 Configuring Terraform Cloud Token in DevContainer
 
 - Using `.devcontainer/devcontainer.json` and `.env` file
 - Example:
@@ -100,9 +278,9 @@
   - Never commit `.env`
   - Use Codespaces secrets in GitHub for shared cloud dev
 
-## 5. Secret Management
+## 7. Secret Management
 
-### 5.1 Secret Types
+### 7.1 Secret Types
 
 - Terraform Cloud:
   - `TFC_TOKEN`
@@ -111,7 +289,7 @@
   - GCP: Service account emails, project IDs
   - Azure: Tenant ID, Subscription ID, Client ID
 
-### 5.2 Where Secrets Live
+### 7.2 Where Secrets Live
 
 - **GitHub Actions**
   - `TFC_TOKEN`
@@ -122,7 +300,7 @@
   - Per-environment variables (e.g. `TF_VAR_environment`)
   - Provider credentials (if not purely OIDC)
 
-### 5.3 Secret Naming Conventions
+### 7.3 Secret Naming Conventions
 
 - Prefix conventions:
   - `AWS_...`
@@ -132,15 +310,15 @@
 - Environment-specific suffixes:
   - `_DEV`, `_STG`, `_PROD`
 
-## 6. Common Terraform Project Layout & Standards
+## 8. Common Terraform Project Layout & Standards
 
-### 6.1 Folder & Module Structure
+### 8.1 Folder & Module Structure
 
-- `environments/` (optional) – environment-level stacks
+<!-- - `environments/` (optional) – environment-level stacks -->
 - `modules/` – reusable modules per cloud
 - `main.tf`, `variables.tf`, `outputs.tf`, `providers.tf`
 
-### 6.2 Code Quality & Policies
+### 8.2 Code Quality & Policies
 
 - Formatting & linting:
   - `terraform fmt`
@@ -149,7 +327,7 @@
   - `checkov` / `tfsec`
   - Sentinel / OPA policies *(if using)*
 
-## 7. GitHub Actions / CI-CD Overview (Infra)
+## 9. GitHub Actions / CI-CD Overview (Infra)
 
 - High-level description:
   - Reusable workflows for `plan` / `apply`
@@ -160,7 +338,7 @@
   - `cloud_provider` (aws/gcp/azure)
   - `environment` (dev/stg/prod)
 
-## 8. Per-Cloud Documentation
+## 10. Per-Cloud Documentation
 
 - See:
   - [`aws/README.md`](./aws/README.md)
