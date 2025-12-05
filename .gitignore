@@ -87,3 +87,4 @@ LICENSE.txt
 aws/*
 
 terraform-sa-key.json
+install-tools.log

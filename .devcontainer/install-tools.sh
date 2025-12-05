@@ -3,7 +3,7 @@ set -euo pipefail
 
 LOG_FILE="install-tools.log"
 SUMMARY_FILE="${SUMMARY_FILE:-install-summary.json}"
-VERSIONS_FILE="${VERSIONS_FILE:-.tool-versions.json}"
+VERSIONS_FILE="${VERSIONS_FILE:-.devcontainer/.tool-versions.json}"
 DRY_RUN=false
 INSTALL_TOOLS=(all)
 
@@ -103,8 +103,8 @@ fi
 if should_run awscli; then
   log_step "Installing AWS CLI"
   run_cmd "Download AWS CLI" curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-  run_cmd "Unzip AWS CLI" unzip awscliv2.zip
-  run_cmd "Install AWS CLI" sudo ./aws/install
+  run_cmd "Unzip AWS CLI" unzip -o awscliv2.zip
+  run_cmd "Install AWS CLI" sudo ./aws/install --update
   rm -rf awscliv2.zip aws
   AWS_VERSION=$(aws --version 2>&1 | awk '{print $1}' | cut -d/ -f2)
   add_summary awscli "$AWS_VERSION"
@@ -165,7 +165,9 @@ if should_run gcloud; then
   log_step "Installing Google Cloud SDK"
   
   if ! $DRY_RUN; then
-    run_cmd "Add gcloud apt key" curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    log_step "Add gcloud apt key"
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    echo -e "${GREEN}✅ Success: Add gcloud apt key${NC}"
     log_step "Add gcloud repository"
     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list > /dev/null
     echo -e "${GREEN}✅ Success: Add gcloud repository${NC}"
@@ -183,7 +185,9 @@ if should_run azurecli; then
   
   if ! $DRY_RUN; then
     run_cmd "Install Azure CLI dependencies" sudo apt-get update && sudo apt-get install -y ca-certificates curl apt-transport-https lsb-release gnupg
-    run_cmd "Download Microsoft signing key" curl -sLS https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg
+    log_step "Download Microsoft signing key"
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --yes --dearmor -o /etc/apt/keyrings/microsoft.gpg
+    echo -e "${GREEN}✅ Success: Download Microsoft signing key${NC}"
     run_cmd "Set key permissions" sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
     log_step "Add Azure CLI repository"
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list > /dev/null
