@@ -10,7 +10,7 @@
   - `gcp/` – GCP-specific Terraform modules and stacks
   - `azure/` – Azure-specific Terraform modules and stacks
   - `.devcontainer/` – Dev container configuration for infra development
-  - `frontenv/` *(optional)* – Conatins the HTML codes for the Resume
+  - `frontenv/` – Conatins the HTML codes for the Resume
 
 ## 2. Prerequisites
 
@@ -18,11 +18,11 @@
   - GitHub account with access to this monorepo
   - HashiCorp Cloud (Terraform Cloud) account
   - AWS, GCP, and Azure accounts with sufficient permissions (per-provider docs in subfolders)
-- **Local Tooling (if not using devcontainer)**
+<!-- - **Local Tooling (if not using devcontainer)**
   - `git`
   - `terraform` (version X.Y.Z)
   - `tfc-agent` *(if applicable)*
-  - `docker` / `docker desktop` (for devcontainer)
+  - `docker` / `docker desktop` (for devcontainer) -->
 
 ## 3. HashiCorp Cloud / Terraform Cloud Setup
 
@@ -30,11 +30,25 @@
 
 - Steps (high-level):
   - Create **organization**
-  - Create **projects/workspaces** per cloud and environment:
-    - `aws-dev`, `aws-prod`
-    - `gcp-dev`, `gcp-prod`
-    - `azure-dev`, `azure-prod`
+    ![](infra/assets/images/terraform-cloud-create-org.jpg)
 
+  - Create **project**
+    ![](infra/assets/images/terraform-cloud-create-project.jpg)
+  
+  - Create **workspaces** per cloud environment:
+    - `cloud-resume-challenge-aws`
+    - `cloud-resume-challenge-gcp`
+    - `cloud-resume-challengeazure`
+    ![](infra/assets/images/terraform-cloud-create-workspaces.jpg)
+
+  - Set **execution mode** to `Local`
+    ![](infra/assets/images/terraform-cloud-workspace-execution-mode.jpg)
+
+  - Create **API Token** to be used in GitHub Codespace and GitHub Action
+
+    ![](infra/assets/images/terraform-cloud-generate-api-token.jpg)
+
+    ![](infra/assets/images/terraform-cloud-api-token.jpg)
 ### 3.2 Workspaces & Remote Backend Configuration
 
 - Standard naming conventions for workspaces
