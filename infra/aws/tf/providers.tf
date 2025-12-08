@@ -1,7 +1,7 @@
 # --- root/providers.tf ---
 
 terraform {
-  required_version = ">= 1.8.4" # Adjust as needed for your environment
+  required_version = ">= 1.14.1" # Adjust as needed for your environment
 
   required_providers {
     aws = {

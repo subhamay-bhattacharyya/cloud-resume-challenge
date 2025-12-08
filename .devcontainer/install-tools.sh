@@ -110,17 +110,23 @@ if should_run awscli; then
   add_summary awscli "$AWS_VERSION"
 fi
 
-# Terraform Docs
-if should_run terraform-docs; then
-  log_step "Installing terraform-docs"
-  version=$(get_expected_version terraform-docs)
-  version="${version:-0.12.0}"
-  run_cmd "Download terraform-docs" curl -sLo terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${version}/terraform-docs-v${version}-$(uname)-amd64.tar.gz"
-  run_cmd "Extract terraform-docs" tar -xzf terraform-docs.tar.gz
-  run_cmd "Move terraform-docs" sudo mv terraform-docs /usr/local/bin/
-  rm terraform-docs.tar.gz
-  TERRADOCS_VERSION=$(terraform-docs --version | awk '{print $2}')
-  add_summary terraform-docs "$TERRADOCS_VERSION"
+# Ansible
+if should_run ansible; then
+  log_step "Installing Ansible"
+  version=$(get_expected_version ansible)
+  
+  if ! $DRY_RUN; then
+    run_cmd "Update apt" sudo apt-get update -y
+    run_cmd "Install Python pip" sudo apt-get install -y python3-pip
+    if [[ -n "$version" && "$version" != "latest" ]]; then
+      run_cmd "Install Ansible" pip3 install --user "ansible==${version}"
+    else
+      run_cmd "Install Ansible" pip3 install --user ansible
+    fi
+  fi
+  
+  ANSIBLE_VERSION=$(ansible --version 2>/dev/null | head -n1 | awk '{print $2}' | tr -d '[]' || echo "installed")
+  add_summary ansible "$ANSIBLE_VERSION"
 fi
 
 # Node.js

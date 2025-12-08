@@ -1,30 +1,98 @@
-name: Terraform Apply
-run-name: Terraform Apply - ${{ github.ref_name }}
+name: Deploy Cloud Resume Challenge
+run-name: Deploy run by ${{ github.actor }} on ${{ github.ref_name }}
 
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: "Environment to deploy to (e.g., AWS, GCP, Azure)"
+      cloud_provider:
+        description: "Target cloud provider"
         required: true
-        type: environment
-
+        type: choice
+        options:
+          - aws
+          - gcp
+          - azure
 
 jobs:
-  # apply:
-  #   name: 🚧 Run Terraform Apply
-  #   uses: subhamay-bhattacharyya-gha/tf-apply-wf/.github/workflows/terraform-apply.yaml@main
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     terraform-dir: ${{ inputs.terraform-dir }}
-  #     tf-vars-file: ${{ inputs.tf-vars-file }}
-  #     ci-pipeline: false
-  #   secrets:
-  #     aws-role-arn: ${{ secrets.AWS_ROLE_ARN }}
-  #     infracost-api-key: ${{ secrets.INFRACOST_API_KEY }}
-  #     infracost-gist-id: ${{ secrets.INFRACOST_GIST_ID }}
-  setup-environments:
+  read-cloud-service-provider:
+    name: Read Cloud Provider Input
+    runs-on: ubuntu-latest
+
+    # 🚫 Prevent workflows from running on feature/* branches
+    if: ${{ !startsWith(github.ref_name, 'feature/') }}
+    outputs:
+      cloud_provider: ${{ steps.set-cloud-provider.outputs.cloud_provider }}
+
     steps:
-      - name: Print environment
+      - name: Show input value
         run: |
-          echo "Setting up environments for ${{ github.event.inputs.environment }}"
+          echo "Cloud provider selected: ${{ inputs.cloud_provider }}"
+
+      - name: Set cloud provider as job output
+        id: set-cloud-provider
+        run: |
+          echo "cloud_provider=${{ inputs.cloud_provider }}" >> "$GITHUB_OUTPUT"
+
+  deploy-infra-to-aws:
+    name: Deploy infra to AWS
+    runs-on: ubuntu-latest
+    needs: read-cloud-service-provider
+    if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'aws' }}
+
+    steps:
+      - name: Print AWS message
+        run: |
+          msg="== AWS BRANCH ==
+              Running AWS-specific logic here...
+              Later this is where terraform apply for AWS would run."
+              echo -e "$msg"
+              echo "## AWS Branch" >> $GITHUB_STEP_SUMMARY
+              echo "$msg" >> $GITHUB_STEP_SUMMARY
+
+      - name: AWS OIDC Connection
+        id: aws-oidc-connection
+        run: |
+          echo "Setup AWS OIDC Connection"
+         
+  deploy-infra-to-gcp:
+    name: Deploy infra to GCP
+    runs-on: ubuntu-latest
+    needs: read-cloud-service-provider
+    if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
+
+    steps:
+      - name: Print GCP message
+        run: |
+          msg="== GCP BRANCH ==
+              Running GCP-specific logic here...
+              Later this is where terraform apply for GCP would run."
+              echo -e "$msg"
+              echo "## GCP Branch" >> $GITHUB_STEP_SUMMARY
+              echo "$msg" >> $GITHUB_STEP_SUMMARY
+
+      - name: GCP OIDC Connection
+        id: gcp-oidc-connection
+        run: |
+          echo "Setup GCP OIDC Connection"
+  
+  deploy-infra-to-azure:
+    name: Deploy infra to Azure
+    runs-on: ubuntu-latest
+    needs: read-cloud-service-provider
+    if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'azure' }}
+
+    steps:
+      - name: Print Azure message
+        run: |
+          msg="== Azure BRANCH ==
+              Running GCP-specific logic here...
+              Later this is where terraform apply for GCP would run."
+              echo -e "$msg"
+              echo "## Azure Branch" >> $GITHUB_STEP_SUMMARY
+              echo "$msg" >> $GITHUB_STEP_SUMMARY
+
+      - name: AWS OIDC Connection
+        id: azure-oidc-connection
+        run: |
+          echo "Setup Azure OIDC Connection"
+

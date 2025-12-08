@@ -245,7 +245,7 @@ cloud-resume-challenge-<cloud service provider>
   |-----------------|-----------|
   | terraform       | 1.14.0    |
   | awscli          | 2.15.0    |
-  | terraform-docs  | 0.12.0    |
+  | ansible         | latest    |
   | terragrunt      | v0.57.4   |
   | terrascan       | 1.18.4    |
   | tflint          | 0.50.3    |

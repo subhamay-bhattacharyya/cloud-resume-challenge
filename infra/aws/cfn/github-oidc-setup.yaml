@@ -37,7 +37,7 @@ Resources:
   GitHubActionsRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "GitHubActionsOidcRole-${GitHubOrg}-${GitHubRepo}"
+      RoleName: "cloud-resume-challenge-oidc-role"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -54,7 +54,7 @@ Resources:
                 token.actions.githubusercontent.com:sub: !Sub "repo:${GitHubOrg}/${GitHubRepo}:*"
       # 🔐 Attach a basic managed policy (adjust as needed)
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AdministratorAccess
       Description: Role assumed by GitHub Actions via OIDC
 
 Outputs:

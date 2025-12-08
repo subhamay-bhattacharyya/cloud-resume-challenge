@@ -3,6 +3,11 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "containerEnv": {
+    "AWS_ACCESS_KEY_ID": "${env:AWS_ACCESS_KEY_ID}",
+    "AWS_SECRET_ACCESS_KEY": "${env:AWS_SECRET_ACCESS_KEY}",
+    "AWS_DEFAULT_REGION": "${env:AWS_DEFAULT_REGION}"
+  },
   "postCreateCommand": "/usr/local/bin/install-tools.sh --tools=all > /tmp/post-create.log 2>&1",
   "customizations": {
     "vscode": {

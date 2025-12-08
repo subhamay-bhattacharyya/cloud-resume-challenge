@@ -19,7 +19,7 @@ The image path is incorrect. It should be relative to the README.md file locatio
   | --------------------- | --------------------------- | ----------------------------------- |
   | AWS Access Key ID     | **`AWS_ACCESS_KEY_ID`**     | The IAM user or IAM role access key |
   | AWS Secret Access Key | **`AWS_SECRET_ACCESS_KEY`** | The secret half of the key pair     |
-
+  | AWS Default Region    | **`AWS_DEFAULT_REGION`**    | The default region                  |
 ![GitHub Repository Secret Access Key](../assets/images/git-repository-secret-access-key.jpg)
 
 ## 3. OIDC Setup: GitHub → AWS
@@ -39,6 +39,19 @@ The image path is incorrect. It should be relative to the README.md file locatio
 
 - URL & thumbprint (GitHub)
 - Audience (e.g. `sts.amazonaws.com`)
+- Create the OIDC role with IDP by executing the following CloudFormation template from the directory `infra/aws/cfn`
+```bash
+cd /workspaces/cloud-resume-challenge/infra/aws/cfn
+
+aws cloudformation deploy \
+  --template-file github-oidc-setup.yaml \
+  --stack-name github-oidc-setup \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides \
+    GitHubOrg=subhamay-bhattacharyya \
+    GitHubRepo=cloud-resume-challenge
+
+```
 
 ### 3.3 IAM Role for GitHub Actions
 
