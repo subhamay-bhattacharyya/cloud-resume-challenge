@@ -97,6 +97,20 @@ jobs:
             echo "- Configured GCP OIDC (skeleton step – replace with reusable workflow later)."
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: 'Authenticate to GCP'
+        id: 'auth'
+        uses: 'google-github-actions/auth@f1e2d3c4b5a6f7e8d9c0b1a2c3d4e5f6a7b8c9d0'
+        with:
+            create_credentials_file: 'true'
+            workload_identity_provider: 'WORKLOAD-IDENTITY-PROVIDER'
+            service_account: "terraform-sa@cloud-resume-challenge-06611.iam.gserviceaccount.com"
+
+      - name: 'gcloud'
+        id: 'gcloud'
+        run: |-
+          gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
+          gcloud services list
+
       - name: Configure Azure OIDC
         if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'Azure' }}
         run: |
