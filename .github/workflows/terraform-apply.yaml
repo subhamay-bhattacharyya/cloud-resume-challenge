@@ -74,7 +74,7 @@ jobs:
           echo "Configuring OIDC for provider: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}"
 
       - name: Configure AWS OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'AWS' }}
+        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'aws' }}
         run: |
           set -euo pipefail
           echo "== AWS OIDC CONFIGURATION =="
@@ -86,7 +86,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Configure GCP OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'GCP' }}
+        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
         run: |
           set -euo pipefail
           echo "== GCP OIDC CONFIGURATION =="
@@ -99,6 +99,7 @@ jobs:
 
       - name: 'Authenticate to GCP'
         id: 'auth'
+        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
         uses: 'google-github-actions/auth@f1e2d3c4b5a6f7e8d9c0b1a2c3d4e5f6a7b8c9d0'
         with:
             create_credentials_file: 'true'
@@ -107,12 +108,13 @@ jobs:
 
       - name: 'gcloud'
         id: 'gcloud'
+        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
         run: |-
           gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
           gcloud services list
 
       - name: Configure Azure OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'Azure' }}
+        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'azure' }}
         run: |
           set -euo pipefail
           echo "== AZURE OIDC CONFIGURATION =="
