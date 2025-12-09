@@ -119,9 +119,9 @@ if should_run ansible; then
     run_cmd "Update apt" sudo apt-get update -y
     run_cmd "Install Python pip" sudo apt-get install -y python3-pip
     if [[ -n "$version" && "$version" != "latest" ]]; then
-      run_cmd "Install Ansible" pip3 install --user "ansible==${version}"
+      run_cmd "Install Ansible" sudo pip3 install --break-system-packages "ansible==${version}"
     else
-      run_cmd "Install Ansible" pip3 install --user ansible
+      run_cmd "Install Ansible" sudo pip3 install --break-system-packages ansible
     fi
   fi
   

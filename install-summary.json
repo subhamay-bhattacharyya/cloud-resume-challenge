@@ -1,7 +1,7 @@
 {
   "terraform": "1.14.1",
-  "awscli": "2.32.11",
-  "terraform-docs": "version",
+  "awscli": "2.32.12",
+  "ansible": "core",
   "nodejs": "20.19.6",
   "npm": "10.8.2",
   "http-server": "v14.1.1",
