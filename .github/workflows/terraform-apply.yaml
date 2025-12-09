@@ -1,10 +1,11 @@
 name: Deploy Cloud Resume Challenge
-run-name: Deploy run by ${{ github.actor }} on ${{ github.ref_name }}
+run-name: >
+  Deploy to ${{ github.event.inputs['cloud-provider'] }} by ${{ github.actor }} on ${{ github.ref_name }}
 
 on:
   workflow_dispatch:
     inputs:
-      cloud_provider:
+      cloud-provider:
         description: "Target cloud provider"
         required: true
         type: choice
@@ -13,86 +14,158 @@ on:
           - gcp
           - azure
 
+permissions:
+  id-token: write      # needed for OIDC
+  contents: read       # needed for checkout / Terraform
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false  # you can set true if you want to cancel older runs
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
   read-cloud-service-provider:
-    name: Read Cloud Provider Input
+    name: Read Cloud Provider
     runs-on: ubuntu-latest
 
     # 🚫 Prevent workflows from running on feature/* branches
     if: ${{ !startsWith(github.ref_name, 'feature/') }}
+
+    timeout-minutes: 5
+
     outputs:
       cloud_provider: ${{ steps.set-cloud-provider.outputs.cloud_provider }}
 
     steps:
       - name: Show input value
         run: |
-          echo "Cloud provider selected: ${{ inputs.cloud_provider }}"
+          echo "Cloud provider selected: ${{ github.event.inputs['cloud-provider'] }}"
 
       - name: Set cloud provider as job output
         id: set-cloud-provider
         run: |
-          echo "cloud_provider=${{ inputs.cloud_provider }}" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          echo "cloud_provider=${{ github.event.inputs['cloud-provider'] }}" >> "$GITHUB_OUTPUT"
 
-  deploy-infra-to-aws:
-    name: Deploy infra to AWS
+      - name: Add summary – selected cloud provider
+        run: |
+          set -euo pipefail
+          CLOUD_PROVIDER="${{ github.event.inputs['cloud-provider'] }}"
+          {
+            echo "## Deploy Cloud Resume Challenge"
+            echo ""
+            echo "- **Ref**: \`${{ github.ref_name }}\`"
+            echo "- **Actor**: \`${{ github.actor }}\`"
+            echo "- **Cloud provider**: \`${CLOUD_PROVIDER}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  terraform-validate:
+    name: Terraform Validate (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
     runs-on: ubuntu-latest
-    needs: read-cloud-service-provider
-    if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'aws' }}
+    needs:
+      - read-cloud-service-provider
+    timeout-minutes: 45
+
+    env:
+      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
 
     steps:
-      - name: Print AWS message
-        run: |
-          msg="== AWS BRANCH ==
-              Running AWS-specific logic here...
-              Later this is where terraform apply for AWS would run."
-              echo -e "$msg"
-              echo "## AWS Branch" >> $GITHUB_STEP_SUMMARY
-              echo "$msg" >> $GITHUB_STEP_SUMMARY
+      - name: Run Terraform Validate Action
+        id: tf-validate
+        uses: subhamay-bhattacharyya-gha/tf-validate-action@main
+        with:
+          terraform-dir: "${{ github.workspace }}/infra/${{ needs.read-cloud-service-provider.outputs.cloud_provider }}/tf"
+          soft-fail: "false"
 
-      - name: AWS OIDC Connection
-        id: aws-oidc-connection
+      - name: Display Status
         run: |
-          echo "Setup AWS OIDC Connection"
-         
-  deploy-infra-to-gcp:
-    name: Deploy infra to GCP
+          echo "Validation Passed: ${{ steps.tf-validate.outputs.valid }}"
+
+
+  configure-oidc:
+    name: Configure OIDC (${{ github.event.inputs['cloud-provider'] }})
     runs-on: ubuntu-latest
-    needs: read-cloud-service-provider
-    if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
+    needs:
+      - read-cloud-service-provider
+      - terraform-validate
+    timeout-minutes: 10
 
     steps:
-      - name: Print GCP message
+      - name: Show selected provider (from previous job)
         run: |
-          msg="== GCP BRANCH ==
-              Running GCP-specific logic here...
-              Later this is where terraform apply for GCP would run."
-              echo -e "$msg"
-              echo "## GCP Branch" >> $GITHUB_STEP_SUMMARY
-              echo "$msg" >> $GITHUB_STEP_SUMMARY
+          set -euo pipefail
+          echo "Configuring OIDC for provider: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}"
 
-      - name: GCP OIDC Connection
-        id: gcp-oidc-connection
+      - name: Configure AWS OIDC
+        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'AWS' }}
         run: |
-          echo "Setup GCP OIDC Connection"
-  
-  deploy-infra-to-azure:
-    name: Deploy infra to Azure
+          set -euo pipefail
+          echo "== AWS OIDC CONFIGURATION =="
+          echo "Here you will configure aws-actions/configure-aws-credentials with OIDC."
+          {
+            echo "## OIDC Configuration – AWS"
+            echo ""
+            echo "- Configured AWS OIDC (skeleton step – replace with reusable workflow later)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Configure GCP OIDC
+        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'GCP' }}
+        run: |
+          set -euo pipefail
+          echo "== GCP OIDC CONFIGURATION =="
+          echo "Here you will configure gcloud / Workload Identity Federation."
+          {
+            echo "## OIDC Configuration – GCP"
+            echo ""
+            echo "- Configured GCP OIDC (skeleton step – replace with reusable workflow later)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Configure Azure OIDC
+        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'Azure' }}
+        run: |
+          set -euo pipefail
+          echo "== AZURE OIDC CONFIGURATION =="
+          echo "Here you will configure az login with federated credentials."
+          {
+            echo "## OIDC Configuration – Azure"
+            echo ""
+            echo "- Configured Azure OIDC (skeleton step – replace with reusable workflow later)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+
+  terraform-plan:
+    name: Terraform Plan (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
     runs-on: ubuntu-latest
-    needs: read-cloud-service-provider
-    if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'azure' }}
+    needs:
+      - read-cloud-service-provider
+      - configure-oidc
+    timeout-minutes: 45
+
+    env:
+      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
 
     steps:
-      - name: Print Azure message
+      - name: Show provider and stage
         run: |
-          msg="== Azure BRANCH ==
-              Running GCP-specific logic here...
-              Later this is where terraform apply for GCP would run."
-              echo -e "$msg"
-              echo "## Azure Branch" >> $GITHUB_STEP_SUMMARY
-              echo "$msg" >> $GITHUB_STEP_SUMMARY
+          set -euo pipefail
+          echo "Starting Terraform plan for provider: ${CLOUD_PROVIDER}"
 
-      - name: AWS OIDC Connection
-        id: azure-oidc-connection
+  terraform-apply:
+    name: Terraform Apply (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
+    runs-on: ubuntu-latest
+    needs:
+      - read-cloud-service-provider
+      - terraform-plan
+    timeout-minutes: 45
+
+    env:
+      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
+
+    steps:
+      - name: Show provider and stage
         run: |
-          echo "Setup Azure OIDC Connection"
-
+          set -euo pipefail
+          echo "Starting Terraform apply for provider: ${CLOUD_PROVIDER}"
