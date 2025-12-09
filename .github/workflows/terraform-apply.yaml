@@ -70,6 +70,17 @@ jobs:
       CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get the terraform-sa-key.json
+        run: |
+          set -euo pipefail
+          echo "Creating GCP service account key file..."
+          mkdir -p infra/gcp/tf/tf-sa-key
+          echo '${{ secrets.TERRAFORM_SA_KEY }}' > infra/gcp/tf/tf-sa-key/terraform-sa-key.json
+          echo "Service account key file created successfully."
+
       - name: Run Terraform Validate Action
         id: tf-validate
         uses: subhamay-bhattacharyya-gha/tf-validate-action@feature/GHA-0032-implement-terraform-state
