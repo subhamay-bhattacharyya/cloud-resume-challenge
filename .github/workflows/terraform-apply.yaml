@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Run Terraform Validate Action
         id: tf-validate
-        uses: subhamay-bhattacharyya-gha/tf-validate-action@main
+        uses: subhamay-bhattacharyya-gha/tf-validate-action@feature/GHA-0032-implement-terraform-state
         with:
           terraform-dir: "infra/${{ needs.read-cloud-service-provider.outputs.cloud_provider }}/tf"
           soft-fail: "false"
