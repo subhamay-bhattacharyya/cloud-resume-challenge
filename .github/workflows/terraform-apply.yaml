@@ -77,7 +77,7 @@ jobs:
         id: tf-validate
         uses: subhamay-bhattacharyya-gha/tf-validate-action@main
         with:
-          terraform-dir: "${{ github.workspace }}/infra/${{ needs.read-cloud-service-provider.outputs.cloud_provider }}/tf"
+          terraform-dir: "infra/${{ needs.read-cloud-service-provider.outputs.cloud_provider }}/tf"
           soft-fail: "false"
 
       - name: Display Status
