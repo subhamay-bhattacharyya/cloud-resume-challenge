@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  Set up an IAM OIDC Identity Provider and IAM Role for GitHub Actions
+  to assume via OpenID Connect (OIDC).
+
+Parameters:
+  GitHubOrg:
+    Type: String
+    Description: GitHub organization or user name (e.g. subhamay-bhattacharyya)
+  GitHubRepo:
+    Type: String
+    Description: GitHub repository name (e.g. my-infra-repo)
+  ProviderUrl:
+    Type: String
+    Default: https://token.actions.githubusercontent.com
+    Description: >
+      OIDC issuer URL for GitHub Actions (or another OIDC IdP if you customize this template).
+  Audience:
+    Type: String
+    Default: sts.amazonaws.com
+    Description: Audience (client ID) expected in OIDC tokens. For GitHub Actions, use sts.amazonaws.com.
+  ThumbprintList:
+    Type: CommaDelimitedList
+    Default: 6938fd4d98bab03faadb97b34396831e3780aea1,1c58a1c4b5ce5b5f1f40f6a1c2a0013e4e27c0c6
+    Description: >
+      SHA-1 thumbprints of the IdP's root certificates. Defaults are for GitHub Actions.
+
+Resources:
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: !Ref ProviderUrl
+      ClientIdList:
+        - !Ref Audience
+      ThumbprintList: !Ref ThumbprintList
+
+  GitHubActionsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "cloud-resume-challenge-oidc-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref GitHubOidcProvider
+            Action:
+              - "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: !Ref Audience
+              StringLike:
+                # Only allow this specific repo to assume the role
+                token.actions.githubusercontent.com:sub: !Sub "repo:${GitHubOrg}/${GitHubRepo}:*"
+      # 🔐 Attach a basic managed policy (adjust as needed)
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Description: Role assumed by GitHub Actions via OIDC
+
+Outputs:
+  OidcProviderArn:
+    Description: ARN of the IAM OIDC provider
+    Value: !Ref GitHubOidcProvider
+
+  GitHubActionsRoleArn:
+    Description: ARN of the IAM Role for GitHub Actions
+    Value: !GetAtt GitHubActionsRole.Arn

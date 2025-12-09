@@ -85,3 +85,6 @@ dist/
 awscliv2.zip
 LICENSE.txt
 aws/*
+
+terraform-sa-key.json
+install-tools.log

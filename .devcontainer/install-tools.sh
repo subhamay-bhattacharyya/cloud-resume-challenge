@@ -3,7 +3,7 @@ set -euo pipefail
 
 LOG_FILE="install-tools.log"
 SUMMARY_FILE="${SUMMARY_FILE:-install-summary.json}"
-VERSIONS_FILE="${VERSIONS_FILE:-.tool-versions.json}"
+VERSIONS_FILE="${VERSIONS_FILE:-.devcontainer/.tool-versions.json}"
 DRY_RUN=false
 INSTALL_TOOLS=(all)
 
@@ -80,7 +80,7 @@ should_run() {
 # OS dependencies
 log_step "Installing OS dependencies"
 run_cmd "Install OS dependencies" sudo apt-get update -y && sudo apt-get install -y \
-  curl unzip git jq gnupg software-properties-common ca-certificates lsb-release tar build-essential
+  curl unzip git jq gnupg software-properties-common ca-certificates lsb-release tar build-essential apt-transport-https
 
 # Terraform (manual installation)
 if should_run terraform; then
@@ -103,41 +103,59 @@ fi
 if should_run awscli; then
   log_step "Installing AWS CLI"
   run_cmd "Download AWS CLI" curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-  run_cmd "Unzip AWS CLI" unzip awscliv2.zip
-  run_cmd "Install AWS CLI" sudo ./aws/install
+  run_cmd "Unzip AWS CLI" unzip -o awscliv2.zip
+  run_cmd "Install AWS CLI" sudo ./aws/install --update
   rm -rf awscliv2.zip aws
   AWS_VERSION=$(aws --version 2>&1 | awk '{print $1}' | cut -d/ -f2)
   add_summary awscli "$AWS_VERSION"
 fi
 
-# Terraform Docs
-if should_run terraform-docs; then
-  log_step "Installing terraform-docs"
-  version=$(get_expected_version terraform-docs)
-  version="${version:-0.12.0}"
-  run_cmd "Download terraform-docs" curl -sLo terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${version}/terraform-docs-v${version}-$(uname)-amd64.tar.gz"
-  run_cmd "Extract terraform-docs" tar -xzf terraform-docs.tar.gz
-  run_cmd "Move terraform-docs" sudo mv terraform-docs /usr/local/bin/
-  rm terraform-docs.tar.gz
-  TERRADOCS_VERSION=$(terraform-docs --version | awk '{print $2}')
-  add_summary terraform-docs "$TERRADOCS_VERSION"
+# Ansible
+if should_run ansible; then
+  log_step "Installing Ansible"
+  version=$(get_expected_version ansible)
+  
+  if ! $DRY_RUN; then
+    run_cmd "Update apt" sudo apt-get update -y
+    run_cmd "Install Python pip" sudo apt-get install -y python3-pip
+    if [[ -n "$version" && "$version" != "latest" ]]; then
+      run_cmd "Install Ansible" sudo pip3 install --break-system-packages "ansible==${version}"
+    else
+      run_cmd "Install Ansible" sudo pip3 install --break-system-packages ansible
+    fi
+  fi
+  
+  ANSIBLE_VERSION=$(ansible --version 2>/dev/null | head -n1 | awk '{print $2}' | tr -d '[]' || echo "installed")
+  add_summary ansible "$ANSIBLE_VERSION"
 fi
 
 # Node.js
 if should_run nodejs; then
   log_step "Installing Node.js"
-  version=$(get_expected_version nodejs)
-  version="${version:-20}"
   
   if ! $DRY_RUN; then
-    run_cmd "Download NodeSource setup script" curl -fsSL https://deb.nodesource.com/setup_${version}.x -o nodesource_setup.sh
-    run_cmd "Run NodeSource setup" sudo -E bash nodesource_setup.sh
-    run_cmd "Install Node.js" sudo apt-get install -y nodejs
-    rm -f nodesource_setup.sh
+    # Check if nodejs is already installed from base image
+    if command -v node &> /dev/null; then
+      log_step "Node.js already installed, ensuring npm is available"
+      # Install npm separately if nodejs exists but npm doesn't
+      if ! command -v npm &> /dev/null; then
+        run_cmd "Install npm" sudo apt-get update && sudo apt-get install -y npm
+      fi
+    else
+      # Fresh installation from NodeSource
+      version=$(get_expected_version nodejs)
+      version="${version:-20}"
+      run_cmd "Download NodeSource setup script" curl -fsSL https://deb.nodesource.com/setup_${version}.x -o nodesource_setup.sh
+      run_cmd "Run NodeSource setup" sudo -E bash nodesource_setup.sh
+      run_cmd "Install Node.js and npm" sudo apt-get install -y nodejs
+      rm -f nodesource_setup.sh
+    fi
   fi
   
   NODE_VERSION=$(node -v 2>/dev/null | sed 's/v//')
+  NPM_VERSION=$(npm -v 2>/dev/null || echo "not installed")
   add_summary nodejs "$NODE_VERSION"
+  add_summary npm "$NPM_VERSION"
 fi
 
 # http-server (npm package)
@@ -153,7 +171,9 @@ if should_run gcloud; then
   log_step "Installing Google Cloud SDK"
   
   if ! $DRY_RUN; then
-    run_cmd "Add gcloud apt key" curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    log_step "Add gcloud apt key"
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    echo -e "${GREEN}✅ Success: Add gcloud apt key${NC}"
     log_step "Add gcloud repository"
     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list > /dev/null
     echo -e "${GREEN}✅ Success: Add gcloud repository${NC}"
@@ -171,7 +191,9 @@ if should_run azurecli; then
   
   if ! $DRY_RUN; then
     run_cmd "Install Azure CLI dependencies" sudo apt-get update && sudo apt-get install -y ca-certificates curl apt-transport-https lsb-release gnupg
-    run_cmd "Download Microsoft signing key" curl -sLS https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg
+    log_step "Download Microsoft signing key"
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --yes --dearmor -o /etc/apt/keyrings/microsoft.gpg
+    echo -e "${GREEN}✅ Success: Download Microsoft signing key${NC}"
     run_cmd "Set key permissions" sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
     log_step "Add Azure CLI repository"
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list > /dev/null

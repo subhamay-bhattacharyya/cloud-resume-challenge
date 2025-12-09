@@ -3,7 +3,14 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "remoteEnv": {
+    "AWS_ACCESS_KEY_ID": "${localEnv:AWS_ACCESS_KEY_ID}",
+    "AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}",
+    "AWS_DEFAULT_REGION": "${localEnv:AWS_DEFAULT_REGION}",
+    "TERRAFORM_SA_KEY": "${localEnv:TERRAFORM_SA_KEY}"
+  },
   "postCreateCommand": "/usr/local/bin/install-tools.sh --tools=all > /tmp/post-create.log 2>&1",
+  "postStartCommand": "bash .devcontainer/write-tf-sa-key.sh > /tmp/devcontainer-poststart.log 2>&1 || true",
   "customizations": {
     "vscode": {
       "extensions": [
