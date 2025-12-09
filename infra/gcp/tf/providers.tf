@@ -13,6 +13,8 @@ terraform {
 
 # Configure the Azure Provider
 provider "google" {
-  project = var.gcp-project-id
-  region  = var.gcp-region
+  credentials = file("tf-sa-key/terraform-sa-key.json")
+  project     = var.gcp-project-id
+  region      = var.gcp-region
+  zone        = var.gcp-zone
 }

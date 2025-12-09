@@ -1,15 +1,3 @@
-## =====================================================================================================================
-## 📁 Project Name        : Terraform GitHub Template Repository
-## 📝 Description         : A reusable template for setting up Terraform-based Infrastructure-as-Code (IaC) projects
-##                         on GitHub using GitHub Actions for CI/CD automation.
-##
-## 🔄 Modification History:
-##   Version   Date          Author     Description
-##   -------   ------------  --------   -------------------------------------------------------------------------------
-##   1.0.0     Jun 20, 2025  Subhamay   Initial version with GitHub Actions workflow for Terraform CI/CD
-##
-## =====================================================================================================================
-
 # --- root/variables.tf ---
 
 # GCP Project ID
@@ -21,5 +9,16 @@ variable "gcp-project-id" {
 variable "gcp-region" {
   description = "The GCP region where resources will be created."
   type        = string
-  default     = "us-central1"
+}
+
+# GCP Zone
+variable "gcp-zone" {
+  description = "The GCP zone where resources will be created."
+  type        = string
+}
+
+
+variable "google-storage-bucket-name" {
+  description = "The name of the Google Storage bucket"
+  type        = string
 }

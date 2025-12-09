@@ -5,7 +5,7 @@ set -euo pipefail
 # The script assumes it's run from the repository root (devcontainer postStartCommand does this).
 
 LOG="/tmp/devcontainer-poststart.log"
-TARGET_DIR="$(pwd)/tf/tf-sa-key"
+TARGET_DIR="$(pwd)/infra/gcp/tf/tf-sa-key"
 TARGET_FILE="$TARGET_DIR/terraform-sa-key.json"
 
 echo "$(date -Is) - write-tf-sa-key.sh starting" >> "$LOG"
