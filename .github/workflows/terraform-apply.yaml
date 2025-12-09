@@ -30,12 +30,9 @@ jobs:
   read-cloud-service-provider:
     name: Read Cloud Provider
     runs-on: ubuntu-latest
-
     # 🚫 Prevent workflows from running on feature/* branches
-    if: ${{ !startsWith(github.ref_name, 'feature/') }}
-
+    # if: ${{ !startsWith(github.ref_name, 'feature/') }}
     timeout-minutes: 5
-
     outputs:
       cloud_provider: ${{ steps.set-cloud-provider.outputs.cloud_provider }}
 
