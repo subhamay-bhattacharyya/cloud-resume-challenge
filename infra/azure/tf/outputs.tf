@@ -1,21 +1,25 @@
-## =====================================================================================================================
-## 📁 Project Name        : Terraform GitHub Template Repository
-## 📝 Description         : A reusable template for setting up Terraform-based Infrastructure-as-Code (IaC) projects
-##                         on GitHub using GitHub Actions for CI/CD automation.
-##
-## 🔄 Modification History:
-##   Version   Date          Author     Description
-##   -------   ------------  --------   -------------------------------------------------------------------------------
-##   1.0.0     Jun 20, 2025  Subhamay   Initial version with GitHub Actions workflow for Terraform CI/CD
-##
-## =====================================================================================================================
-
-# --- root/main.tf ---
-
-output "s3_bucket_name" {
-  value = aws_s3_bucket.s3_bucket.arn
+output "azure_subscription_id" {
+  description = "Azure subscription id"
+  value       = azurerm_resource_group.this.id
 }
 
-output "s3_bucket_tags" {
-  value = aws_s3_bucket.s3_bucket.tags_all
+output "azurerm_resource_group_name" {
+  description = "Azure resource group name"
+  value       = azurerm_resource_group.this.name
 }
+
+output "azurerm_resource_group_location" {
+  description = "Azure resource group location"
+  value       = azurerm_resource_group.this.location
+}
+
+output "azurerm_storage_account" {
+  description = "Azure storage account"
+  value       = azurerm_storage_account.this.name
+}
+
+output "static_website_url" {
+  description = "The primary web endpoint for the static website of the storage account"
+  value       = azurerm_storage_account.this.primary_web_endpoint
+}
+
