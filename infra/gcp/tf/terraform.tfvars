@@ -1,3 +1,5 @@
+# --- root/gcp/tf/terraform.tfvars ---
+
 gcp-project-id             = "cloud-resume-challenge-06611"
 gcp-region                 = "us-east1"
 gcp-zone                   = "us-east1-a"

@@ -1,4 +1,4 @@
-# --- root/main.tf ---
+# --- root/gcp/tf/outputs.tf ---
 
 output "google_storage_bucket_name" {
   description = "Google Storage Bucket Name"

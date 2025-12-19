@@ -1,3 +1,5 @@
+# --- root/gcp/tf/main.tf ---
+
 resource "google_storage_bucket" "resume-site" {
   name          = var.google-storage-bucket-name
   location      = var.gcp-region

@@ -1,3 +1,5 @@
+# --- root/azure/tf/outputs.tf ---
+
 output "azure_subscription_id" {
   description = "Azure subscription id"
   value       = azurerm_resource_group.this.id
