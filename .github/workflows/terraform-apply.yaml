@@ -27,8 +27,8 @@ defaults:
     shell: bash
 
 jobs:
-  read-cloud-service-provider:
-    name: Read Cloud Provider
+  terraform-lint:
+    name: 📋 Terraform Lint
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -65,6 +65,38 @@ jobs:
           tflint-ver: "v0.52.0"
           use-cache: "true"
           tflint-format: "compact"
+
+  terraform-validate:
+    name: ✅ Terraform Validate
+    runs-on: ubuntu-latest
+    needs:
+      - terraform-lint
+    timeout-minutes: 10
+
+    env:
+      CLOUD_PROVIDER: ${{ needs.terraform-lint.outputs.cloud_provider }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Terraform Validate Action
+        id: tf-validate
+        run: |
+          set -euo pipefail
+          echo "Running Terraform validate for provider: ${CLOUD_PROVIDER}"
+          # Placeholder for actual validation logic
+          echo "Validation logic would go here."
+          echo "Terraform dir: infra/${CLOUD_PROVIDER}/tf."
+
+        # uses: subhamay-bhattacharyya-gha/tf-validate-action@feature/GHA-0032-implement-terraform-state
+        # with:
+        #   terraform-dir: infra/${{ needs.terraform-lint.outputs.cloud_provider }}/tf
+        #   soft-fail: "false"
+
+      - name: Display Status
+        run: |
+          echo "Validation Passed: ${{ steps.tf-validate.outputs.valid }}"
 
   # configure-oidc:
   #   name: Configure OIDC (${{ github.event.inputs['cloud-provider'] }})
