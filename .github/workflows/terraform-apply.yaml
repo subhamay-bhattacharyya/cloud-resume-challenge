@@ -57,127 +57,127 @@ jobs:
             echo "- **Cloud provider**: \`${CLOUD_PROVIDER}\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
-  configure-oidc:
-    name: Configure OIDC (${{ github.event.inputs['cloud-provider'] }})
-    runs-on: ubuntu-latest
-    needs:
-      - read-cloud-service-provider
-    timeout-minutes: 10
+  # configure-oidc:
+  #   name: Configure OIDC (${{ github.event.inputs['cloud-provider'] }})
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - read-cloud-service-provider
+  #   timeout-minutes: 10
 
-    steps:
-      - name: Show selected provider (from previous job)
-        run: |
-          set -euo pipefail
-          echo "Configuring OIDC for provider: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}"
+  #   steps:
+  #     - name: Show selected provider (from previous job)
+  #       run: |
+  #         set -euo pipefail
+  #         echo "Configuring OIDC for provider: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}"
 
-      - name: Configure AWS OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'aws' }}
-        run: |
-          set -euo pipefail
-          echo "== AWS OIDC CONFIGURATION =="
-          echo "Here you will configure aws-actions/configure-aws-credentials with OIDC."
-          {
-            echo "## OIDC Configuration – AWS"
-            echo ""
-            echo "- Configured AWS OIDC (skeleton step – replace with reusable workflow later)."
-          } >> "$GITHUB_STEP_SUMMARY"
+  #     - name: Configure AWS OIDC
+  #       if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'aws' }}
+  #       run: |
+  #         set -euo pipefail
+  #         echo "== AWS OIDC CONFIGURATION =="
+  #         echo "Here you will configure aws-actions/configure-aws-credentials with OIDC."
+  #         {
+  #           echo "## OIDC Configuration – AWS"
+  #           echo ""
+  #           echo "- Configured AWS OIDC (skeleton step – replace with reusable workflow later)."
+  #         } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Configure GCP OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
-        run: |
-          set -euo pipefail
-          echo "== GCP OIDC CONFIGURATION =="
-          echo "Here you will configure gcloud / Workload Identity Federation."
-          {
-            echo "## OIDC Configuration – GCP"
-            echo ""
-            echo "- Configured GCP OIDC (skeleton step – replace with reusable workflow later)."
-          } >> "$GITHUB_STEP_SUMMARY"
+  #     - name: Configure GCP OIDC
+  #       if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
+  #       run: |
+  #         set -euo pipefail
+  #         echo "== GCP OIDC CONFIGURATION =="
+  #         echo "Here you will configure gcloud / Workload Identity Federation."
+  #         {
+  #           echo "## OIDC Configuration – GCP"
+  #           echo ""
+  #           echo "- Configured GCP OIDC (skeleton step – replace with reusable workflow later)."
+  #         } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Authenticate to GCP
-        id: auth
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: true
-          workload_identity_provider: WORKLOAD-IDENTITY-PROVIDER
-          service_account: terraform-sa@cloud-resume-challenge-06611.iam.gserviceaccount.com
+  #     - name: Authenticate to GCP
+  #       id: auth
+  #       if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
+  #       uses: google-github-actions/auth@v2
+  #       with:
+  #         create_credentials_file: true
+  #         workload_identity_provider: WORKLOAD-IDENTITY-PROVIDER
+  #         service_account: terraform-sa@cloud-resume-challenge-06611.iam.gserviceaccount.com
 
-      - name: gcloud
-        id: gcloud
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
-        run: |
-          gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
-          gcloud services list
+  #     - name: gcloud
+  #       id: gcloud
+  #       if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'gcp' }}
+  #       run: |
+  #         gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
+  #         gcloud services list
 
-      - name: Configure Azure OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'azure' }}
-        run: |
-          set -euo pipefail
-          echo "== AZURE OIDC CONFIGURATION =="
-          echo "Here you will configure az login with federated credentials."
-          {
-            echo "## OIDC Configuration – Azure"
-            echo ""
-            echo "- Configured Azure OIDC (skeleton step – replace with reusable workflow later)."
-          } >> "$GITHUB_STEP_SUMMARY"
+  #     - name: Configure Azure OIDC
+  #       if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'azure' }}
+  #       run: |
+  #         set -euo pipefail
+  #         echo "== AZURE OIDC CONFIGURATION =="
+  #         echo "Here you will configure az login with federated credentials."
+  #         {
+  #           echo "## OIDC Configuration – Azure"
+  #           echo ""
+  #           echo "- Configured Azure OIDC (skeleton step – replace with reusable workflow later)."
+  #         } >> "$GITHUB_STEP_SUMMARY"
 
-  terraform-validate:
-    name: Terraform Validate (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
-    runs-on: ubuntu-latest
-    needs:
-      - read-cloud-service-provider
-      - configure-oidc
-    timeout-minutes: 45
+  # terraform-validate:
+  #   name: Terraform Validate (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - read-cloud-service-provider
+  #     - configure-oidc
+  #   timeout-minutes: 45
 
-    env:
-      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
+  #   env:
+  #     CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Run Terraform Validate Action
-        id: tf-validate
-        uses: subhamay-bhattacharyya-gha/tf-validate-action@feature/GHA-0032-implement-terraform-state
-        with:
-          terraform-dir: infra/${{ needs.read-cloud-service-provider.outputs.cloud_provider }}/tf
-          soft-fail: "false"
+  #     - name: Run Terraform Validate Action
+  #       id: tf-validate
+  #       uses: subhamay-bhattacharyya-gha/tf-validate-action@feature/GHA-0032-implement-terraform-state
+  #       with:
+  #         terraform-dir: infra/${{ needs.read-cloud-service-provider.outputs.cloud_provider }}/tf
+  #         soft-fail: "false"
 
-      - name: Display Status
-        run: |
-          echo "Validation Passed: ${{ steps.tf-validate.outputs.valid }}"
+  #     - name: Display Status
+  #       run: |
+  #         echo "Validation Passed: ${{ steps.tf-validate.outputs.valid }}"
 
-  terraform-plan:
-    name: Terraform Plan (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
-    runs-on: ubuntu-latest
-    needs:
-      - read-cloud-service-provider
-      - terraform-validate
-    timeout-minutes: 45
+  # terraform-plan:
+  #   name: Terraform Plan (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - read-cloud-service-provider
+  #     - terraform-validate
+  #   timeout-minutes: 45
 
-    env:
-      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
+  #   env:
+  #     CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
 
-    steps:
-      - name: Show provider and stage
-        run: |
-          set -euo pipefail
-          echo "Starting Terraform plan for provider: ${CLOUD_PROVIDER}"
+  #   steps:
+  #     - name: Show provider and stage
+  #       run: |
+  #         set -euo pipefail
+  #         echo "Starting Terraform plan for provider: ${CLOUD_PROVIDER}"
 
-  terraform-apply:
-    name: Terraform Apply (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
-    runs-on: ubuntu-latest
-    needs:
-      - read-cloud-service-provider
-      - terraform-plan
-    timeout-minutes: 45
+  # terraform-apply:
+  #   name: Terraform Apply (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - read-cloud-service-provider
+  #     - terraform-plan
+  #   timeout-minutes: 45
 
-    env:
-      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
+  #   env:
+  #     CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
 
-    steps:
-      - name: Show provider and stage
-        run: |
-          set -euo pipefail
-          echo "Starting Terraform apply for provider: ${CLOUD_PROVIDER}"
+  #   steps:
+  #     - name: Show provider and stage
+  #       run: |
+  #         set -euo pipefail
+  #         echo "Starting Terraform apply for provider: ${CLOUD_PROVIDER}"
