@@ -10,7 +10,7 @@ module "acm-certificate" {
 
 
 module "s3-bucket" {
-  source            = "./modules/s3-bucket"
+            source            = "./modules/s3-bucket"
   s3-static-website = local.s3-static-website
   project-name      = var.project-name
 }
