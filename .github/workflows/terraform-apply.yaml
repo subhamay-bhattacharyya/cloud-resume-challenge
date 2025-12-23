@@ -82,17 +82,10 @@ jobs:
 
       - name: Run Terraform Validate Action
         id: tf-validate
-        run: |
-          set -euo pipefail
-          echo "Running Terraform validate for provider: ${CLOUD_PROVIDER}"
-          # Placeholder for actual validation logic
-          echo "Validation logic would go here."
-          echo "Terraform dir: infra/${CLOUD_PROVIDER}/tf"
-
-        # uses: subhamay-bhattacharyya-gha/tf-validate-action@feature/GHA-0032-implement-terraform-state
-        # with:
-        #   terraform-dir: infra/${{ needs.terraform-lint.outputs.cloud_provider }}/tf
-        #   soft-fail: "false"
+        uses: subhamay-bhattacharyya-gha/tf-validate-action@feature/GHA-0032-implement-terraform-state
+        with:
+          terraform-dir: infra/${{ needs.terraform-lint.outputs.cloud_provider }}/tf
+          soft-fail: "false"
 
       - name: Display Status
         run: |
