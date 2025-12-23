@@ -28,7 +28,7 @@ defaults:
 
 jobs:
   terraform-lint:
-    name: 📋 Terraform Lint
+    name: ⚙️ Terraform Lint
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -67,7 +67,7 @@ jobs:
           tflint-format: "compact"
 
   terraform-validate:
-    name: ⚙️ Terraform Validate
+    name: ✅ Terraform Validate
     runs-on: ubuntu-latest
     needs:
       - terraform-lint
@@ -92,7 +92,7 @@ jobs:
           echo "Validation Passed: ${{ steps.tf-validate.outputs.valid }}"
 
   terraform-plan:
-    name: ⚙️ Terraform Plan
+    name: 🔍 Terraform Plan
     runs-on: ubuntu-latest
     needs: terraform-validate
     steps:
@@ -109,7 +109,7 @@ jobs:
           tf-vars-file: terraform.tfvars
 
   terraform-apply:
-    name: ⚙️ Terraform Apply
+    name:  🚀 Terraform Apply
     runs-on: ubuntu-latest
     needs: terraform-plan
     steps:
