@@ -1,9 +1,5 @@
 # --- root/aws/tf/root/outputs.tf ---
 
-output "input-json" {
-  value = local.s3-static-website
-}
-
 output "s3-bucket-name" {
   description = "S3 bucket name used for static website"
   value       = module.s3-bucket.s3-bucket-name
