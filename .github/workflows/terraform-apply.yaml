@@ -115,7 +115,7 @@ jobs:
     steps:
       - name: Terraform Apply
         id: apply
-        uses: subhamay-bhattacharyya-gha/tf-plan-apply@feature/GHA-0031-add-multi-cloud-support
+        uses: subhamay-bhattacharyya-gha/tf-plan-action@feature/GHA-0031-add-multi-cloud-support
         with:
           terraform-dir: infra/${{ github.event.inputs['cloud-provider'] }}/tf
           backend-type: remote
