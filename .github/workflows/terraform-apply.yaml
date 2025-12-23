@@ -98,7 +98,7 @@ jobs:
     steps:
       - name: Terraform Plan
         id: plan
-        uses: subhamay-bhattacharyya-gha/tf-plan-action@v1.2.0
+        uses: subhamay-bhattacharyya-gha/tf-plan-action@feature/GHA-0040-rearrange-the-steps-for-b
         with:
           terraform-dir: infra/${{ github.event.inputs['cloud-provider'] }}/tf
           backend-type: remote
@@ -115,12 +115,16 @@ jobs:
     steps:
       - name: Terraform Apply
         id: apply
-        run: |
-          set -euo pipefail
-          echo "Running Terraform apply for provider: ${{ github.event.inputs['cloud-provider'] }}"
-          # Placeholder for actual apply logic
-          echo "Apply logic would go here."
-          echo "Terraform dir: infra/${{ github.event.inputs['cloud-provider'] }}/tf"
+        uses: subhamay-bhattacharyya-gha/tf-plan-action@feature/GHA-0031-add-multi-cloud-support
+        with:
+          terraform-dir: infra/${{ github.event.inputs['cloud-provider'] }}/tf
+          backend-type: remote
+          tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+          cloud-provider: aws
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN}}
+          tf-vars-file: terraform.tfvars
+
         # uses: subhamay-bhattacharyya-gha/tf-plan-action@v1.2.0
         # with:
         #   terraform-dir: infra/${{ github.event.inputs['cloud-provider'] }}/tf
