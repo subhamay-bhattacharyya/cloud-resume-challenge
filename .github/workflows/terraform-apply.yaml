@@ -104,8 +104,8 @@ jobs:
           backend-type: remote
           tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
           cloud-provider: aws
-          aws-region: "us-east-1"
-          aws-role-to-assume: "arn:aws:iam::439289764204:role/cloud-resume-challenge-oidc-role"
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN}}
           tf-vars-file: terraform.tfvars
 
   terraform-apply:
