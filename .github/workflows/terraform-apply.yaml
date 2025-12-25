@@ -33,12 +33,17 @@ jobs:
     with:
       cloud-provider: ${{ github.event.inputs['cloud-provider'] }}
       tflint-ver: ${{ vars.TF_LINT_VER }}
-      backend-type: ${{ inputs.backend-type }}
+      backend-type: remote
       aws-region: ${{ vars.AWS_REGION }}
       tf-vars-file: terraform.tfvars
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
       aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+      # gcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
+      # gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      # azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      # azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      # azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
   
   # terraform-plan:
