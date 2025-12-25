@@ -27,25 +27,25 @@ on:
 #     shell: bash
 
 jobs:
-  # terraform-deploy:
-  #   name: 🚀 Terraform Deploy
-  #   uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@main
+  terraform-deploy:
+    name: 🚀 Terraform Deploy
+    uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@main
     
     # with:
     #   environment: "ci"
     #   terraform-dir: "tf"
 
-  terraform-lint:
-    name: ⚙️ Terraform Lint
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      cloud_provider: ${{ steps.set-cloud-provider.outputs.cloud_provider }}
+  # terraform-lint:
+  #   name: ⚙️ Terraform Lint
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 5
+  #   outputs:
+  #     cloud_provider: ${{ steps.set-cloud-provider.outputs.cloud_provider }}
 
-    steps:
-      - name: Show input value
-        run: |
-          echo "Cloud provider selected: ${{ github.event.inputs['cloud-provider'] }}"
+  #   steps:
+  #     - name: Show input value
+  #       run: |
+  #         echo "Cloud provider selected: ${{ github.event.inputs['cloud-provider'] }}"
 
   #     - name: Set cloud provider as job output
   #       id: set-cloud-provider
