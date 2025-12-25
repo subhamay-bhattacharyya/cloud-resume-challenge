@@ -29,12 +29,7 @@ on:
 jobs:
   terraform-deploy:
     name: 🚀 Terraform Deploy
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-
-    steps:
-      - name: Checkout code
-        uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0009-initial-release
+    uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0009-initial-release
     # with:
     #   environment: "ci"
     #   terraform-dir: "tf"
