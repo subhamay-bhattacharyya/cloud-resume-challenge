@@ -14,9 +14,9 @@ on:
           - gcp
           - azure
 
-# permissions:
-#   id-token: write      # needed for OIDC
-#   contents: read       # needed for checkout / Terraform
+permissions:
+  id-token: write      # needed for OIDC
+  contents: read       # needed for checkout / Terraform
 
 # concurrency:
 #   group: deploy-${{ github.ref }}
