@@ -29,7 +29,7 @@ on:
 jobs:
   terraform-deploy:
     name: 🚀 Terraform Deploy
-    uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0009-initial-release
+    uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@main
     # with:
     #   environment: "ci"
     #   terraform-dir: "tf"
