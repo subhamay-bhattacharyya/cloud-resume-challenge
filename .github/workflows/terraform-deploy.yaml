@@ -1,0 +1,139 @@
+name: Deploy Cloud Resume Challenge
+run-name: >
+  Deploy to ${{ github.event.inputs['cloud-provider'] }} by ${{ github.actor }} on ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      cloud-provider:
+        description: "Target cloud provider"
+        required: true
+        type: choice
+        options:
+          - aws
+          - gcp
+          - azure
+
+# permissions:
+#   id-token: write      # needed for OIDC
+#   contents: read       # needed for checkout / Terraform
+
+# concurrency:
+#   group: deploy-${{ github.ref }}
+#   cancel-in-progress: false
+
+# defaults:
+#   run:
+#     shell: bash
+
+jobs:
+  terraform-deploy:
+    name: 🚀 Terraform Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0009-initial-release
+    # with:
+    #   environment: "ci"
+    #   terraform-dir: "tf"
+
+  # terraform-lint:
+  #   name: ⚙️ Terraform Lint
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 5
+  #   outputs:
+  #     cloud_provider: ${{ steps.set-cloud-provider.outputs.cloud_provider }}
+
+  #   steps:
+  #     - name: Show input value
+  #       run: |
+  #         echo "Cloud provider selected: ${{ github.event.inputs['cloud-provider'] }}"
+
+  #     - name: Set cloud provider as job output
+  #       id: set-cloud-provider
+  #       run: |
+  #         set -euo pipefail
+  #         echo "cloud_provider=${{ github.event.inputs['cloud-provider'] }}" >> "$GITHUB_OUTPUT"
+
+  #     - name: Add summary – selected cloud provider
+  #       run: |
+  #         set -euo pipefail
+  #         CLOUD_PROVIDER="${{ github.event.inputs['cloud-provider'] }}"
+  #         {
+  #           echo "## Deploy Cloud Resume Challenge"
+  #           echo ""
+  #           echo "- **Ref**: \`${{ github.ref_name }}\`"
+  #           echo "- **Actor**: \`${{ github.actor }}\`"
+  #           echo "- **Cloud provider**: \`${CLOUD_PROVIDER}\`"
+  #         } >> "$GITHUB_STEP_SUMMARY"
+
+  #     - name: Run TFLint
+  #       uses: subhamay-bhattacharyya-gha/tf-lint-action@main
+  #       with:
+  #         terraform-dir: infra/${{ github.event.inputs['cloud-provider'] }}/tf
+  #         # release-tag: ""
+  #         tflint-ver: "v0.52.0"
+  #         use-cache: "true"
+  #         tflint-format: "compact"
+
+  # terraform-validate:
+  #   name: ✅ Terraform Validate
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - terraform-lint
+  #   timeout-minutes: 10
+
+  #   env:
+  #     CLOUD_PROVIDER: ${{ needs.terraform-lint.outputs.cloud_provider }}
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Run Terraform Validate Action
+  #       id: tf-validate
+  #       uses: subhamay-bhattacharyya-gha/tf-validate-action@feature/GHA-0032-implement-terraform-state
+  #       with:
+  #         terraform-dir: infra/${{ needs.terraform-lint.outputs.cloud_provider }}/tf
+  #         soft-fail: "false"
+
+  #     - name: Display Status
+  #       run: |
+  #         echo "Validation Passed: ${{ steps.tf-validate.outputs.valid }}"
+
+  # terraform-plan:
+  #   name: 🔍 Terraform Plan
+  #   runs-on: ubuntu-latest
+  #   needs: terraform-validate
+  #   steps:
+  #     - name: Terraform Plan
+  #       id: plan
+  #       uses: subhamay-bhattacharyya-gha/tf-plan-action@feature/GHA-0040-rearrange-the-steps-for-b
+  #       with:
+  #         terraform-dir: infra/${{ github.event.inputs['cloud-provider'] }}/tf
+  #         backend-type: remote
+  #         tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+  #         cloud-provider: aws
+  #         aws-region: ${{ secrets.AWS_REGION }}
+  #         aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN}}
+  #         tf-vars-file: terraform.tfvars
+
+  # terraform-apply:
+  #   name:  🚀 Terraform Apply
+  #   runs-on: ubuntu-latest
+  #   needs: terraform-plan
+  #   steps:
+  #     - name: Terraform Apply
+  #       id: apply
+  #       uses: subhamay-bhattacharyya-gha/tf-apply-action@feature/GHA-0031-add-multi-cloud-support
+  #       with:
+  #         terraform-dir: infra/${{ github.event.inputs['cloud-provider'] }}/tf
+  #         backend-type: remote
+  #         tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+  #         cloud-provider: aws
+  #         aws-region: ${{ secrets.AWS_REGION }}
+  #         aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN}}
+  #         tf-vars-file: terraform.tfvars
+
