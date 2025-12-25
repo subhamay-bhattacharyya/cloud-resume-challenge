@@ -40,8 +40,7 @@ jobs:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
       aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
 
-    
-
+  
   # terraform-plan:
   #   name: 🔍 Terraform Plan
   #   runs-on: ubuntu-latest
