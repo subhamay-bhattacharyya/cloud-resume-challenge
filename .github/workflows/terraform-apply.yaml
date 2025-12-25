@@ -34,10 +34,12 @@ jobs:
       cloud-provider: ${{ github.event.inputs['cloud-provider'] }}
       tflint-ver: ${{ vars.TF_LINT_VER }}
       backend-type: ${{ inputs.backend-type }}
-      tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
       aws-region: ${{ vars.AWS_REGION }}
-      aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
       tf-vars-file: terraform.tfvars
+    secrets:
+      tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+
     
 
   # terraform-plan:
