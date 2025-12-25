@@ -18,154 +18,31 @@ permissions:
   id-token: write      # needed for OIDC
   contents: read       # needed for checkout / Terraform
 
-concurrency:
-  group: deploy-${{ github.ref }}
-  cancel-in-progress: false  # you can set true if you want to cancel older runs
+# concurrency:
+#   group: deploy-${{ github.ref }}
+#   cancel-in-progress: false
 
-defaults:
-  run:
-    shell: bash
+# defaults:
+#   run:
+#     shell: bash
 
 jobs:
-  read-cloud-service-provider:
-    name: Read Cloud Provider
-    runs-on: ubuntu-latest
-
-    # 🚫 Prevent workflows from running on feature/* branches
-    if: ${{ !startsWith(github.ref_name, 'feature/') }}
-
-    timeout-minutes: 5
-
-    outputs:
-      cloud_provider: ${{ steps.set-cloud-provider.outputs.cloud_provider }}
-
-    steps:
-      - name: Show input value
-        run: |
-          echo "Cloud provider selected: ${{ github.event.inputs['cloud-provider'] }}"
-
-      - name: Set cloud provider as job output
-        id: set-cloud-provider
-        run: |
-          set -euo pipefail
-          echo "cloud_provider=${{ github.event.inputs['cloud-provider'] }}" >> "$GITHUB_OUTPUT"
-
-      - name: Add summary – selected cloud provider
-        run: |
-          set -euo pipefail
-          CLOUD_PROVIDER="${{ github.event.inputs['cloud-provider'] }}"
-          {
-            echo "## Deploy Cloud Resume Challenge"
-            echo ""
-            echo "- **Ref**: \`${{ github.ref_name }}\`"
-            echo "- **Actor**: \`${{ github.actor }}\`"
-            echo "- **Cloud provider**: \`${CLOUD_PROVIDER}\`"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-  terraform-validate:
-    name: Terraform Validate (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
-    runs-on: ubuntu-latest
-    needs:
-      - read-cloud-service-provider
-    timeout-minutes: 45
-
-    env:
-      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
-
-    steps:
-      - name: Run Terraform Validate Action
-        id: tf-validate
-        uses: subhamay-bhattacharyya-gha/tf-validate-action@main
-        with:
-          terraform-dir: "${{ github.workspace }}/infra/${{ needs.read-cloud-service-provider.outputs.cloud_provider }}/tf"
-          soft-fail: "false"
-
-      - name: Display Status
-        run: |
-          echo "Validation Passed: ${{ steps.tf-validate.outputs.valid }}"
+  terraform-deploy:
+    name: Deploy
+    uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0011-add-tflint-in-the-workflo
+    with:
+      cloud-provider: ${{ github.event.inputs['cloud-provider'] }}
+      tflint-ver: ${{ vars.TF_LINT_VER }}
+      backend-type: remote
+      aws-region: ${{ vars.AWS_REGION }}
+      tf-vars-file: terraform.tfvars
+    secrets:
+      tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+      # gcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
+      # gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      # azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      # azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      # azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 
-  configure-oidc:
-    name: Configure OIDC (${{ github.event.inputs['cloud-provider'] }})
-    runs-on: ubuntu-latest
-    needs:
-      - read-cloud-service-provider
-      - terraform-validate
-    timeout-minutes: 10
-
-    steps:
-      - name: Show selected provider (from previous job)
-        run: |
-          set -euo pipefail
-          echo "Configuring OIDC for provider: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}"
-
-      - name: Configure AWS OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'AWS' }}
-        run: |
-          set -euo pipefail
-          echo "== AWS OIDC CONFIGURATION =="
-          echo "Here you will configure aws-actions/configure-aws-credentials with OIDC."
-          {
-            echo "## OIDC Configuration – AWS"
-            echo ""
-            echo "- Configured AWS OIDC (skeleton step – replace with reusable workflow later)."
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Configure GCP OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'GCP' }}
-        run: |
-          set -euo pipefail
-          echo "== GCP OIDC CONFIGURATION =="
-          echo "Here you will configure gcloud / Workload Identity Federation."
-          {
-            echo "## OIDC Configuration – GCP"
-            echo ""
-            echo "- Configured GCP OIDC (skeleton step – replace with reusable workflow later)."
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Configure Azure OIDC
-        if: ${{ needs.read-cloud-service-provider.outputs.cloud_provider == 'Azure' }}
-        run: |
-          set -euo pipefail
-          echo "== AZURE OIDC CONFIGURATION =="
-          echo "Here you will configure az login with federated credentials."
-          {
-            echo "## OIDC Configuration – Azure"
-            echo ""
-            echo "- Configured Azure OIDC (skeleton step – replace with reusable workflow later)."
-          } >> "$GITHUB_STEP_SUMMARY"
-
-
-  terraform-plan:
-    name: Terraform Plan (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
-    runs-on: ubuntu-latest
-    needs:
-      - read-cloud-service-provider
-      - configure-oidc
-    timeout-minutes: 45
-
-    env:
-      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
-
-    steps:
-      - name: Show provider and stage
-        run: |
-          set -euo pipefail
-          echo "Starting Terraform plan for provider: ${CLOUD_PROVIDER}"
-
-  terraform-apply:
-    name: Terraform Apply (${{ needs.read-cloud-service-provider.outputs.cloud_provider }})
-    runs-on: ubuntu-latest
-    needs:
-      - read-cloud-service-provider
-      - terraform-plan
-    timeout-minutes: 45
-
-    env:
-      CLOUD_PROVIDER: ${{ needs.read-cloud-service-provider.outputs.cloud_provider }}
-
-    steps:
-      - name: Show provider and stage
-        run: |
-          set -euo pipefail
-          echo "Starting Terraform apply for provider: ${CLOUD_PROVIDER}"

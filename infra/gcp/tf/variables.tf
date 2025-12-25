@@ -1,4 +1,4 @@
-# --- root/variables.tf ---
+# --- root/gcp/tf/variables.tf ---
 
 # GCP Project ID
 variable "gcp-project-id" {

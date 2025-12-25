@@ -1,0 +1,1 @@
+# --- root/aws/tf/modules/route53/outputs.tf ---

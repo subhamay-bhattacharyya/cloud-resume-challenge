@@ -1,21 +1,26 @@
-## =====================================================================================================================
-## 📁 Project Name        : Terraform GitHub Template Repository
-## 📝 Description         : A reusable template for setting up Terraform-based Infrastructure-as-Code (IaC) projects
-##                         on GitHub using GitHub Actions for CI/CD automation.
-##
-## 🔄 Modification History:
-##   Version   Date          Author     Description
-##   -------   ------------  --------   -------------------------------------------------------------------------------
-##   1.0.0     Jun 20, 2025  Subhamay   Initial version with GitHub Actions workflow for Terraform CI/CD
-##
-## =====================================================================================================================
+# --- root/aws/tf/root/outputs.tf ---
 
-# --- root/main.tf ---
-
-output "s3_bucket_name" {
-  value = aws_s3_bucket.s3_bucket.arn
+output "s3-bucket-name" {
+  description = "S3 bucket name used for static website"
+  value       = module.s3-bucket.s3-bucket-name
 }
 
-output "s3_bucket_tags" {
-  value = aws_s3_bucket.s3_bucket.tags_all
+output "s3-bucket-arn" {
+  description = "S3 bucket ARN"
+  value       = module.s3-bucket.s3-bucket-arn
+}
+
+output "static-website-domain" {
+  description = "The domain of the static website"
+  value       = module.s3-bucket.static-website-domain
+}
+
+output "static-website-endpoint" {
+  description = "The endpoint of the static website"
+  value       = module.s3-bucket.static-website-endpoint
+}
+
+output "acm-certificate-arn" {
+  description = "The ARN of the ACM certificate"
+  value       = module.acm-certificate.acm-certificate-arn
 }

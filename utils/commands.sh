@@ -13,3 +13,6 @@ pre-commit run --all-files
 # This command will remove the token from the environment and then
 # re-authenticate with the GitHub CLI.
 unset GITHUB_TOKEN && gh auth login -h github.com -p https -s delete_repo -w
+
+## Azure CLI login
+az login --use-device-code

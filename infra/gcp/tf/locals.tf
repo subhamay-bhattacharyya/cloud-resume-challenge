@@ -1,0 +1,1 @@
+# --- root/gcp/tf/locals.tf ---
