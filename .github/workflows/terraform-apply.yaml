@@ -28,7 +28,7 @@ on:
 
 jobs:
   terraform-deploy:
-    # name: Terraform Deploy
+    name: Deploy
     uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0011-add-tflint-in-the-workflo
     with:
       cloud-provider: ${{ github.event.inputs['cloud-provider'] }}
