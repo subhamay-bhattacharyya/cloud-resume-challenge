@@ -30,6 +30,9 @@ jobs:
   terraform-deploy:
     name: 🚀 Terraform Deploy
     uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@main
+    with:
+      cloud-provider: ${{ github.event.inputs['cloud-provider'] }}
+
     
     # with:
     #   environment: "ci"
