@@ -5,10 +5,12 @@ variable "aws-region" {
   default = "us-east-1"
 }
 ######################################## Project Name ##############################################
-variable "project-name" {
-  description = "The name of the project"
-  type        = string
-  default     = "Cloud Resume Challenge"
+variable "tags" {
+  description = "A map of tags to assign to resources"
+  type        = map(string)
+  default = {
+    Project = "Cloud Resume Challenge"
+    Owner   = "Subhamay Bhattacharyya"
+    Env     = "Dev"
+  }
 }
-
-####################################### S3 Bucket Configuration ##########################################
