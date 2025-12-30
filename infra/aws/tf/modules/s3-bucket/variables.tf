@@ -5,8 +5,3 @@ variable "s3-static-website" {
   type        = map(any)
 }
 
-# variable "project-name" {
-#   description = "name of the project"
-#   type        = string
-#   default     = "Cloud Reusable Challenge"
-# }

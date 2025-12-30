@@ -26,7 +26,7 @@ module "cloudfront" {
 
 module "dynamodb-table" {
   source          = "./modules/dynamodb-table"
-  dynamodb-tables = local.dynamodb-tables
+  dynamodb-tables = local.dynamodb-table
 }
 
 # module "iam-role" {

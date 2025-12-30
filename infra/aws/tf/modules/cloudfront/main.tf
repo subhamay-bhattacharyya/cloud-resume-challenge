@@ -1,7 +1,5 @@
 # --- root/aws/tf/modules/cloudfront/main.tf ---
 
-# --- root/aws/tf/modules/cloudfront/main.tf ---
-
 resource "aws_cloudfront_origin_access_control" "this" {
   name                              = var.cloudfront-distribution["cloudfront-domain-name"]
   description                       = "OAC for private S3 bucket"
@@ -59,11 +57,11 @@ resource "aws_cloudfront_cache_policy" "this" {
 }
 
 resource "aws_cloudfront_distribution" "this" {
-  enabled         = true
-  is_ipv6_enabled = true
-  comment         = var.cloudfront-distribution["comment"]
-  # default_root_object = "index.html"
-  price_class = "PriceClass_All"
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = var.cloudfront-distribution["comment"]
+  default_root_object = "index.html"
+  price_class         = "PriceClass_All"
 
   origin {
     # IMPORTANT: for S3 + OAC use the bucket *regional* domain name:
