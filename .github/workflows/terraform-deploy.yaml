@@ -70,7 +70,7 @@ jobs:
     name: Deploy to Azure
     needs: start-job
     uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0011-add-tflint-in-the-workflo
-    if: ${{ github.event.inputs['cloud-provider']. == 'azure' }}
+    if: ${{ github.event.inputs['cloud-provider'] == 'azure' }}
     with:
       cloud-provider: azure
       tflint-ver: ${{ vars.TF_LINT_VER }}
