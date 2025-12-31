@@ -62,6 +62,7 @@ resource "aws_cloudfront_distribution" "this" {
   comment             = var.cloudfront-distribution["comment"]
   default_root_object = "index.html"
   price_class         = "PriceClass_All"
+  aliases             = var.cloudfront-distribution["cname"]
 
   origin {
     # IMPORTANT: for S3 + OAC use the bucket *regional* domain name:
@@ -69,6 +70,7 @@ resource "aws_cloudfront_distribution" "this" {
     domain_name              = var.cloudfront-distribution["cloudfront-domain-name"]
     origin_id                = var.cloudfront-distribution["origin-id"]
     origin_access_control_id = aws_cloudfront_origin_access_control.this.id
+
 
     # REQUIRED BLOCK for S3 origins (even with OAC)
     s3_origin_config {
@@ -95,7 +97,9 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = var.cloudfront-distribution["acm-certificate-arn"]
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.3_2025"
   }
 
   restrictions {

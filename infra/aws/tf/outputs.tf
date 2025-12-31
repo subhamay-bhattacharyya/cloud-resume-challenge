@@ -2,11 +2,10 @@
 
 ############ ACM Certificate Outputs ############
 
-# output "acm-certificate-arn" {
-#   description = "The ARN of the ACM certificate"
-#   value       = module.acm-certificate.acm-certificate-arn
-# }
-
+output "acm-certificate-arn" {
+  description = "The ARN of the ACM certificate"
+  value       = module.acm-certificate.acm-certificate-arn
+}
 
 ############ S3 Bucket Outputs ############
 output "s3-bucket-name" {

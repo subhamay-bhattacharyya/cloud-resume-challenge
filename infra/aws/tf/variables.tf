@@ -11,6 +11,12 @@ variable "crc-domain-name" {
   default     = "abc.com"
 }
 
+variable "website-domain" {
+  description = "The root domain name for Route53 hosted zone lookup"
+  type        = string
+  default     = "subhamay.us"
+}
+
 ######################################## Project Name ##############################################
 variable "tags" {
   description = "A map of tags to assign to resources"
