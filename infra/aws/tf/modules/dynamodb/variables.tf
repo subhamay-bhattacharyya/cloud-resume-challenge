@@ -1,6 +1,6 @@
 # --- root/aws/tf/modules/dynamodb/variables.tf ---
 
-variable "dynamodb-tables" {
-  description = "DynamoDB tables configuration"
+variable "dynamodb_table" {
+  description = "DynamoDB table configuration"
   type        = map(any)
 }

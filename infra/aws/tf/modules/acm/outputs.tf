@@ -1,11 +1,11 @@
 # --- root/aws/tf/modules/acm-certificate/outputs.tf ---
 
-output "acm-certificate-arn" {
+output "acm_certificate_arn" {
   description = "ARN of the ACM certificate."
   value       = aws_acm_certificate.this.arn
 }
 
-output "domain-validation-options" {
+output "domain_validation_options" {
   description = "Domain validation options to create Route53 DNS validation records."
   value = [
     for dvo in aws_acm_certificate.this.domain_validation_options : {

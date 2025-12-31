@@ -1,0 +1,10 @@
+{
+    "get_lambda_log_group": {
+        "log_group_class": "STANDARD",
+        "retention_in_days": 7
+    },
+    "post_lambda_log_group": {
+        "log_group_class": "STANDARD",
+        "retention_in_days": 7
+    }
+}

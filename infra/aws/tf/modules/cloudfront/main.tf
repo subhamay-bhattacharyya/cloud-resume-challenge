@@ -1,7 +1,7 @@
 # --- root/aws/tf/modules/cloudfront/main.tf ---
 
 resource "aws_cloudfront_origin_access_control" "this" {
-  name                              = var.cloudfront-distribution["cloudfront-domain-name"]
+  name                              = var.cloudfront_distribution["cloudfront-domain-name"]
   description                       = "OAC for private S3 bucket"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -59,16 +59,16 @@ resource "aws_cloudfront_cache_policy" "this" {
 resource "aws_cloudfront_distribution" "this" {
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = var.cloudfront-distribution["comment"]
+  comment             = var.cloudfront_distribution["comment"]
   default_root_object = "index.html"
   price_class         = "PriceClass_All"
-  aliases             = var.cloudfront-distribution["cname"]
+  aliases             = var.cloudfront_distribution["cname"]
 
   origin {
     # IMPORTANT: for S3 + OAC use the bucket *regional* domain name:
     # e.g. my-bucket.s3.us-east-1.amazonaws.com
-    domain_name              = var.cloudfront-distribution["cloudfront-domain-name"]
-    origin_id                = var.cloudfront-distribution["origin-id"]
+    domain_name              = var.cloudfront_distribution["cloudfront-domain-name"]
+    origin_id                = var.cloudfront_distribution["origin-id"]
     origin_access_control_id = aws_cloudfront_origin_access_control.this.id
 
 
@@ -82,7 +82,7 @@ resource "aws_cloudfront_distribution" "this" {
 
 
   default_cache_behavior {
-    target_origin_id       = var.cloudfront-distribution["origin-id"]
+    target_origin_id       = var.cloudfront_distribution["origin-id"]
     viewer_protocol_policy = "redirect-to-https"
     compress               = true
 
@@ -97,7 +97,7 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.cloudfront-distribution["acm-certificate-arn"]
+    acm_certificate_arn      = var.cloudfront_distribution["acm-certificate-arn"]
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.3_2025"
   }
@@ -108,13 +108,13 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
-  tags = merge(var.cloudfront-distribution["tags"], {
+  tags = merge(var.cloudfront_distribution["tags"], {
     Name = "CRC-CloudFront-Distribution"
   })
 }
 
 resource "aws_s3_bucket_policy" "this" {
-  bucket = var.cloudfront-distribution["s3-bucket-name"]
+  bucket = var.cloudfront_distribution["s3-bucket-name"]
   # depends_on = [aws_s3_bucket_public_access_block.this]
 
   policy = jsonencode({
@@ -127,7 +127,7 @@ resource "aws_s3_bucket_policy" "this" {
           Service = "cloudfront.amazonaws.com"
         }
         Action   = "s3:GetObject"
-        Resource = "${var.cloudfront-distribution["s3-bucket-arn"]}/*"
+        Resource = "${var.cloudfront_distribution["s3-bucket-arn"]}/*"
         Condition = {
           StringEquals = {
             "AWS:SourceArn" = aws_cloudfront_distribution.this.arn

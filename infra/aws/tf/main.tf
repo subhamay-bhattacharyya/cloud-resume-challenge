@@ -1,40 +1,60 @@
 # --- root/aws/tf/root/main.tf ---
 
-
-module "acm-certificate" {
-  source          = "./modules/acm-certificate"
-  acm-certificate = local.acm-certificate
+module "acm" {
+  source          = "./modules/acm"
+  acm_certificate = local.acm_config
 }
 
-module "s3-bucket" {
-  source            = "./modules/s3-bucket"
-  s3-static-website = local.s3-static-website
+module "s3" {
+  source            = "./modules/s3"
+  s3_static_website = local.s3_config
 }
 
 module "cloudfront" {
   source                  = "./modules/cloudfront"
-  cloudfront-distribution = local.cloudfront-distribution
+  cloudfront_distribution = local.cloudfront
 }
 
 module "route53" {
   source                 = "./modules/route53"
-  route53-simple-routing = local.route53-simple-routing
+  route53_simple_routing = local.route53_record
 }
 
-module "dynamodb-table" {
-  source          = "./modules/dynamodb-table"
-  dynamodb-tables = local.dynamodb-table
+module "dynamodb" {
+  source         = "./modules/dynamodb"
+  dynamodb_table = local.dynamodb
 }
 
-# module "iam-role" {
-#   source    = "./modules/iam-role"
-#   iam-roles = local.iam-roles
-# }
+module "iam_get_endpoint_role" {
+  source      = "./modules/iam"
+  lambda_role = local.lambda_get_role
+}
 
-# module "lambda-function" {
-#   source           = "./modules/lambda-function"
-#   lambda-functions = local.lambda-functions
-# }
+module "iam_put_endpoint_role" {
+  source      = "./modules/iam"
+  lambda_role = local.lambda_put_role
+}
+
+module "lambda_get_cw_log_group" {
+  source                   = "./modules/cloudwatch"
+  cloudwatch_configuration = local.get_function_cw_log
+}
+
+module "lambda_put_cw_log_group" {
+  source                   = "./modules/cloudwatch"
+  cloudwatch_configuration = local.put_function_cw_log
+}
+
+module "lambda_get_function" {
+  source          = "./modules/lambda"
+  lambda_function = local.lambda_get_function
+}
+
+module "lambda_put_function" {
+  source          = "./modules/lambda"
+  lambda_function = local.lambda_put_function
+}
+
 
 # module "api-gateway" {
 #   source              = "./modules/api-gateway"
