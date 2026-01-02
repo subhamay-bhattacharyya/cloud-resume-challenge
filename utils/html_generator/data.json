@@ -25,7 +25,7 @@
                 "href": "/"
             },
             {
-                "text": "Résumé ",
+                "text": "Résumé",
                 "href": "/resume.html",
                 "class": "active"
             },
@@ -49,7 +49,7 @@
                         "info_title": "National Institute of Technology, Rourkela, India",
                         "info_subtitle": "Master of Computer Applications",
                         "details": {
-                            "location": "Rourkela, Odissa, IN",
+                            "location": "Rourkela, Odisha, IN",
                             "duration": "1997-2000"
                         },
                         "bullets": []
@@ -61,57 +61,271 @@
                 "title": "Experience",
                 "items": [
                     {
-                        "info_title": "Capgemini",
-                        "info_subtitle": "Senior Manager",
+                        "info_title": "Capgemini, Senior Manager",
+                        "info_subtitle": "Adobe Experience Platform (AEP) API Development, Vanguard",
                         "details": {
                             "location": "New York City, NY / Remote",
-                            "duration": "March, 2022 - Present"
+                            "duration": "March 2022 - Present"
                         },
                         "bullets": [
-                            "Built a custom multi-tenant learning management system, deployed to AWS",
-                            "Created over 40 courses and 1000+ hours of educational content"
+                            "Acted as Architect and Lead Developer, owning the end-to-end solution and working directly with the client’s engineering counterpart",
+                            "Designed scalable ingestion mechanisms to process AEP data and transform it for internal consumption",
+                            "Architected and implemented RESTful APIs using AWS API Gateway and Application Load Balancer with secure routing via Route 53",
+                            "Built durable, asynchronous processing pipelines using SNS and SQS, integrating AWS Glue for downstream transformations",
+                            "Established observability dashboards and distributed tracing with Honeycomb to ensure performance and reliability",
+                            "Managed stakeholder expectations, defined architectural patterns, and ensured successful delivery of a business-critical platform"
                         ]
                     },
                     {
-                        "info_title": "Compugain",
-                        "info_subtitle": "AWS Talend Data Engineer",
+                        "info_title": "",
+                        "info_subtitle": "DataStage Modernization, Vanguard",
                         "details": {
-                            "location": "McLean, VA",
-                            "duration": "Apr 2021-Feb 2022"
+                            "location": "New York City, NY / Remote",
+                            "duration": "March 2022 - Present"
                         },
                         "bullets": [
-                            "Built 50+ web-applications for various tech startups"
+                            "Converted legacy DataStage transformations into AWS Glue PySpark jobs with optimal partitioning and data handling strategies",
+                            "Developed orchestration workflows using AWS Lambda and Step Functions, enabling dynamic, metadata-driven ETL execution",
+                            "Designed and populated DynamoDB metadata schemas to centralize job configuration and runtime parameters",
+                            "Implemented automated monitoring, logging, and alerting for ETL jobs to improve reliability and operational visibility",
+                            "Supported knowledge transfer and collaborated closely with cross-functional teams to ensure smooth adoption and operational continuity"
                         ]
                     },
                     {
-                        "info_title": "3i Infotech",
-                        "info_subtitle": "AWS Talend Data Engineer",
+                        "info_title": "",
+                        "info_subtitle": "Cloud Business Office – AWS Cost Reduction Initiative, Vanguard",
                         "details": {
-                            "location": "McLean, VA",
-                            "duration": "March 2020-Mar 2021"
+                            "location": "New York City, NY / Remote",
+                            "duration": "March 2022 - Present"
                         },
                         "bullets": [
-                            "Hardware repairs, troubleshooting common computer issues",
-                            "Onsite training and computer repair"
+                            "Developed automation scripts and workflows to identify, track, and remediate high-cost AWS resources",
+                            "Built serverless solutions for scheduled insights, notifications, and data processing pipelines",
+                            "Collaborated with FinOps stakeholders to refine cloud usage analytics and provide actionable recommendations"
+                        ]
+                    },
+                    {
+                        "info_title": "",
+                        "info_subtitle": "Retail PAS Cloud Modernization, Vanguard",
+                        "details": {
+                            "location": "New York City, NY / Remote",
+                            "duration": "March 2022 - Present"
+                        },
+                        "bullets": [
+                            "Developed automation scripts and workflows to identify, track, and remediate high-cost AWS resources",
+                            "Built serverless solutions for scheduled insights, notifications, and data processing pipelines",
+                            "Collaborated with FinOps stakeholders to refine cloud usage analytics and provide actionable recommendations"
+                        ]
+                    },
+                    {
+                        "info_title": "Compugain, AWS Talend Data Engineer",
+                        "info_subtitle": "Cloud Data Migratio, Freddie Mac",
+                        "details": {
+                            "location": "McLean, VA",
+                            "duration": "Apr 2021 - Feb 2022"
+                        },
+                        "bullets": [
+                            "Executed large-scale data integration solutions leveraging Talend Big Data to support enterprise analytics initiatives",
+                            "Translated complex business logic into modular, reusable Talend transformations and data mappings",
+                            "Engineered Talend ETL pipelines adhering to industry-standard design patterns and data engineering best practices",
+                            "Developed both conventional Talend jobs and Spark-based processing workflows for big data environments",
+                            "Configured context variables and parameterized job frameworks to enable scalable and reusable ETL deployments",
+                            "Extended Talend functionality by implementing custom Java-based routines",
+                            "Authored comprehensive technical documentation including design specifications, test cases, and deployment guides",
+                            "Implemented reliable data ingestion pipelines into Amazon Redshift using Talend",
+                            "Developed advanced SQL queries to support data validation, transformation, and reporting needs",
+                            "Worked across AWS services such as EMR, RDS, Lambda, S3, SQS, and SNS to build distributed data solutions",
+                            "Actively contributed within an Agile delivery model, collaborating across teams and participating in daily Scrum ceremonies"
+                        ]
+                    },
+                    {
+                        "info_title": "3i Infotech, AWS Talend Data Engineer",
+                        "info_subtitle": "Fannie Mae",
+                        "details": {
+                            "location": "McLean, VA",
+                            "duration": "Mar 2020 - Mar 2021"
+                        },
+                        "bullets": [
+                            "Led data integration initiatives using Talend Big Data as the primary ETL tool",
+                            "Implemented complex business rules through reusable Talend transformations and robust data mappings",
+                            "Designed and developed Talend ETL jobs following established ETL methodologies and best practices",
+                            "Built both standard Talend jobs and Spark-based jobs for large-scale big data processing",
+                            "Defined and managed parameter files and context variables to create reusable and configurable Talend jobs",
+                            "Developed custom Talend routines using Java to extend platform capabilities",
+                            "Produced technical specifications, detailed designs, unit test cases, interface documentation, and deployment procedures",
+                            "Loaded and managed data ingestion into AWS Redshift using Talend ETL pipelines",
+                            "Wrote complex SQL queries to support data transformation, validation, and analytics",
+                            "Worked extensively with AWS services including EMR, RDS, Lambda, S3, SQS, and SNS",
+                            "Contributed in an Agile sprint environment, participating in daily Scrum meetings and cross-team coordination"
+                        ]
+                    },
+                    {
+                        "info_title": "Genpact Headstrong LLC, Principal Consultant",
+                        "info_subtitle": "Genpact PVAI - Python, Pandas, Matplotlib, Seaborn, Jupyter Notebook",
+                        "details": {
+                            "location": "New York City, NY / Remote",
+                            "duration": "Nov 2019 - Mar 2020"
+                        },
+                        "bullets": [
+                            "Developed data visualization dashboards for scoring models using Python Dash, Plotly, and Matplotlib",
+                            "Parsed emails and attachments stored as JSON in Oracle databases to extract case numbers using regular expressions",
+                            "Performed data wrangling, cleansing, merging, and feature engineering using Pandas on AWS EC2 and RDS environments",
+                            "Created analytical charts and exploratory visualizations in Jupyter Notebook using Matplotlib for preliminary data analysis",
+                            "Utilized Python libraries including NumPy, Pandas, Plotly, Dash, CSV, JSON, and Scikit-Learn for data processing and modeling"
+                        ]
+                    },
+                    {
+                        "info_title": "Data Engineer - GE Power",
+                        "info_subtitle": "Python Pandas, Talend, Greenplum, AWS - RDS",
+                        "details": {
+                            "location": "Atlanta, GA",
+                            "duration": "Sep 2019 - Nov 2019"
+                        },
+                        "bullets": [
+                            "Developed data visualization dashboards using Python Dash, Plotly, Matplotlib",
+                            "Processed email content and attachments stored as JSON in Oracle using regular expressions",
+                            "Performed feature engineering using Pandas on AWS EC2 and RDS",
+                            "Created analytical charts in Jupyter Notebook",
+                            "Used Python libraries: NumPy, Pandas, Plotly, Dash, Scikit-Learn",
+                            "Designed and developed ETL jobs in Talend using GE’s internal EDL framework"
+                        ]
+                    },
+                    {
+                        "info_title": "Data Engineer - Wells Fargo",
+                        "info_subtitle": "Microsoft SQL Developer, T-SQL Developer, SSIS Developer",
+                        "details": {
+                            "location": "Charlotte, NC",
+                            "duration": "Mar 2019 - Sep 2019"
+                        },
+                        "bullets": [
+                            "Designed a unified analytics platform for large-scale investment data",
+                            "Developed Talend Big Data jobs ingesting XML, JSON, and flat files",
+                            "Created T-SQL stored procedures for real-time data processing",
+                            "Modeled star, snowflake, and galaxy schemas using SAP PowerDesigner",
+                            "Guided Tableau developers and optimized reporting models",
+                            "Evaluated Snowflake during POC (later standardized on SQL Server)"
+                        ]
+                    },
+                    {
+                        "info_title": "Oracle E-Business Suite Team Lead / Developer / ETL",
+                        "info_subtitle": "Oracle EBS, PL/SQL Developer",
+                        "details": {
+                            "location": "Hyderabad, India / North Canton, OH / Houston, TX / Charlotte, NC / Cincinnati, OH / Stamford, CT",
+                            "duration": "Feb 2006 - Mar 2020"
+                        },
+                        "bullets": [
+                            "Worked as a conversion lead at GE Corporate (Stamford, CT), liaising between onsite business teams and offshore technical teams",
+                            "Guided offshore teams on data conversion methods, resolving mapping issues in Oracle Endeca and Oracle E-Business Suite",
+                            "Developed Python preprocessing scripts to handle large mainframe data files, filtering required columns and removing redundant data",
+                            "Converted mainframe data encoding from EBCDIC to UTF-8 and cleansed non-printable characters and invalid column values",
+                            "Led end-to-end data conversion activities, including requirement gathering, development, testing, and deployment",
+                            "Served as Technical Lead at GE Digital (Cincinnati, OH), managing a distributed team of 10 across the US, India, and Philippines",
+                            "Designed and developed interfaces integrating Oracle with third-party applications",
+                            "Led delivery of multiple technical components across cross-functional Oracle E-Business Suite R12 modules",
+                            "Ensured code quality through reviews, adherence to client standards, and mentoring team members on complex issues",
+                            "Managed code migration, release activities, Oracle SR responses, and production issue resolution",
+                            "Performed unit testing, environment migrations, user testing support, and ticket closure",
+                            "Collaborated closely with functional teams to understand business requirements and drive conversion solutions",
+                            "Developed critical CEMLI components at Knapp & Vogt (Hyderabad, India), including label printing for the WMS module",
+                            "Participated in design reviews, code reviews, development, and testing activities",
+                            "Worked as a developer and onsite-offshore coordinator at GE Oil & Gas (Houston, TX)",
+                            "Customized Oracle CRM suite components as a technical developer at Diebold Nixdorf (North Canton, OH)",
+                            "Worked on Oracle ERP implementation, support, and enhancements at GE Plastics / SABIC Innovative Plastics (Hyderabad, India)",
+                            "Developed ETL solutions using SAP BODS, Oracle PL/SQL, and Unix Shell Scripting",
+                            "Followed Oracle AIM methodology across projects, including MD50 and MD70 documentation",
+                            "Developed Oracle interfaces for standard Sales Order Import in the OM module"
                         ]
                     }
                 ]
             },
             {
-                "class": "leadership",
-                "title": "Leadership & Activities",
+                "class": "certifications",
+                "title": "Certifications",
                 "items": [
                     {
-                        "info_title": "Cloud Resume Challenge Bootcamp",
-                        "info_subtitle": "I maintain the community project Cloud Resume Challenge",
+                        "info_title": "AWS Certifications",
+                        "info_subtitle": "AWS Foundational and Associate Certifications",
                         "details": {
-                            "location": "Online",
-                            "duration": "2025 May — Present"
+                            "location": "",
+                            "duration": ""
                         },
                         "bullets": [
-                            "Update eBooks",
-                            "Created new video course",
-                            "Created companion cloud essentials course"
+                            ["AWS Certified Cloud Practitioner","https://www.google.com"],
+                            ["AWS Certified AI Practitioner","https://www.google.com"],
+                            ["AWS Certified Solutions Architect – Associate","https://www.google.com"],
+                            ["AWS Certified Developer – Associate","https://www.google.com"],
+                            ["AWS Certified SysOps Administrator – Associate","https://www.google.com"],
+                            ["AWS Certified Data Engineer – Associate","https://www.google.com"]
+                        ]
+                    },
+                    {
+                        "info_title": "GitHub Certifications",
+                        "info_subtitle": "DevOps Skills",
+                        "details": {
+                            "location": "",
+                            "duration": ""
+                        },
+                        "bullets": [
+                            ["GitHub Foundation","https://www.google.com"],
+                            ["GitHub Actions","https://www.google.com"]
+                        ]
+                    },
+                    {
+                        "info_title": "Terraform Certifications",
+                        "info_subtitle": "DevOps Skills",
+                        "details": {
+                            "location": "",
+                            "duration": ""
+                        },
+                        "bullets": [
+                            ["HashiCorp Certified: Terraform Associate (003)","https://www.google.com"]
+                        ]
+                    },
+                    {
+                        "info_title": "Snowflake Certifications",
+                        "info_subtitle": "Data Engineer Skills",
+                        "details": {
+                            "location": "",
+                            "duration": ""
+                        },
+                        "bullets": [
+                            ["SnowPro Associate: Platform Certification","https://www.google.com"],
+                            ["SnowPro Core Certification","https://www.google.com"]
+                        ]
+                    },
+                    {
+                        "info_title": "Azure Certifications",
+                        "info_subtitle": "Data Engineer Skills",
+                        "details": {
+                            "location": "",
+                            "duration": ""
+                        },
+                        "bullets": [
+                            ["Microsoft Certified: Azure Data Fundamentals","https://www.google.com"]
+                        ]
+                    },
+                    {
+                        "info_title": "GCP Certifications",
+                        "info_subtitle": "Data Engineer Skills",
+                        "details": {
+                            "location": "",
+                            "duration": ""
+                        },
+                        "bullets": [
+                            ["Cloud Digital Leader Certification","https://www.google.com"],
+                            ["Google Certified Associate Data Practitioner","https://www.google.com"]
+                        ]
+                    },
+                    {
+                        "info_title": "Astronomer Certifications",
+                        "info_subtitle": "Data Engineer Skills",
+                        "details": {
+                            "location": "",
+                            "duration": ""
+                        },
+                        "bullets": [
+                            ["Astronomer Certification DAG Authoring for Apache Airflow 3","https://www.google.com"],
+                            ["Astronomer Certification for Apache Airflow 3 Fundamentals","https://www.google.com"]
                         ]
                     }
                 ]
@@ -122,27 +336,56 @@
                 "items_groups": [
                     [
                         {
-                            "info_title": "ExamPro Cloud Essentials",
-                            "info_subtitle": "Cloud Fundamentals and multi-cloud knowledge",
-                            "details": {
-                                "code": "Japan/Toronto",
-                                "duration": "Valid Till: 2025-2028"
-                            }
+                            "info_title": "AWS",
+                            "info_subtitle": "Lambda, S3, Glue, Athena, DynamoDB, RDS, Redshift, Step Functions, CloudWatch, IAM, API Gateway, EventBridge",
+                            "details": {}
                         }
                     ],
                     [
                         {
-                            "info_title": "JLPT Certification",
-                            "info_subtitle": "I'm currently studying Japanese aiming to pass the JLPT N4 in 2025-2026",
-                            "details": {
-                                "location": "Japan/Toronto",
-                                "duration": "2025 May — Present"
-                            }
+                            "info_title": "Google Cloud Platform (GCP)",
+                            "info_subtitle": "BigQuery, Cloud Storage, Cloud Functions, Pub/Sub, Dataflow, Composer (Airflow), IAM",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Microsoft Azure",
+                            "info_subtitle": "Azure Data Factory, Azure Functions, Azure Storage, Azure SQL, Synapse Analytics",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Terraform & IaC",
+                            "info_subtitle": "Terraform, HCP Terraform, CloudFormation, Modular IaC, Remote State, OIDC, CI/CD Automation",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Snowflake",
+                            "info_subtitle": "Snowflake SQL, Warehousing, Data Modeling, POC Evaluation, Performance Optimization",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "GitHub & DevOps",
+                            "info_subtitle": "GitHub Actions, Reusable Workflows, Composite Actions, OIDC, CI/CD Pipelines, GitHub CLI",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Astronomer & Airflow",
+                            "info_subtitle": "Apache Airflow, DAG Design, Astronomer Platform, Scheduling, Monitoring, Data Pipelines",
+                            "details": {}
                         }
                     ]
                 ]
             }
         ],
-        "disclaimer": "This is an example résumé for instructional content and is not intended to be accurate."
+        "disclaimer": "This resume is generated as a part of Cloud Résumé Challenge."
     }
 }

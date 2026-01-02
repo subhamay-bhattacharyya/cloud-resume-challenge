@@ -45,7 +45,7 @@ def build_section(sec: dict):
                     if bullets:
                         with ul():
                             for b in bullets:
-                                li(b)
+                                li(b[0], href=b[1]) if isinstance(b, list) else li(b)
 
 
 def build_page(page: dict) -> dominate.document:
@@ -101,4 +101,5 @@ def build_page(page: dict) -> dominate.document:
 
 
 if __name__ == "__main__":
-    print(build_page(PAGE).render())  # Dominate prints one <!DOCTYPE html>
+    with open("../../frontend/public/index.html", "w") as f:
+        f.write(build_page(PAGE).render())  # Dominate prints one <!DOCTYPE html>
