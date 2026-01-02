@@ -1,0 +1,148 @@
+{
+    "html": {
+        "lang": "en"
+    },
+    "head": {
+        "meta": [
+            {
+                "charset": "utf-8"
+            },
+            {
+                "name": "viewport",
+                "content": "width=device-width, initial-scale=1"
+            }
+        ],
+        "title": "Subhamay Bhattacharyya's AWS Data Engineer Résumé",
+        "stylesheets": [
+            "/assets/stylesheets/style.css"
+        ]
+    },
+    "body": {
+        "location": "resume",
+        "nav": [
+            {
+                "text": "Home",
+                "href": "/"
+            },
+            {
+                "text": "Résumé ",
+                "href": "/resume.html",
+                "class": "active"
+            },
+            {
+                "text": "Projects",
+                "href": "/projects.html"
+            }
+        ],
+        "header_section": {
+            "name": "Subhamay Bhattacharyya",
+            "address": "23 Rosebud Dr, Trumbull, CT-06611, USA",
+            "email": "subhamay@subhamay.cloud",
+            "phone": "+1 203-482-3898"
+        },
+        "sections": [
+            {
+                "class": "education",
+                "title": "Education",
+                "items": [
+                    {
+                        "info_title": "National Institute of Technology, Rourkela, India",
+                        "info_subtitle": "Master of Computer Applications",
+                        "details": {
+                            "location": "Rourkela, Odissa, IN",
+                            "duration": "1997-2000"
+                        },
+                        "bullets": []
+                    }
+                ]
+            },
+            {
+                "class": "experience",
+                "title": "Experience",
+                "items": [
+                    {
+                        "info_title": "Capgemini",
+                        "info_subtitle": "Senior Manager",
+                        "details": {
+                            "location": "New York City, NY / Remote",
+                            "duration": "March, 2022 - Present"
+                        },
+                        "bullets": [
+                            "Built a custom multi-tenant learning management system, deployed to AWS",
+                            "Created over 40 courses and 1000+ hours of educational content"
+                        ]
+                    },
+                    {
+                        "info_title": "Compugain",
+                        "info_subtitle": "AWS Talend Data Engineer",
+                        "details": {
+                            "location": "McLean, VA",
+                            "duration": "Apr 2021-Feb 2022"
+                        },
+                        "bullets": [
+                            "Built 50+ web-applications for various tech startups"
+                        ]
+                    },
+                    {
+                        "info_title": "3i Infotech",
+                        "info_subtitle": "AWS Talend Data Engineer",
+                        "details": {
+                            "location": "McLean, VA",
+                            "duration": "March 2020-Mar 2021"
+                        },
+                        "bullets": [
+                            "Hardware repairs, troubleshooting common computer issues",
+                            "Onsite training and computer repair"
+                        ]
+                    }
+                ]
+            },
+            {
+                "class": "leadership",
+                "title": "Leadership & Activities",
+                "items": [
+                    {
+                        "info_title": "Cloud Resume Challenge Bootcamp",
+                        "info_subtitle": "I maintain the community project Cloud Resume Challenge",
+                        "details": {
+                            "location": "Online",
+                            "duration": "2025 May — Present"
+                        },
+                        "bullets": [
+                            "Update eBooks",
+                            "Created new video course",
+                            "Created companion cloud essentials course"
+                        ]
+                    }
+                ]
+            },
+            {
+                "class": "skills",
+                "title": "Skills & Interests",
+                "items_groups": [
+                    [
+                        {
+                            "info_title": "ExamPro Cloud Essentials",
+                            "info_subtitle": "Cloud Fundamentals and multi-cloud knowledge",
+                            "details": {
+                                "code": "Japan/Toronto",
+                                "duration": "Valid Till: 2025-2028"
+                            }
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "JLPT Certification",
+                            "info_subtitle": "I'm currently studying Japanese aiming to pass the JLPT N4 in 2025-2026",
+                            "details": {
+                                "location": "Japan/Toronto",
+                                "duration": "2025 May — Present"
+                            }
+                        }
+                    ]
+                ]
+            }
+        ],
+        "disclaimer": "This is an example résumé for instructional content and is not intended to be accurate."
+    }
+}

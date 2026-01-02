@@ -1,10 +1,12 @@
 {
   "terraform": "1.14.1",
-  "awscli": "2.32.23",
+  "awscli": "2.32.26",
   "ansible": "core",
   "nodejs": "20.19.6",
   "npm": "10.8.2",
   "http-server": "v14.1.1",
   "gcloud": "",
-  "azurecli": "2.81.0"
+  "azurecli": "2.81.0",
+  "jinja2": "3.1.6",
+  "dominate": "2.9.1"
 }
