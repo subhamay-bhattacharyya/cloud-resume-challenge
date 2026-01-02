@@ -3,7 +3,7 @@ import dominate
 import json
 from dominate.tags import (
     meta, title, link, body, main, header, nav, a, div, article,
-    section, h1, h2, h3, p, ul, li
+    section, h1, h2, h3, h4, p, ul, li
 )
 from dominate.util import raw
 
@@ -52,11 +52,6 @@ def build_page(page: dict) -> dominate.document:
     doc = dominate.document()
     doc.head.add(title(page["head"]["title"]))
 
-    # doc = dominate.document(title=page["head"]["title"])
-
-    # ✅ Correct way to set <html lang="en"> in Dominate
-    # doc.document_element["lang"] = page["html"]["lang"]
-
     # ✅ Add head content explicitly (dominate already has <head>, so just add tags)
     for m in page["head"]["meta"]:
         doc.head.add(meta(**m))
@@ -82,15 +77,7 @@ def build_page(page: dict) -> dominate.document:
                             hs = page["body"]["header_section"]
                             with section(cls="header"):
                                 h1(hs["name"])
-                                with p():
-                                    # keep exact bullets + mailto as in your sample
-                                    doc.add(raw(
-                                        f"""{hs["address"]}
-                &bull;
-                <a href="mailto:{hs["email"]}">{hs["email"]}</a>
-                &bull;
-                {hs["phone"]}"""
-                                    ))
+                                h4(f'{hs["address"]} • {hs["phone"]} • {hs["email"]}')
 
                             for sec in page["body"]["sections"]:
                                 build_section(sec)

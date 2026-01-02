@@ -1,0 +1,196 @@
+/* =========================
+   Base Reset & Variables
+   ========================= */
+:root {
+  --bg: #ffffff;
+  --fg: #111827;
+  --muted: #4b5563;
+  --border: #e5e7eb;
+  --accent: #2563eb;
+  --card: #f9fafb;
+  --max-width: 900px;
+  --radius: 10px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, Helvetica, Arial, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+/* =========================
+   Layout
+   ========================= */
+main {
+  width: 100%;
+}
+
+.content_wrap {
+  display: flex;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.content {
+  width: 100%;
+  max-width: var(--max-width);
+}
+
+/* =========================
+   Header & Navigation
+   ========================= */
+header {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+nav a.active {
+  color: var(--fg);
+  border-bottom: 2px solid var(--accent);
+}
+
+/* =========================
+   Article Header
+   ========================= */
+section.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+section.header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+section.header p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+section.header a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+section.header a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   Section Titles
+   ========================= */
+section {
+  margin-bottom: 36px;
+}
+
+section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* =========================
+   Items / Cards
+   ========================= */
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.item_heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.item_heading .info h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.item_heading .info p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.item_heading .details {
+  text-align: right;
+  font-size: 0.85rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.item_heading .details .code {
+  font-weight: 600;
+}
+
+/* =========================
+   Lists
+   ========================= */
+ul {
+  margin: 12px 0 0 18px;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+/* =========================
+   Disclaimer
+   ========================= */
+.disclaimer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
