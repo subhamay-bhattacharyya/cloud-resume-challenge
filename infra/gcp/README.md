@@ -129,27 +129,40 @@ flowchart TD
   WIP --> Bind
 ```
 
-### 1.1 Set the Active GCP Project
+#### 1.1 Authenticate with GCloud CLI
+
+```bash
+gcloud auth login
+```
+#### 1.2 Set the Active GCP Project
 
 ```bash
 gcloud config set project YOUR_PROJECT_ID
 ```
-### 1.2  Create the Terraform Service Account
+### 2  Create the Terraform Service Account
 
 ```bash
 gcloud iam service-accounts create terraform-sa \
   --display-name="Terraform Service Account"
 ```
 
-#### 1.3 Assign IAM Roles to the Service Account
+#### 2.1 Assign IAM Roles to the Service Account
 
 ```bash
 gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
   --member="serviceAccount:terraform-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
   --role="roles/storage.admin"
+
+  gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
+  --member="serviceAccount:terraform-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/compute.admin"
+
+  gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
+  --member="serviceAccount:terraform-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/dns.admin"
 ```
 
-###### 1.3.1 Grant read-only access across the project (Optional)
+#### 2.2 Grant read-only access across the project (Optional)
 
 ```bash
 gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
@@ -157,20 +170,25 @@ gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
   --role="roles/viewer"
 ```
 
-#### 1.4 Create and Download the Service Account JSON Key
+#### 2.3 Create and Download the Service Account JSON Key
 
 ```bash
 gcloud iam service-accounts keys create terraform-sa-key.json \
   --iam-account="terraform-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com"
 ```
 
-#### 1.5 Configure Terraform to Use the Service Account
+#### 2.4 Configure Terraform to Use the Service Account
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS="/absolute/path/to/terraform-sa-key.json"
 ```
 
-## Future: Move from JSON Keys to Workload Identity Federation (OIDC)
+#### 2.5 Enable the following Google Cloud APIs
+1. Cloud Resource Manager
+2. Compute Engine
+3. Cloud Storage
+4. Cloud DNS
+#### 3 Future: Move from JSON Keys to Workload Identity Federation (OIDC)
 
 <!-- In the future, to avoid long-lived JSON keys, this setup can be migrated to **Workload Identity Federation (WIF)** / OIDC:
 
@@ -219,7 +237,7 @@ flowchart TD
 
 ```
 
-## Configure Hashicorp Cloud for state management
+#### 4. Configure Hashicorp Cloud for state management
 
-## Create the Terraform config files
+#### 5. Create the Terraform config files
 

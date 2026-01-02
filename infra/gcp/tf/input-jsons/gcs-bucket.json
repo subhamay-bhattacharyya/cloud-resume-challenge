@@ -1,0 +1,13 @@
+{
+  "gcs_bucket_name": "subhamay-crc-website-066113",
+  "bucket_location": "us-east1",
+  "storage_class": "STANDARD",
+  "website_domain": "subhamay.com",
+  "managed_zone_name": "subhamay-com",
+  "labels": {
+    "project": "cloud-resume-challenge",
+    "environment": "devl",
+    "owner": "subhamay",
+    "managed": "terraform"
+  }
+}
