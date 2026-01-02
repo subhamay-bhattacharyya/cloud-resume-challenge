@@ -241,3 +241,57 @@ flowchart TD
 
 #### 5. Create the Terraform config files
 
+#### 6. Architecture
+
+```mermaid
+flowchart TB
+  %% Cloud Resume Challenge (GCP) - Private GCS origin served via HTTPS LB + Cloud CDN
+
+  user((User Browser))
+
+  subgraph dns["DNS (Cloud DNS / Registrar)"]
+    a_record["A record: resume.subhamay.com → Global Static IP"]
+  end
+
+  subgraph lb["External HTTPS Load Balancer (Global)"]
+    ip["Global Static IP"]
+    fr["Global Forwarding Rule :443"]
+    https_proxy["Target HTTPS Proxy"]
+    cert["Google-managed SSL Certificate\n(CN: resume.subhamay.com)"]
+    urlmap["URL Map\nRewrite / → /index.html"]
+  end
+
+  subgraph cdn["Cloud CDN + Backend Bucket"]
+    backend["Backend Bucket\n(enable_cdn=true)"]
+    cache["Edge Cache (Cloud CDN)"]
+  end
+
+  subgraph gcs["Google Cloud Storage (Origin)"]
+    bucket["GCS Bucket\nStatic Website Hosting\n(index.html, 404.html)\nUBLA enabled"]
+    objs["Objects\n/index.html\n/404.html"]
+  end
+
+  %% Request path
+  user -->|"1) Resolve domain"| dns
+  dns -->|"A record"| ip
+
+  user -->|"2) HTTPS request"| fr
+  fr --> https_proxy
+  https_proxy -->|"SNI + TLS"| cert
+  https_proxy --> urlmap
+  urlmap -->|"3) Route to backend"| backend
+
+  %% CDN behavior
+  backend --> cache
+  cache -->|"Cache miss → fetch"| bucket
+  bucket --> objs
+  cache -->|"Cache hit → serve"| user
+
+  %% Direct origin access (blocked/403)
+  user -.->|"Direct GCS URL (blocked if private)"| bucket
+
+  %% Notes
+  classDef note fill:#f6f6f6,stroke:#999,stroke-width:1px,color:#111;
+
+```
+
