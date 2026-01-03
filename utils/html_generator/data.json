@@ -46,13 +46,10 @@
                 "title": "Education",
                 "items": [
                     {
-                        "info_title": "National Institute of Technology, Rourkela, India",
-                        "info_subtitle": "Master of Computer Applications",
-                        "details": {
-                            "location": "Rourkela, Odisha, IN",
-                            "duration": "1997-2000"
-                        },
-                        "bullets": []
+                        "bullets": [
+                            "Master of Compter Applications (MCA), 1997-2000, National Institute of Technology, Rourkela, India",
+                            "Bachelor of Science (B.Sc.), 1994-1997, St. Xavier's College, Calcutta University, India"
+                        ]
                     }
                 ]
             },
@@ -62,10 +59,10 @@
                 "items": [
                     {
                         "info_title": "Capgemini, Senior Manager",
-                        "info_subtitle": "Adobe Experience Platform (AEP) API Development, Vanguard",
+                        "info_subtitle": "Adobe Experience Platform (AEP) API Development - Vanguard",
                         "details": {
                             "location": "New York City, NY / Remote",
-                            "duration": "March 2022 - Present"
+                            "duration": "Oct 2024 - Present"
                         },
                         "bullets": [
                             "Acted as Architect and Lead Developer, owning the end-to-end solution and working directly with the client’s engineering counterpart",
@@ -78,10 +75,10 @@
                     },
                     {
                         "info_title": "",
-                        "info_subtitle": "DataStage Modernization, Vanguard",
+                        "info_subtitle": "DataStage Modernization - Vanguard",
                         "details": {
                             "location": "New York City, NY / Remote",
-                            "duration": "March 2022 - Present"
+                            "duration": "May 2024 - Sept 2024"
                         },
                         "bullets": [
                             "Converted legacy DataStage transformations into AWS Glue PySpark jobs with optimal partitioning and data handling strategies",
@@ -93,10 +90,10 @@
                     },
                     {
                         "info_title": "",
-                        "info_subtitle": "Cloud Business Office – AWS Cost Reduction Initiative, Vanguard",
+                        "info_subtitle": "Cloud Business Office – AWS Cost Reduction Initiative - Vanguard",
                         "details": {
                             "location": "New York City, NY / Remote",
-                            "duration": "March 2022 - Present"
+                            "duration": "Mar 2024 - Apr 2024"
                         },
                         "bullets": [
                             "Developed automation scripts and workflows to identify, track, and remediate high-cost AWS resources",
@@ -106,10 +103,10 @@
                     },
                     {
                         "info_title": "",
-                        "info_subtitle": "Retail PAS Cloud Modernization, Vanguard",
+                        "info_subtitle": "Retail PAS Cloud Modernization - Vanguard",
                         "details": {
                             "location": "New York City, NY / Remote",
-                            "duration": "March 2022 - Present"
+                            "duration": "March 2022 - Mar 2024"
                         },
                         "bullets": [
                             "Developed automation scripts and workflows to identify, track, and remediate high-cost AWS resources",
@@ -119,7 +116,7 @@
                     },
                     {
                         "info_title": "Compugain, AWS Talend Data Engineer",
-                        "info_subtitle": "Cloud Data Migratio, Freddie Mac",
+                        "info_subtitle": "Cloud Data Migration, Freddie Mac",
                         "details": {
                             "location": "McLean, VA",
                             "duration": "Apr 2021 - Feb 2022"
@@ -140,7 +137,7 @@
                     },
                     {
                         "info_title": "3i Infotech, AWS Talend Data Engineer",
-                        "info_subtitle": "Fannie Mae",
+                        "info_subtitle": "AWS Data Lake and Report Generation - Fannie Mae",
                         "details": {
                             "location": "McLean, VA",
                             "duration": "Mar 2020 - Mar 2021"
@@ -161,7 +158,7 @@
                     },
                     {
                         "info_title": "Genpact Headstrong LLC, Principal Consultant",
-                        "info_subtitle": "Genpact PVAI - Python, Pandas, Matplotlib, Seaborn, Jupyter Notebook",
+                        "info_subtitle": "Python, Pandas, Matplotlib - Pfizer",
                         "details": {
                             "location": "New York City, NY / Remote",
                             "duration": "Nov 2019 - Mar 2020"
@@ -176,7 +173,7 @@
                     },
                     {
                         "info_title": "Data Engineer - GE Power",
-                        "info_subtitle": "Python Pandas, Talend, Greenplum, AWS - RDS",
+                        "info_subtitle": "Python Pandas, Talend, Greenplum, AWS RDS - GE Power",
                         "details": {
                             "location": "Atlanta, GA",
                             "duration": "Sep 2019 - Nov 2019"
@@ -192,7 +189,7 @@
                     },
                     {
                         "info_title": "Data Engineer - Wells Fargo",
-                        "info_subtitle": "Microsoft SQL Developer, T-SQL Developer, SSIS Developer",
+                        "info_subtitle": "Microsoft SQL Developer, T-SQL Developer, SSIS Developer - Wells Fargo",
                         "details": {
                             "location": "Charlotte, NC",
                             "duration": "Mar 2019 - Sep 2019"
@@ -208,7 +205,7 @@
                     },
                     {
                         "info_title": "Oracle E-Business Suite Team Lead / Developer / ETL",
-                        "info_subtitle": "Oracle EBS, PL/SQL Developer",
+                        "info_subtitle": "Oracle EBS, PL/SQL Developer - Various Clients",
                         "details": {
                             "location": "Hyderabad, India / North Canton, OH / Houston, TX / Charlotte, NC / Cincinnati, OH / Stamford, CT",
                             "duration": "Feb 2006 - Mar 2020"
@@ -244,88 +241,54 @@
                 "items": [
                     {
                         "info_title": "AWS Certifications",
-                        "info_subtitle": "AWS Foundational and Associate Certifications",
-                        "details": {
-                            "location": "",
-                            "duration": ""
-                        },
                         "bullets": [
-                            ["AWS Certified Cloud Practitioner","https://www.google.com"],
-                            ["AWS Certified AI Practitioner","https://www.google.com"],
-                            ["AWS Certified Solutions Architect – Associate","https://www.google.com"],
-                            ["AWS Certified Developer – Associate","https://www.google.com"],
-                            ["AWS Certified SysOps Administrator – Associate","https://www.google.com"],
-                            ["AWS Certified Data Engineer – Associate","https://www.google.com"]
+                            ["AWS Certified Cloud Practitioner","https://www.credly.com/earner/earned/share/6ac83ea2-cdd0-452d-ba10-c6632de1204b"],
+                            ["AWS Certified AI Practitioner","https://www.credly.com/earner/earned/badge/0e81af65-63fa-4626-a9f2-c96d738e8d15"],
+                            ["AWS Certified Solutions Architect – Associate","https://www.credly.com/earner/earned/badge/3c96dcdc-1d6a-47df-a8d0-620b06609be9"],
+                            ["AWS Certified Developer – Associate","https://www.credly.com/earner/earned/share/60276fbf-e64e-4344-963f-b2be80cd7416"],
+                            ["AWS Certified SysOps Administrator – Associate","https://www.credly.com/earner/earned/badge/695e0322-4bd4-4f85-99eb-d4e68c95e5dc"],
+                            ["AWS Certified Data Engineer – Associate","https://www.credly.com/earner/earned/badge/90fa65c0-2b2b-4b72-bcd6-de60ec3af12a"]
                         ]
                     },
                     {
                         "info_title": "GitHub Certifications",
-                        "info_subtitle": "DevOps Skills",
-                        "details": {
-                            "location": "",
-                            "duration": ""
-                        },
                         "bullets": [
-                            ["GitHub Foundation","https://www.google.com"],
-                            ["GitHub Actions","https://www.google.com"]
+                            ["GitHub Foundation","https://www.credly.com/earner/earned/badge/d5dccf85-eb23-487e-87de-e5531c2d95a1"],
+                            ["GitHub Actions","https://www.credly.com/earner/earned/badge/e8d4889f-f351-4439-8775-1910cc058cf7"]
                         ]
                     },
                     {
                         "info_title": "Terraform Certifications",
-                        "info_subtitle": "DevOps Skills",
-                        "details": {
-                            "location": "",
-                            "duration": ""
-                        },
+                        "info_subtitle": "",
                         "bullets": [
-                            ["HashiCorp Certified: Terraform Associate (003)","https://www.google.com"]
+                            ["HashiCorp Certified: Terraform Associate (003)","https://www.credly.com/earner/earned/badge/52a1f5d9-1129-4cee-b7fb-7bc4ccd93b88"]
                         ]
                     },
                     {
                         "info_title": "Snowflake Certifications",
-                        "info_subtitle": "Data Engineer Skills",
-                        "details": {
-                            "location": "",
-                            "duration": ""
-                        },
                         "bullets": [
-                            ["SnowPro Associate: Platform Certification","https://www.google.com"],
-                            ["SnowPro Core Certification","https://www.google.com"]
+                            ["SnowPro Associate: Platform Certification","https://achieve.snowflake.com/06b5046f-e964-4124-b825-fb13f9256fd8#acc.J72vCgfB"],
+                            ["SnowPro Core Certification","https://achieve.snowflake.com/7eedb483-a6be-4e06-8cde-f37295200ac2#acc.9dcpNiVZ"]
                         ]
                     },
                     {
                         "info_title": "Azure Certifications",
-                        "info_subtitle": "Data Engineer Skills",
-                        "details": {
-                            "location": "",
-                            "duration": ""
-                        },
                         "bullets": [
-                            ["Microsoft Certified: Azure Data Fundamentals","https://www.google.com"]
+                            ["Microsoft Certified: Azure Data Fundamentals","https://www.credly.com/earner/earned/share/3c74bc0a-3abc-40e3-bba7-16af5c1c52dd"]
                         ]
                     },
                     {
                         "info_title": "GCP Certifications",
-                        "info_subtitle": "Data Engineer Skills",
-                        "details": {
-                            "location": "",
-                            "duration": ""
-                        },
                         "bullets": [
-                            ["Cloud Digital Leader Certification","https://www.google.com"],
-                            ["Google Certified Associate Data Practitioner","https://www.google.com"]
+                            ["Cloud Digital Leader Certification","https://www.credly.com/earner/earned/badge/fcb7b9c4-4b5c-45b4-901a-c1b268caebb1"],
+                            ["Google Certified Associate Data Practitioner","https://www.credly.com/badges/98d8b119-b1ad-424c-90f4-3c81305844a4"]
                         ]
                     },
                     {
                         "info_title": "Astronomer Certifications",
-                        "info_subtitle": "Data Engineer Skills",
-                        "details": {
-                            "location": "",
-                            "duration": ""
-                        },
                         "bullets": [
-                            ["Astronomer Certification DAG Authoring for Apache Airflow 3","https://www.google.com"],
-                            ["Astronomer Certification for Apache Airflow 3 Fundamentals","https://www.google.com"]
+                            ["Astronomer Certification DAG Authoring for Apache Airflow 3","https://www.credly.com/earner/earned/badge/aa538171-170d-4f30-8202-d228ee2c2b89"],
+                            ["Astronomer Certification for Apache Airflow 3 Fundamentals","https://www.credly.com/earner/earned/badge/224e4704-6268-48e7-a209-e490b136d5d0"]
                         ]
                     }
                 ]

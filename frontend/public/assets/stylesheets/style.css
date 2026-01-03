@@ -31,6 +31,10 @@ body {
   line-height: 1.6;
 }
 
+a {
+  text-decoration: none;
+}
+
 /* =========================
    Layout
    ========================= */
@@ -93,6 +97,8 @@ section.header h1 {
   margin: 0;
   font-size: 2.2rem;
   font-weight: 700;
+  box-shadow: #2b333e;
+  box-decoration-break: var(--border);
 }
 
 section.header p {
@@ -107,7 +113,7 @@ section.header a {
 }
 
 section.header a:hover {
-  text-decoration: underline;
+  color: var(--fg);
 }
 
 /* =========================
@@ -116,9 +122,62 @@ section.header a:hover {
 section {
   margin-bottom: 36px;
 }
-
-section h2 {
+section h1{
   font-size: 1.25rem;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+}
+
+section h2, h3 {
+  font-size: 12px;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+  text-shadow: #111827;
+}
+
+section h4 {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+}
+
+section h5 {
+  font-size: 8px;
+  text-align: left;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+}
+
+
+.location {
+  font-size: 0.75rem;
+  font-weight: 200;
+  font-style: italic;
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.duration {
+  font-size: 0.60rem;
+  font-weight: 50;
+  font-style: italic;
+  color: rgb(18, 20, 20);
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.info_subtitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: rgb(1, 14, 14);
   margin-bottom: 16px;
   padding-bottom: 6px;
   border-bottom: 1px solid var(--border);
@@ -159,7 +218,7 @@ section h2 {
   color: var(--muted);
 }
 
-.item_heading .details {
+.item_heading .details .info_employer {
   text-align: right;
   font-size: 0.85rem;
   color: var(--muted);
@@ -180,6 +239,26 @@ ul {
 
 li {
   margin-bottom: 6px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: small;
+  color: #4b5563;
+}
+
+/* =========================
+   External Links
+   ========================= */
+a[target="_blank"]::after {
+  content: "⇲";
+  font-size: 0.85em;
+  margin-left: 3px;
+  vertical-align: super;
+  opacity: 0.7;
+  text-decoration: none;
+  text-underline-position: unset;
+}
+
+a[target="_blank"]:hover::after {
+  opacity: 1;
 }
 
 /* =========================

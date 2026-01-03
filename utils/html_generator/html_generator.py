@@ -3,25 +3,26 @@ import dominate
 import json
 from dominate.tags import (
     meta, title, link, body, main, header, nav, a, div, article,
-    section, h1, h2, h3, h4, p, ul, li
+    section, h1, h2, h3, h4, h5, p, ul, li, br
 )
 from dominate.util import raw
 
 PAGE = json.load(open("data.json"))
 
 def build_item_heading(it: dict):
+    h3(it["info_title"]) if it.get("info_title", None) else None
     with div(cls="item_heading"):
         with div(cls="info"):
-            h3(it["info_title"])
-            p(it["info_subtitle"])
+            h5(it["info_subtitle"]) if it.get("info_subtitle", None) else None
         with div(cls="details"):
             details = it.get("details", {})
+            location_duration = ""
             if "location" in details:
-                div(details["location"], cls="location")
-            if "code" in details:
-                div(details["code"], cls="code")
+                location_duration = details["location"]
             if "duration" in details:
-                div(details["duration"], cls="duration")
+                location_duration += f' • {details["duration"]}'
+            if location_duration:
+                div(location_duration, cls="duration")
 
 
 def build_section(sec: dict):
@@ -45,12 +46,15 @@ def build_section(sec: dict):
                     if bullets:
                         with ul():
                             for b in bullets:
-                                li(b[0], href=b[1]) if isinstance(b, list) else li(b)
+                                if isinstance(b, list):
+                                    attrs = {"href": b[1], "target": "_blank"}
+                                    li(a(b[0], **attrs))
+                                else:
+                                    li(b)
 
 
 def build_page(page: dict) -> dominate.document:
-    doc = dominate.document()
-    doc.head.add(title(page["head"]["title"]))
+    doc = dominate.document(None)
 
     # ✅ Add head content explicitly (dominate already has <head>, so just add tags)
     for m in page["head"]["meta"]:
