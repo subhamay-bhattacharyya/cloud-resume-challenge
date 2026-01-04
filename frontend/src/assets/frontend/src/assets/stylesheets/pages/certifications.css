@@ -1,0 +1,65 @@
+@import './../breakpoints.css';
+
+body[location='certifications'] {
+  .certifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+
+  .certification_item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+
+  .certification_info {
+    flex: 1;
+  }
+
+  .thumb img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+  }
+}
+
+@media (--small-only) {
+  body[location='certifications'] {
+    article {
+      padding: 0px;
+    }
+
+    .certification_item {
+      flex-direction: column;
+      gap: 16px;
+      border-bottom: solid 1px rgb(220, 220, 220);
+
+      .thumb img {
+        width: 100%;
+      }
+
+      .project_info {
+        order: 2;
+        padding: 16px;
+
+        .bttn {
+          align-self: center;
+        }
+      }
+    }
+  }
+}
+
+@media (--medium-up) {
+  body[location='projects'] {
+    .project_item {
+      flex-direction: row;
+      gap: 16px;
+    }
+  }
+}

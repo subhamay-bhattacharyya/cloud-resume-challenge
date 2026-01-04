@@ -5,7 +5,7 @@ export default function ProjectItem(props) {
   const project = props.project;
   return (
     <div className="project_item">
-      <div class="project_info">
+      <div className="project_info">
         <h2>{project.name}</h2>
         <p>{project.description}</p>
         <NavLink className='bttn' to={`/projects/${project.handle}`}>View Project Details</NavLink>

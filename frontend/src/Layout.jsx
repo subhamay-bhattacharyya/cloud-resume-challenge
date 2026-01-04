@@ -18,6 +18,8 @@ export default function Layout() {
       pageName = "resume";
     } else if (path === "/projects") {
       pageName = "projects";
+    } else if (path === "/certifications") {
+      pageName = "certifications";
     } else if (/^\/projects\/[^/]+$/.test(path)) {
       // Matches /projects/:handle
       pageName = "project";

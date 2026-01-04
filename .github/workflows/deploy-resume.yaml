@@ -1,0 +1,40 @@
+name: Deploy Resume
+run-name: >
+  Deploy resume to ${{ github.event.inputs['cloud-provider'] }} by ${{ github.actor }} on ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      cloud-provider:
+        description: "Choose the cloud provider"
+        required: true
+        type: choice
+        options:
+          - aws
+          - gcp
+          - azure
+        default: aws
+
+jobs:
+  bootstrap:
+    uses: subhamay-bhattacharyya-gha/bootstrap-ansible-wf/.github/workflows/ansible-bootstrap-oidc.yaml@main
+    with:
+      cloud-provider: ${{ inputs.cloud-provider }}
+      aws-region: us-east-1
+      python-version: "3.12"
+    secrets:
+      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+
+  run-ansible:
+    name: Run Ansible to Deploy Resume
+    needs: bootstrap
+    runs-on: ubuntu-latest
+    working-directory: ${{ github.workspace }}/frontend/playbook
+    steps:
+      - name: List playbook files
+        run: ls -la
+
+  #   - name: Run Ansible Playbook
+  #         run: |
+  #           ansible-playbook deploy.yml \
+  #             --extra-vars "environment=production"

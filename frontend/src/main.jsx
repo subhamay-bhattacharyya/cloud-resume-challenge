@@ -6,6 +6,7 @@ import Layout from './Layout.jsx'
 import HomePage from 'pages/HomePage'
 import ResumePage from 'pages/ResumePage'
 import ProjectsPage from 'pages/ProjectsPage'
+import CertificationsPage from 'pages/CertificationsPage'
 import ProjectPage from 'pages/ProjectPage'
 import PostPage from 'pages/PostPage'
 
@@ -17,6 +18,7 @@ createRoot(document.querySelector('main')).render(
         <Route path="/blog/:date/:handle" element={<PostPage />} />
         <Route path="/resume" element={<ResumePage />} />
         <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/certifications" element={<CertificationsPage />} />
         <Route path="/projects/:handle" element={<ProjectPage />} />
       </Route>
     </Routes>

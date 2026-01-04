@@ -1,0 +1,58 @@
+[
+  {
+    "name": "AWS Certified Cloud Practitioner",
+    "handle": "aws-certified-cloud-practitioner",
+    "certificate_url": "https://www.credly.com/earner/earned/badge/6ac83ea2-cdd0-452d-ba10-c6632de1204b",
+    "image_url": "https://images.credly.com/size/340x340/images/00634f82-b07f-4bbd-a6bb-53de397fc3a6/image.png",
+    "validity": "Date issued: Oct 09, 2021 Expires: Aug 18, 2028"
+  },
+  {
+    "name": "AWS Certified AI Practitioner",
+    "handle": "aws-certified-ai-practitioner",
+    "certificate_url": "https://www.credly.com/earner/earned/badge/0e81af65-63fa-4626-a9f2-c96d738e8d15",
+    "image_url": "https://images.credly.com/size/340x340/images/4d4693bb-530e-4bca-9327-de07f3aa2348/image.png",
+    "validity": "Date issued: Jun 14, 2025 Expires: Jun 14, 2028"
+  },
+  {
+    "name": "AWS Certified Solutions Architect – Associate",
+    "handle": "aws-certified-solution-architect-associate",
+    "certificate_url": "https://www.credly.com/users/subhamay-bhattacharyya.4c48cb98/edit#credly",
+    "image_url": "https://images.credly.com/size/340x340/images/0e284c3f-5164-4b21-8660-0d84737941bc/image.png",
+    "validity": "Date issued: May 31, 2025 Expires: May 31, 2028"
+  },
+  {
+    "name": "AWS Certified Developer – Associate",
+    "handle": "aws-certified-developer-associate",
+    "certificate_url": "https://www.credly.com/earner/earned/badge/60276fbf-e64e-4344-963f-b2be80cd7416",
+    "image_url": "https://images.credly.com/size/340x340/images/b9feab85-1a43-4f6c-99a5-631b88d5461b/image.png",
+    "validity": "Date issued: Aug 27, 2022 Expires: Aug 16, 2028"
+  },
+  {
+    "name": "AWS Certified SysOps Administrator – Associate",
+    "handle": "aws-certified-sysops-administrator-associate",
+    "certificate_url": "https://www.credly.com/users/subhamay-bhattacharyya.4c48cb98/edit#credly",
+    "image_url": "https://images.credly.com/size/340x340/images/f0d3fbb9-bfa7-4017-9989-7bde8eaf42b1/image.png",
+    "validity": "Date issued: Apr 13, 2024 Expires: Apr 13, 2027"
+  },
+  {
+    "name": "AWS Certified Data Engineer – Associate",
+    "handle": "aws-certified-data-engineer-associate",
+    "certificate_url": "https://www.credly.com/earner/earned/badge/90fa65c0-2b2b-4b72-bcd6-de60ec3af12a9",
+    "image_url": "https://images.credly.com/size/340x340/images/e5c85d7f-4e50-431e-b5af-fa9d9b0596e7/image.png",
+    "validity": "Date issued: Dec 20, 2024 Expires: May 31, 2028"
+  },
+  {
+    "name": "Microsoft Certified: Azure Data Fundamentals",
+    "handle": "microsoft-certified-azure-data-fundamentals",
+    "certificate_url": "https://www.credly.com/earner/earned/badge/3c74bc0a-3abc-40e3-bba7-16af5c1c52dd",
+    "image_url": "https://images.credly.com/size/340x340/images/70eb1e3f-d4de-4377-a062-b20fb29594ea/azure-data-fundamentals-600x600.png",
+    "validity": "Date issued: Dec 18, 2021 Expires: - "
+  },
+  {
+    "name": "Cloud Digital Leader Certification",
+    "handle": "cloud-digital-leader-certification",
+    "certificate_url": "https://www.credly.com/earner/earned/badge/fcb7b9c4-4b5c-45b4-901a-c1b268caebb1",
+    "image_url": "https://images.credly.com/size/340x340/images/44994cda-b5b0-44cb-9a6d-d29b57163073/image.png",
+    "validity": "Date issued: Dec 13, 2025 Expires: Dec 13, 2028"
+  }
+]
