@@ -10,14 +10,15 @@ export default function ResumePage() {
 
   return (
     <>
-      <h1 className='fancy'>Subhamay Bhattacharyya's Résumé</h1>
       <ResumeHeader person={resumeData.person}></ResumeHeader>
       <ResumeSection title='Education' handle='education' section={resumeData.sections.education} />
-      <ResumeSection title='Experience' handle='experience' section={resumeData.sections.experience} />
-      <ResumeSection title='Leadership & Activities' handle='leadership' section={resumeData.sections.leadership} />
-      <ResumeSection title='Skills & Interests' handle='skills' section={resumeData.sections.skills_interests} />
+      <ResumeSection title='Skills' handle='skills' section={resumeData.sections.skills} />
+      <ResumeSection title='Capgemini' handle='experience' section={resumeData.sections.capgemini} />
+      <ResumeSection title='Compugain' handle='experience' section={resumeData.sections.compugain} />
+      <ResumeSection title='3i Infotech' handle='experience' section={resumeData.sections.infotech} />
+      <ResumeSection title='Genpact' handle='experience' section={resumeData.sections.genpact} />
       <div className="disclaimer">
-        This is an example résumé for instructional content and is not intended to be accurate.
+        This résumé has been developed as a part of my cloud resume challenge project and hosted in the AWS Cloud github repository - <a href="https://github.com/subhamay-bhattacharyya/cloud-resume-challenge">https://github.com/subhamay-bhattacharyya/cloud-resume-challenge</a>
       </div>
     </>
   );

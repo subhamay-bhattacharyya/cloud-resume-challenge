@@ -7,12 +7,13 @@ body[location='resume'] {
     p {
       display: flex;
       gap: 8px;
+      font-size: 2px;
     }
   }
 
   section {
     h2 {
-      border-bottom: solid 1px rgb(0,0,0);
+      border-bottom: solid 1px rgb(89, 13, 13);
       padding: 8px 0px;
       font-size: 16px;
       text-transform: uppercase;
@@ -22,9 +23,8 @@ body[location='resume'] {
     }
   }
 
-
   .item {
-    padding: 12px 0px;
+    padding: 12px 0px
   }
 
   .item_heading {
@@ -34,13 +34,21 @@ body[location='resume'] {
       flex-direction: column;
       gap: 4px;
     }
-    .duration {
-      font-style: italic;
-      font-size: 10px;
+    .info {
+      p {
+        font-size: 14px;
+      }
+    }
+    .duration{
+        font-weight: bold;
+        font-size: 12px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .location {
+        font-size: 6px;
+    }
+    .details  {
       font-style: italic;
-      font-size: 12px;
     }
   }
 }

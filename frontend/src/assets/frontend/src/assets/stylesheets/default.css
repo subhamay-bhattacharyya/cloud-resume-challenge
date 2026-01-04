@@ -10,7 +10,7 @@ html, body {
   width: 100%;
   margin: 0px;
   padding: 0px;
-  background: #E5E8EB url('/src/assets/images/textured_paper.webp');
+  background: #E5E8EB url('/src/assets/images/textured-mulberry-paper.webp');
   background-size: 50%;
 }
 
@@ -30,8 +30,6 @@ h1.fancy {
 
 p {
   margin: 0px;
-  padding-bottom: 20px;
-  font-size: 10px;
 }
 
 main {
@@ -90,18 +88,6 @@ li {
     text-decoration: underline;
   }
 } 
-.experience{
-  background: rgb(244, 244, 242);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px;
-}
-
-.subtitle {
-  font-style: italic;
-  font-size: 14px;
-}
 
 .disclaimer {
   background: rgb(255,255,0);

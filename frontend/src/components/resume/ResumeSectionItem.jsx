@@ -14,11 +14,6 @@ export default function ResumeSectionItem(props) {
           <div className="duration">{item.duration}</div>
         </div>
       </div>
-      <ul>
-        <li>Update eBooks</li>
-        <li>Created new video course</li>
-        <li>Created companion cloud essentials course</li>
-      </ul>
       {Array.isArray(item.details) && item.details.length > 0 && (
         <ul>
           {item.details.map((text) => (
