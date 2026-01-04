@@ -4,6 +4,7 @@ body[location='resume'] {
   section.header {
     text-align: center;
     padding-bottom: 12px;
+
     p {
       display: flex;
       gap: 8px;
@@ -18,36 +19,43 @@ body[location='resume'] {
       font-size: 16px;
       text-transform: uppercase;
     }
+
     h3 {
       font-size: 16px;
     }
   }
 
   .item {
-    padding: 12px 0px
+    padding: 0px;
   }
 
   .item_heading {
     display: flex;
-    .info, .details {
+
+    .info,
+    .details {
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
+
     .info {
       p {
         font-size: 14px;
       }
     }
-    .duration{
-        font-weight: bold;
-        font-size: 12px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    .duration {
+      font-weight: bold;
+      font-size: 12px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .location {
-        font-size: 6px;
+      font-size: 6px;
     }
-    .details  {
+
+    .details {
       font-style: italic;
     }
   }
@@ -58,11 +66,16 @@ body[location='resume'] {
     section.header {
       p {
         flex-direction: column;
-        span.bull { display: none; }
+
+        span.bull {
+          display: none;
+        }
       }
     }
+
     .item_heading {
       flex-direction: column;
+
       .details {
         flex-direction: row !important;
         justify-content: space-between;
@@ -78,14 +91,17 @@ body[location='resume'] {
       p {
         flex-direction: row;
         justify-content: center;
+
         br {
           display: none;
         }
       }
     }
+
     .item_heading {
       flex-direction: row;
       justify-content: space-between;
+
       .details {
         text-align: right;
       }

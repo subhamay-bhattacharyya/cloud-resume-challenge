@@ -75,10 +75,13 @@ const resumeData = {
         location: "Malvern, PA",
         duration: "Mar'22 - Mar'24",
         details: [
-          "Developed automation scripts and workflows to identify, track, and remediate high-cost AWS resources",
-          "Built serverless solutions for scheduled insights, notifications, and data processing pipelines",
-          "Collaborated with FinOps stakeholders to refine cloud usage analytics and provide actionable recommendations"
-        ],
+          "Served as Technical Lead and primary Onshore–Offshore Coordinator, enabling seamless collaboration across global engineering teams.",
+          "Designed end-to-end event-driven architectures leveraging serverless compute, streaming ingestion, and secure data storage patterns.",
+          "Defined CI/CD deployment strategies and CloudFormation-based Infrastructure-as-Code templates.",
+          "Provided architectural guidance, code reviews, and best practices focused on performance optimization, cost efficiency, and operational excellence.",
+          "Ensured system reliability and traceability through Honeycomb dashboards and Splunk monitoring.",
+          "Coordinated requirements with product owners, clarified technical dependencies, and ensured timely project delivery."
+        ]
       },
     ],
 

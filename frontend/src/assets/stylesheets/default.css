@@ -101,6 +101,7 @@ li {
 .subtitle {
   font-style: italic;
   font-size: 14px;
+  padding-bottom: 2px;
 }
 
 .disclaimer {
