@@ -1,0 +1,22 @@
+{
+    "lambda_functions": {
+        "put_visitor_count_function": {
+            "function_name": "put-visitor-count-function",
+            "description": "Lambda function to put visitor count into DynamoDB",
+            "source_path": "lambda_functions/put_visitor_count/app.py",
+            "output_path": "lambda_functions/put_visitor_count/lambda.zip"
+        },
+        "get_visitor_count_function": {
+            "function_name": "get-visitor-count-function",
+            "description": "Lambda function to get visitor count from DynamoDB",
+            "source_path": "lambda_functions/get_visitor_count/app.py",
+            "output_path": "lambda_functions/get_visitor_count/lambda.zip"
+        }
+    },
+    "common_arguments": {
+        "runtime": "python3.12",
+        "timeout": 10,
+        "memory_size": 128,
+        "handler": "app.lambda_handler"
+    }
+}

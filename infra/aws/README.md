@@ -4,7 +4,22 @@
 
 This AWS Infrastructure-as-Code (IaC) section provides a complete, automated solution for deploying a static website hosting infrastructure as part of the **Cloud Resume Challenge**. The infrastructure is designed to be secure, scalable, and cost-effective using AWS managed services.
 
-### 1.1 Architecture Overview
+### 1.1 Services used
+```mermaid
+mindmap
+  root)Cloud Resume Challenge(
+    S3
+    Lambda
+    API Gateway
+    ACM
+    Cloudfront
+    DynamoDB
+    IAM
+    Route53
+    CloudWatch
+```
+
+### 1.2 Architecture Overview
 
 The current implementation focuses on static website hosting with the following components:
 
@@ -13,7 +28,7 @@ The current implementation focuses on static website hosting with the following 
 - **CI/CD Pipeline**: GitHub Actions with OIDC authentication for secure deployments
 - **Environment Strategy**: Single AWS account with environment-based resource naming
 
-### 1.2 Key Features
+### 1.3 Key Features
 
 - **Security-First Approach**: OIDC integration eliminates long-lived credentials
 - **Automated Deployments**: GitHub Actions workflows for validation, planning, and deployment
@@ -21,7 +36,7 @@ The current implementation focuses on static website hosting with the following 
 - **State Management**: Terraform Cloud backend for secure state storage and team collaboration
 - **Cost Optimization**: Random string generation for CI builds to avoid resource conflicts
 
-### 1.3 Future Enhancements
+### 1.4 Future Enhancements
 
 The infrastructure is designed to be extensible for additional Cloud Resume Challenge components:
 - Route53 for custom domain management

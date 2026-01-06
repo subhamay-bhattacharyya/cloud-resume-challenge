@@ -1,0 +1,1 @@
+# --- root/aws/tf/modules/api-gateway/outputs.tf ---

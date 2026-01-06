@@ -1,0 +1,275 @@
+/* =========================
+   Base Reset & Variables
+   ========================= */
+:root {
+  --bg: #ffffff;
+  --fg: #111827;
+  --muted: #4b5563;
+  --border: #e5e7eb;
+  --accent: #2563eb;
+  --card: #f9fafb;
+  --max-width: 900px;
+  --radius: 10px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, Helvetica, Arial, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* =========================
+   Layout
+   ========================= */
+main {
+  width: 100%;
+}
+
+.content_wrap {
+  display: flex;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.content {
+  width: 100%;
+  max-width: var(--max-width);
+}
+
+/* =========================
+   Header & Navigation
+   ========================= */
+header {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+nav a.active {
+  color: var(--fg);
+  border-bottom: 2px solid var(--accent);
+}
+
+/* =========================
+   Article Header
+   ========================= */
+section.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+section.header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  box-shadow: #2b333e;
+  box-decoration-break: var(--border);
+}
+
+section.header p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+section.header a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+section.header a:hover {
+  color: var(--fg);
+}
+
+/* =========================
+   Section Titles
+   ========================= */
+section {
+  margin-bottom: 36px;
+}
+section h1{
+  font-size: 1.25rem;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+}
+
+section h2, h3 {
+  font-size: 12px;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+  text-shadow: #111827;
+}
+
+section h4 {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+}
+
+section h5 {
+  font-size: 8px;
+  text-align: left;
+  margin-bottom: 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+}
+
+
+.location {
+  font-size: 0.75rem;
+  font-weight: 200;
+  font-style: italic;
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.duration {
+  font-size: 0.60rem;
+  font-weight: 50;
+  font-style: italic;
+  color: rgb(18, 20, 20);
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.info_subtitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: rgb(1, 14, 14);
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* =========================
+   Items / Cards
+   ========================= */
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.item_heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.item_heading .info h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.item_heading .info p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.item_heading .details .info_employer {
+  text-align: right;
+  font-size: 0.85rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.item_heading .details .code {
+  font-weight: 600;
+}
+
+/* =========================
+   Lists
+   ========================= */
+ul {
+  margin: 12px 0 0 18px;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 6px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: small;
+  color: #4b5563;
+}
+
+/* =========================
+   External Links
+   ========================= */
+a[target="_blank"]::after {
+  content: "⇲";
+  font-size: 0.85em;
+  margin-left: 3px;
+  vertical-align: super;
+  opacity: 0.7;
+  text-decoration: none;
+  text-underline-position: unset;
+}
+
+a[target="_blank"]:hover::after {
+  opacity: 1;
+}
+
+/* =========================
+   Disclaimer
+   ========================= */
+.disclaimer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+

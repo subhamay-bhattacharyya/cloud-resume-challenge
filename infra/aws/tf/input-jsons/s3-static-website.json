@@ -1,3 +1,4 @@
 {
-    "s3-bucket-name": "subhamay-resume-aws.space"
+    "s3-bucket-name": "subhamay-crc-website",
+    "website-domain": "subhamay.us"
 }

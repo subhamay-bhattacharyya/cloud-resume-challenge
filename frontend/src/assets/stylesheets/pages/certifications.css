@@ -1,0 +1,82 @@
+@import './../breakpoints.css';
+
+body[location='certifications'] {
+  .certifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+    padding: 20px 0;
+  }
+  .certification_item {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 8px;
+    background: #fff;
+    transition: box-shadow 0.3s ease;
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .thumb {
+      flex-shrink: 0;
+      img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+      }
+    }
+    .caption{
+        text-align: center;
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 8px;
+    }
+    .certification_info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      .bttn {
+        margin-top: 8px;
+      }
+      p {
+        line-height: 1.5em;
+      }
+    }
+  }
+}
+
+@media (--small-only) {
+  body[location='certifications'] {
+    article {
+      padding: 0px;
+    }
+    .certification_item {
+      flex-direction: column;
+      gap: 16px;
+      border-bottom: solid 1px rgb(220,220,220);
+      .thumb img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+      }
+      .certification_info {
+        order: 2;
+        padding: 16px;
+        .bttn {
+          align-self: center;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  body[location='certifications'] {
+    .certification_item .thumb img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+    }
+  }
+}

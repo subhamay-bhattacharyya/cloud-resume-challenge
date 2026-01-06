@@ -19,8 +19,18 @@ permissions:
   contents: read       # needed for checkout / Terraform
 
 jobs:
-  terraform-destroy:
-    name: Destroy
+  start-job:
+    name: Start Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Destroy Job Status
+        id: set-destroy-job-status
+        run: |
+          echo "destroy-job-status=started" >> $GITHUB_OUTPUT
+
+  terraform-destroy-aws:
+    name: Destroy AWS Stack
+    needs: start-job
     uses: subhamay-bhattacharyya-gha/terraform-destroy-wf/.github/workflows/terraform-destroy.yaml@feature/GHA-0028-add-multi-cloud-support
     with:
       cloud-provider: ${{ github.event.inputs['cloud-provider'] }}
@@ -29,3 +39,41 @@ jobs:
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
       aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+
+  terraform-destroy-gcp:
+    name: Destroy GCP Stack
+    needs: start-job
+    uses: subhamay-bhattacharyya-gha/terraform-destroy-wf/.github/workflows/terraform-destroy.yaml@feature/GHA-0028-add-multi-cloud-support
+    with:
+      cloud-provider: ${{ github.event.inputs['cloud-provider'] }}
+      backend-type: remote
+    secrets:
+      tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      gcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
+      gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }} 
+
+  terraform-destroy-azure:
+    needs: start-job
+    name: Destroy Azure Stack
+    uses: subhamay-bhattacharyya-gha/terraform-destroy-wf/.github/workflows/terraform-destroy.yaml@feature/GHA-0028-add-multi-cloud-support
+    with:
+      cloud-provider: ${{ github.event.inputs['cloud-provider'] }}    
+      backend-type: remote
+    secrets:
+      tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  finalize-destroy-job:
+    name: Finalize Destroy Job
+    needs:
+      - terraform-destroy-aws
+      - terraform-destroy-gcp
+      - terraform-destroy-azure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Destroy Job Status
+        id: set-destroy-job-status
+        run: |
+          echo "destroy-job-status=completed" >> $GITHUB_OUTPUT

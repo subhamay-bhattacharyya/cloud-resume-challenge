@@ -13,5 +13,7 @@
   "nodejs": "20",
   "http-server": "14.1.1",
   "gcloud": "latest",
-  "azurecli": "latest"
+  "azurecli": "latest",
+  "jinja2": "latest",
+  "dominate": "latest"
 }

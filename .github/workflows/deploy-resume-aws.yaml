@@ -1,0 +1,28 @@
+name: Deploy Resume
+run-name: >
+  Deploy resume to ${{ github.event.inputs['cloud-provider'] }} by ${{ github.actor }} on ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      cloud-provider:
+        description: "Choose the cloud provider"
+        required: true
+        type: choice
+        options:
+          - aws
+          - gcp
+          - azure
+        default: aws
+
+jobs:
+  run-playbook:
+    uses: subhamay-bhattacharyya-gha/bootstrap-ansible-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
+    with:
+      cloud-provider: ${{ inputs.cloud-provider }}
+      aws-region: us-east-1
+      python-version: "3.12"
+      ansible-extra-vars: "message=\"Hello from GitHub Actions!\"
+      ansible-playbook-path=frontend/playbook/deploy-resume-${{ inputs.cloud-provider }}.yaml"
+    secrets:
+      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}

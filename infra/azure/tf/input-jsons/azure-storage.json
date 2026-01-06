@@ -1,0 +1,49 @@
+{
+    "website_domain_name": "www.subhamay-resume-azure.space",
+    "base": {
+        "resource_group_name": "cloud-resume-challenge-rg",
+        "location": "East US"
+    },
+    "storage_account": {
+        "name": "subhamaycrc",
+        "account_tier": "Standard",
+        "account_replication_type": "LRS",
+        "account_kind": "StorageV2",
+        "min_tls_version": "TLS1_2",
+        "allow_nested_items_to_be_public": false
+    },
+    "cdn": {
+        "profile_name": "crc-cdn-profile",
+        "sku_name": "Standard_AzureFrontDoor",
+        "front_door_name": "crc-cdn",
+        "front_door_endpoint": "crc-cdn-endpoint",
+        "origin_host_header": "subhamaycrc.z13.web.core.windows.net",
+        "is_http_allowed": false,
+        "is_https_allowed": true,
+        "content_types_to_compress": [
+            "text/html",
+            "text/css",
+            "application/javascript",
+            "application/json",
+            "image/svg+xml"
+        ],
+        "query_string_caching_behavior": "IgnoreQueryString",
+        "origin": {
+            "name": "storage-origin",
+            "host_name": "subhamaycrc.z13.web.core.windows.net"
+        }
+    },
+    "dns": {
+        "zone_name": "subhamay-resume-azure.space",
+        "record_type": "CNAME",
+        "record_name": "www",
+        "ttl": 3600,
+        "target": "crc-cdn-endpoint.azureedge.net"
+    },
+    "default_tags": {
+        "project": "cloud-resume-challenge",
+        "environment": "devl",
+        "owner": "subhamay",
+        "managed": "terraform"
+    }
+}

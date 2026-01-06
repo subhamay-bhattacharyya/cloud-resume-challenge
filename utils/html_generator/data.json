@@ -1,0 +1,354 @@
+{
+    "html": {
+        "lang": "en"
+    },
+    "head": {
+        "meta": [
+            {
+                "charset": "utf-8"
+            },
+            {
+                "name": "viewport",
+                "content": "width=device-width, initial-scale=1"
+            }
+        ],
+        "title": "Subhamay Bhattacharyya's AWS Data Engineer Résumé",
+        "stylesheets": [
+            "/assets/stylesheets/style.css"
+        ]
+    },
+    "body": {
+        "location": "resume",
+        "nav": [
+            {
+                "text": "Home",
+                "href": "/"
+            },
+            {
+                "text": "Résumé",
+                "href": "/resume.html",
+                "class": "active"
+            },
+            {
+                "text": "Projects",
+                "href": "/projects.html"
+            }
+        ],
+        "header_section": {
+            "name": "Subhamay Bhattacharyya",
+            "address": "23 Rosebud Dr, Trumbull, CT-06611, USA",
+            "email": "subhamay@subhamay.cloud",
+            "phone": "+1 203-482-3898"
+        },
+        "sections": [
+            {
+                "class": "education",
+                "title": "Education",
+                "items": [
+                    {
+                        "bullets": [
+                            "Master of Compter Applications (MCA), 1997-2000, National Institute of Technology, Rourkela, India",
+                            "Bachelor of Science (B.Sc.), 1994-1997, St. Xavier's College, Calcutta University, India"
+                        ]
+                    }
+                ]
+            },
+            {
+                "class": "experience",
+                "title": "Experience",
+                "items": [
+                    {
+                        "info_title": "Capgemini, Senior Manager",
+                        "info_subtitle": "Adobe Experience Platform (AEP) API Development - Vanguard",
+                        "details": {
+                            "location": "New York City, NY / Remote",
+                            "duration": "Oct 2024 - Present"
+                        },
+                        "bullets": [
+                            "Acted as Architect and Lead Developer, owning the end-to-end solution and working directly with the client’s engineering counterpart",
+                            "Designed scalable ingestion mechanisms to process AEP data and transform it for internal consumption",
+                            "Architected and implemented RESTful APIs using AWS API Gateway and Application Load Balancer with secure routing via Route 53",
+                            "Built durable, asynchronous processing pipelines using SNS and SQS, integrating AWS Glue for downstream transformations",
+                            "Established observability dashboards and distributed tracing with Honeycomb to ensure performance and reliability",
+                            "Managed stakeholder expectations, defined architectural patterns, and ensured successful delivery of a business-critical platform"
+                        ]
+                    },
+                    {
+                        "info_title": "",
+                        "info_subtitle": "DataStage Modernization - Vanguard",
+                        "details": {
+                            "location": "New York City, NY / Remote",
+                            "duration": "May 2024 - Sept 2024"
+                        },
+                        "bullets": [
+                            "Converted legacy DataStage transformations into AWS Glue PySpark jobs with optimal partitioning and data handling strategies",
+                            "Developed orchestration workflows using AWS Lambda and Step Functions, enabling dynamic, metadata-driven ETL execution",
+                            "Designed and populated DynamoDB metadata schemas to centralize job configuration and runtime parameters",
+                            "Implemented automated monitoring, logging, and alerting for ETL jobs to improve reliability and operational visibility",
+                            "Supported knowledge transfer and collaborated closely with cross-functional teams to ensure smooth adoption and operational continuity"
+                        ]
+                    },
+                    {
+                        "info_title": "",
+                        "info_subtitle": "Cloud Business Office – AWS Cost Reduction Initiative - Vanguard",
+                        "details": {
+                            "location": "New York City, NY / Remote",
+                            "duration": "Mar 2024 - Apr 2024"
+                        },
+                        "bullets": [
+                            "Developed automation scripts and workflows to identify, track, and remediate high-cost AWS resources",
+                            "Built serverless solutions for scheduled insights, notifications, and data processing pipelines",
+                            "Collaborated with FinOps stakeholders to refine cloud usage analytics and provide actionable recommendations"
+                        ]
+                    },
+                    {
+                        "info_title": "",
+                        "info_subtitle": "Retail PAS Cloud Modernization - Vanguard",
+                        "details": {
+                            "location": "New York City, NY / Remote",
+                            "duration": "March 2022 - Mar 2024"
+                        },
+                        "bullets": [
+                            "Developed automation scripts and workflows to identify, track, and remediate high-cost AWS resources",
+                            "Built serverless solutions for scheduled insights, notifications, and data processing pipelines",
+                            "Collaborated with FinOps stakeholders to refine cloud usage analytics and provide actionable recommendations"
+                        ]
+                    },
+                    {
+                        "info_title": "Compugain, AWS Talend Data Engineer",
+                        "info_subtitle": "Cloud Data Migration, Freddie Mac",
+                        "details": {
+                            "location": "McLean, VA",
+                            "duration": "Apr 2021 - Feb 2022"
+                        },
+                        "bullets": [
+                            "Executed large-scale data integration solutions leveraging Talend Big Data to support enterprise analytics initiatives",
+                            "Translated complex business logic into modular, reusable Talend transformations and data mappings",
+                            "Engineered Talend ETL pipelines adhering to industry-standard design patterns and data engineering best practices",
+                            "Developed both conventional Talend jobs and Spark-based processing workflows for big data environments",
+                            "Configured context variables and parameterized job frameworks to enable scalable and reusable ETL deployments",
+                            "Extended Talend functionality by implementing custom Java-based routines",
+                            "Authored comprehensive technical documentation including design specifications, test cases, and deployment guides",
+                            "Implemented reliable data ingestion pipelines into Amazon Redshift using Talend",
+                            "Developed advanced SQL queries to support data validation, transformation, and reporting needs",
+                            "Worked across AWS services such as EMR, RDS, Lambda, S3, SQS, and SNS to build distributed data solutions",
+                            "Actively contributed within an Agile delivery model, collaborating across teams and participating in daily Scrum ceremonies"
+                        ]
+                    },
+                    {
+                        "info_title": "3i Infotech, AWS Talend Data Engineer",
+                        "info_subtitle": "AWS Data Lake and Report Generation - Fannie Mae",
+                        "details": {
+                            "location": "McLean, VA",
+                            "duration": "Mar 2020 - Mar 2021"
+                        },
+                        "bullets": [
+                            "Led data integration initiatives using Talend Big Data as the primary ETL tool",
+                            "Implemented complex business rules through reusable Talend transformations and robust data mappings",
+                            "Designed and developed Talend ETL jobs following established ETL methodologies and best practices",
+                            "Built both standard Talend jobs and Spark-based jobs for large-scale big data processing",
+                            "Defined and managed parameter files and context variables to create reusable and configurable Talend jobs",
+                            "Developed custom Talend routines using Java to extend platform capabilities",
+                            "Produced technical specifications, detailed designs, unit test cases, interface documentation, and deployment procedures",
+                            "Loaded and managed data ingestion into AWS Redshift using Talend ETL pipelines",
+                            "Wrote complex SQL queries to support data transformation, validation, and analytics",
+                            "Worked extensively with AWS services including EMR, RDS, Lambda, S3, SQS, and SNS",
+                            "Contributed in an Agile sprint environment, participating in daily Scrum meetings and cross-team coordination"
+                        ]
+                    },
+                    {
+                        "info_title": "Genpact Headstrong LLC, Principal Consultant",
+                        "info_subtitle": "Python, Pandas, Matplotlib - Pfizer",
+                        "details": {
+                            "location": "New York City, NY / Remote",
+                            "duration": "Nov 2019 - Mar 2020"
+                        },
+                        "bullets": [
+                            "Developed data visualization dashboards for scoring models using Python Dash, Plotly, and Matplotlib",
+                            "Parsed emails and attachments stored as JSON in Oracle databases to extract case numbers using regular expressions",
+                            "Performed data wrangling, cleansing, merging, and feature engineering using Pandas on AWS EC2 and RDS environments",
+                            "Created analytical charts and exploratory visualizations in Jupyter Notebook using Matplotlib for preliminary data analysis",
+                            "Utilized Python libraries including NumPy, Pandas, Plotly, Dash, CSV, JSON, and Scikit-Learn for data processing and modeling"
+                        ]
+                    },
+                    {
+                        "info_title": "Data Engineer - GE Power",
+                        "info_subtitle": "Python Pandas, Talend, Greenplum, AWS RDS - GE Power",
+                        "details": {
+                            "location": "Atlanta, GA",
+                            "duration": "Sep 2019 - Nov 2019"
+                        },
+                        "bullets": [
+                            "Developed data visualization dashboards using Python Dash, Plotly, Matplotlib",
+                            "Processed email content and attachments stored as JSON in Oracle using regular expressions",
+                            "Performed feature engineering using Pandas on AWS EC2 and RDS",
+                            "Created analytical charts in Jupyter Notebook",
+                            "Used Python libraries: NumPy, Pandas, Plotly, Dash, Scikit-Learn",
+                            "Designed and developed ETL jobs in Talend using GE’s internal EDL framework"
+                        ]
+                    },
+                    {
+                        "info_title": "Data Engineer - Wells Fargo",
+                        "info_subtitle": "Microsoft SQL Developer, T-SQL Developer, SSIS Developer - Wells Fargo",
+                        "details": {
+                            "location": "Charlotte, NC",
+                            "duration": "Mar 2019 - Sep 2019"
+                        },
+                        "bullets": [
+                            "Designed a unified analytics platform for large-scale investment data",
+                            "Developed Talend Big Data jobs ingesting XML, JSON, and flat files",
+                            "Created T-SQL stored procedures for real-time data processing",
+                            "Modeled star, snowflake, and galaxy schemas using SAP PowerDesigner",
+                            "Guided Tableau developers and optimized reporting models",
+                            "Evaluated Snowflake during POC (later standardized on SQL Server)"
+                        ]
+                    },
+                    {
+                        "info_title": "Oracle E-Business Suite Team Lead / Developer / ETL",
+                        "info_subtitle": "Oracle EBS, PL/SQL Developer - Various Clients",
+                        "details": {
+                            "location": "Hyderabad, India / North Canton, OH / Houston, TX / Charlotte, NC / Cincinnati, OH / Stamford, CT",
+                            "duration": "Feb 2006 - Mar 2020"
+                        },
+                        "bullets": [
+                            "Worked as a conversion lead at GE Corporate (Stamford, CT), liaising between onsite business teams and offshore technical teams",
+                            "Guided offshore teams on data conversion methods, resolving mapping issues in Oracle Endeca and Oracle E-Business Suite",
+                            "Developed Python preprocessing scripts to handle large mainframe data files, filtering required columns and removing redundant data",
+                            "Converted mainframe data encoding from EBCDIC to UTF-8 and cleansed non-printable characters and invalid column values",
+                            "Led end-to-end data conversion activities, including requirement gathering, development, testing, and deployment",
+                            "Served as Technical Lead at GE Digital (Cincinnati, OH), managing a distributed team of 10 across the US, India, and Philippines",
+                            "Designed and developed interfaces integrating Oracle with third-party applications",
+                            "Led delivery of multiple technical components across cross-functional Oracle E-Business Suite R12 modules",
+                            "Ensured code quality through reviews, adherence to client standards, and mentoring team members on complex issues",
+                            "Managed code migration, release activities, Oracle SR responses, and production issue resolution",
+                            "Performed unit testing, environment migrations, user testing support, and ticket closure",
+                            "Collaborated closely with functional teams to understand business requirements and drive conversion solutions",
+                            "Developed critical CEMLI components at Knapp & Vogt (Hyderabad, India), including label printing for the WMS module",
+                            "Participated in design reviews, code reviews, development, and testing activities",
+                            "Worked as a developer and onsite-offshore coordinator at GE Oil & Gas (Houston, TX)",
+                            "Customized Oracle CRM suite components as a technical developer at Diebold Nixdorf (North Canton, OH)",
+                            "Worked on Oracle ERP implementation, support, and enhancements at GE Plastics / SABIC Innovative Plastics (Hyderabad, India)",
+                            "Developed ETL solutions using SAP BODS, Oracle PL/SQL, and Unix Shell Scripting",
+                            "Followed Oracle AIM methodology across projects, including MD50 and MD70 documentation",
+                            "Developed Oracle interfaces for standard Sales Order Import in the OM module"
+                        ]
+                    }
+                ]
+            },
+            {
+                "class": "certifications",
+                "title": "Certifications",
+                "items": [
+                    {
+                        "info_title": "AWS Certifications",
+                        "bullets": [
+                            ["AWS Certified Cloud Practitioner","https://www.credly.com/earner/earned/share/6ac83ea2-cdd0-452d-ba10-c6632de1204b"],
+                            ["AWS Certified AI Practitioner","https://www.credly.com/earner/earned/badge/0e81af65-63fa-4626-a9f2-c96d738e8d15"],
+                            ["AWS Certified Solutions Architect – Associate","https://www.credly.com/earner/earned/badge/3c96dcdc-1d6a-47df-a8d0-620b06609be9"],
+                            ["AWS Certified Developer – Associate","https://www.credly.com/earner/earned/share/60276fbf-e64e-4344-963f-b2be80cd7416"],
+                            ["AWS Certified SysOps Administrator – Associate","https://www.credly.com/earner/earned/badge/695e0322-4bd4-4f85-99eb-d4e68c95e5dc"],
+                            ["AWS Certified Data Engineer – Associate","https://www.credly.com/earner/earned/badge/90fa65c0-2b2b-4b72-bcd6-de60ec3af12a"]
+                        ]
+                    },
+                    {
+                        "info_title": "GitHub Certifications",
+                        "bullets": [
+                            ["GitHub Foundation","https://www.credly.com/earner/earned/badge/d5dccf85-eb23-487e-87de-e5531c2d95a1"],
+                            ["GitHub Actions","https://www.credly.com/earner/earned/badge/e8d4889f-f351-4439-8775-1910cc058cf7"]
+                        ]
+                    },
+                    {
+                        "info_title": "Terraform Certifications",
+                        "info_subtitle": "",
+                        "bullets": [
+                            ["HashiCorp Certified: Terraform Associate (003)","https://www.credly.com/earner/earned/badge/52a1f5d9-1129-4cee-b7fb-7bc4ccd93b88"]
+                        ]
+                    },
+                    {
+                        "info_title": "Snowflake Certifications",
+                        "bullets": [
+                            ["SnowPro Associate: Platform Certification","https://achieve.snowflake.com/06b5046f-e964-4124-b825-fb13f9256fd8#acc.J72vCgfB"],
+                            ["SnowPro Core Certification","https://achieve.snowflake.com/7eedb483-a6be-4e06-8cde-f37295200ac2#acc.9dcpNiVZ"]
+                        ]
+                    },
+                    {
+                        "info_title": "Azure Certifications",
+                        "bullets": [
+                            ["Microsoft Certified: Azure Data Fundamentals","https://www.credly.com/earner/earned/share/3c74bc0a-3abc-40e3-bba7-16af5c1c52dd"]
+                        ]
+                    },
+                    {
+                        "info_title": "GCP Certifications",
+                        "bullets": [
+                            ["Cloud Digital Leader Certification","https://www.credly.com/earner/earned/badge/fcb7b9c4-4b5c-45b4-901a-c1b268caebb1"],
+                            ["Google Certified Associate Data Practitioner","https://www.credly.com/badges/98d8b119-b1ad-424c-90f4-3c81305844a4"]
+                        ]
+                    },
+                    {
+                        "info_title": "Astronomer Certifications",
+                        "bullets": [
+                            ["Astronomer Certification DAG Authoring for Apache Airflow 3","https://www.credly.com/earner/earned/badge/aa538171-170d-4f30-8202-d228ee2c2b89"],
+                            ["Astronomer Certification for Apache Airflow 3 Fundamentals","https://www.credly.com/earner/earned/badge/224e4704-6268-48e7-a209-e490b136d5d0"]
+                        ]
+                    }
+                ]
+            },
+            {
+                "class": "skills",
+                "title": "Skills & Interests",
+                "items_groups": [
+                    [
+                        {
+                            "info_title": "AWS",
+                            "info_subtitle": "Lambda, S3, Glue, Athena, DynamoDB, RDS, Redshift, Step Functions, CloudWatch, IAM, API Gateway, EventBridge",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Google Cloud Platform (GCP)",
+                            "info_subtitle": "BigQuery, Cloud Storage, Cloud Functions, Pub/Sub, Dataflow, Composer (Airflow), IAM",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Microsoft Azure",
+                            "info_subtitle": "Azure Data Factory, Azure Functions, Azure Storage, Azure SQL, Synapse Analytics",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Terraform & IaC",
+                            "info_subtitle": "Terraform, HCP Terraform, CloudFormation, Modular IaC, Remote State, OIDC, CI/CD Automation",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Snowflake",
+                            "info_subtitle": "Snowflake SQL, Warehousing, Data Modeling, POC Evaluation, Performance Optimization",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "GitHub & DevOps",
+                            "info_subtitle": "GitHub Actions, Reusable Workflows, Composite Actions, OIDC, CI/CD Pipelines, GitHub CLI",
+                            "details": {}
+                        }
+                    ],
+                    [
+                        {
+                            "info_title": "Astronomer & Airflow",
+                            "info_subtitle": "Apache Airflow, DAG Design, Astronomer Platform, Scheduling, Monitoring, Data Pipelines",
+                            "details": {}
+                        }
+                    ]
+                ]
+            }
+        ],
+        "disclaimer": "This resume is generated as a part of Cloud Résumé Challenge."
+    }
+}

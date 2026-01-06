@@ -206,6 +206,44 @@ if should_run azurecli; then
   add_summary azurecli "$AZCLI_VERSION"
 fi
 
+# jinja2 (Python package)
+if should_run jinja2; then
+  log_step "Installing jinja2"
+  version=$(get_expected_version jinja2)
+  
+  if ! $DRY_RUN; then
+    run_cmd "Update apt" sudo apt-get update -y
+    run_cmd "Install Python pip" sudo apt-get install -y python3-pip
+    if [[ -n "$version" && "$version" != "latest" ]]; then
+      run_cmd "Install jinja2" sudo pip3 install --break-system-packages "jinja2==${version}"
+    else
+      run_cmd "Install jinja2" sudo pip3 install --break-system-packages jinja2
+    fi
+  fi
+  
+  JINJA2_VERSION=$(python3 -c "import jinja2; print(jinja2.__version__)" 2>/dev/null || echo "installed")
+  add_summary jinja2 "$JINJA2_VERSION"
+fi
+
+# dominate (Python package)
+if should_run dominate; then
+  log_step "Installing dominate"
+  version=$(get_expected_version dominate)
+  
+  if ! $DRY_RUN; then
+    run_cmd "Update apt" sudo apt-get update -y
+    run_cmd "Install Python pip" sudo apt-get install -y python3-pip
+    if [[ -n "$version" && "$version" != "latest" ]]; then
+      run_cmd "Install dominate" sudo pip3 install --break-system-packages "dominate==${version}"
+    else
+      run_cmd "Install dominate" sudo pip3 install --break-system-packages dominate
+    fi
+  fi
+  
+  DOMINATE_VERSION=$(python3 -c "import dominate; print(dominate.__version__)" 2>/dev/null || echo "installed")
+  add_summary dominate "$DOMINATE_VERSION"
+fi
+
 # Write summary
 if ! $DRY_RUN; then
   echo "$SUMMARY_JSON" | jq . > "$SUMMARY_FILE"

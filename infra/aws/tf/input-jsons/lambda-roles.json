@@ -1,0 +1,42 @@
+ {
+    "get_lambda_role": {
+        "name": "get-visitor-count-lambda-role",
+        "description": "IAM role for Get Visitor Count Lambda Function",
+        "path": "/service-role/",
+        "max_session_duration": 3600,
+        "inline-policies":{
+            "dynamodb-get-policy": {
+                "Effect": "Allow",
+                "Api": ["dynamodb:getItem"]
+            },
+            "cloudwatch-create-log-group-policy": {
+                "Effect": "Allow",
+                "Api": ["logs:CreateLogGroup"]
+            },
+            "cloudwatch-write-log-event-policy": {
+                "Effect": "Allow",
+                "Api": ["logs:CreateLogStream", "logs:PutLogEvents"]
+            }
+        }
+    },
+    "put_lambda_role": {
+        "name": "put-visitor-count-lambda-role",
+        "description": "IAM role for Put Visitor Count Lambda Function",
+        "path": "/service-role/",
+        "max_session_duration": 3600,
+        "inline-policies":{
+            "dynamodb-get-policy": {
+                "Effect": "Allow",
+                "Api": ["dynamodb:putItem"]
+            },
+            "cloudwatch-create-log-group-policy": {
+                "Effect": "Allow",
+                "Api": ["logs:CreateLogGroup"]
+            },
+            "cloudwatch-write-log-event-policy": {
+                "Effect": "Allow",
+                "Api": ["logs:CreateLogStream", "logs:PutLogEvents"]
+            }
+        }
+    }
+ }

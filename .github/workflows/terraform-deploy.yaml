@@ -8,7 +8,7 @@ on:
       cloud-provider:
         description: "Target cloud provider"
         required: true
-        type: choice
+        type: options
         options:
           - aws
           - gcp
@@ -27,11 +27,22 @@ permissions:
 #     shell: bash
 
 jobs:
-  terraform-deploy:
-    name: Deploy
+  start-job:
+    name: Start Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Deploy Job Status
+        id: set-deploy-job-status
+        run: |
+          echo "deploy-job-status=started" >> $GITHUB_OUTPUT
+
+  terraform-deploy-aws:
+    name: Deploy to AWS
+    needs: start-job
     uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0011-add-tflint-in-the-workflo
+    if: ${{ github.event.inputs['cloud-provider'] == 'aws' }}
     with:
-      cloud-provider: ${{ github.event.inputs['cloud-provider'] }}
+      cloud-provider: aws
       tflint-ver: ${{ vars.TF_LINT_VER }}
       backend-type: remote
       aws-region: ${{ vars.AWS_REGION }}
@@ -39,10 +50,49 @@ jobs:
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
       aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
-      # gcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
-      # gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-      # azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      # azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      # azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  terraform-deploy-gcp:
+    name: Deploy to GCP
+    needs: start-job
+    uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0011-add-tflint-in-the-workflo
+    if: ${{ github.event.inputs['cloud-provider'] == 'gcp' }}
+    with:
+      cloud-provider: gcp
+      tflint-ver: ${{ vars.TF_LINT_VER }}
+      backend-type: remote
+      tf-vars-file: terraform.tfvars
+    secrets:
+      tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      gcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
+      gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+  terraform-deploy-azure:
+    name: Deploy to Azure
+    needs: start-job
+    uses: subhamay-bhattacharyya-gha/tf-deploy-multi-reusable-wf/.github/workflows/terraform-deploy.yaml@feature/GHA-0011-add-tflint-in-the-workflo
+    if: ${{ github.event.inputs['cloud-provider'] == 'azure' }}
+    with:
+      cloud-provider: azure
+      tflint-ver: ${{ vars.TF_LINT_VER }}
+      backend-type: remote
+      tf-vars-file: terraform.tfvars
+    secrets:
+      tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  finalize-deploy-job:
+    name: Finalize Deploy Job
+    needs:
+      - terraform-deploy-aws
+      - terraform-deploy-gcp
+      - terraform-deploy-azure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Deploy Job Status
+        id: set-deploy-job-status
+        run: |
+          echo "deploy-job-status=completed" >> $GITHUB_OUTPUT
 
 

@@ -13,8 +13,8 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = var.aws-region
-  # default_tags {
-  #   tags = local.tags
-  # }
+  region = var.aws_region
+  default_tags {
+    tags = var.tags
+  }
 }

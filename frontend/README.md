@@ -55,14 +55,15 @@ cd /workspaces/cloud-resume-challenge
 ```
 
 # To kill and restart the http-server 
-## Kill the http-server process
-pkill -f http-server
 
-# Now start it correctly
+## To start the http-server
 ```text
 http-server frontend/public -p 8080
 ```
-
+## To kill the http-server process
+```text
+pkill -f http-server
+```
 ## Serve Static Website Locally
 
 We need to serve our static website locally so we can start using stylesheets externally from our HTML page in Cloud Development Environment (Codespace)

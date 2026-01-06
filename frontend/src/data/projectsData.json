@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Cloud Resume Challenge",
+    "handle": "cloud-resume-challenge",
+    "description": "An end-to-end Cloud Resume Challenge project demonstrating real-world cloud and DevOps engineering skills, built as part of Andrew Brown’s bootcamp.",
+    "thumbnail": "https://camo.githubusercontent.com/30494366a90f3ac7fa4042366933f2a9c2647fc4266807ba52bcd2b25572df5b/68747470733a2f2f636c6f7564726573756d656368616c6c656e67652e6465762f696d616765732f6c6f676f2e737667",
+    "body_html": "The Cloud Resume Challenge is a hands-on project designed to help you bridge the gap from cloud certification to cloud job. It incorporates many of the skills that real cloud and DevOps engineers use in their daily work. This repo is created as a part of the bootcamp by Andrew Brown"
+  }
+]
