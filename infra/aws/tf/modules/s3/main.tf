@@ -17,5 +17,36 @@ resource "aws_s3_object" "index_html" {
   # etag = "${md5(file("path/to/file"))}"
   etag         = filemd5("${path.module}/website-content/index.html")
   content_type = "text/html; charset=utf-8"
+
+  lifecycle {
+    # Ignore changes from external uploads (Ansible)
+    ignore_changes = [
+      source,
+      metadata,
+      cache_control,
+      content_type
+    ]
+  }
 }
 
+resource "aws_s3_object" "error_404_document" {
+  bucket = aws_s3_bucket.this.id
+  key    = "404.html"
+  source = "${path.module}/website-content/404.html"
+
+  # The filemd5() function is available in Terraform 0.11.12 and later
+  # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
+  # etag = "${md5(file("path/to/file"))}"
+  etag         = filemd5("${path.module}/website-content/index.html")
+  content_type = "text/html; charset=utf-8"
+
+  lifecycle {
+    # Ignore changes from external uploads (Ansible)
+    ignore_changes = [
+      source,
+      metadata,
+      cache_control,
+      content_type
+    ]
+  }
+}

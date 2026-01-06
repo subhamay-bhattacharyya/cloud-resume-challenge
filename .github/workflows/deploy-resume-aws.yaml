@@ -16,25 +16,13 @@ on:
         default: aws
 
 jobs:
-  bootstrap:
-    uses: subhamay-bhattacharyya-gha/bootstrap-ansible-wf/.github/workflows/ansible-bootstrap-oidc.yaml@main
+  run-playbook:
+    uses: subhamay-bhattacharyya-gha/bootstrap-ansible-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
       cloud-provider: ${{ inputs.cloud-provider }}
       aws-region: us-east-1
       python-version: "3.12"
+      ansible-extra-vars: "message=\"Hello from GitHub Actions!\"
+      ansible-playbook-path=frontend/playbook/deploy-resume-${{ inputs.cloud-provider }}.yaml"
     secrets:
       aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-
-  run-ansible:
-    name: Run Ansible to Deploy Resume
-    needs: bootstrap
-    runs-on: ubuntu-latest
-    working-directory: ${{ github.workspace }}/frontend/playbook
-    steps:
-      - name: List playbook files
-        run: ls -la
-
-  #   - name: Run Ansible Playbook
-  #         run: |
-  #           ansible-playbook deploy.yml \
-  #             --extra-vars "environment=production"

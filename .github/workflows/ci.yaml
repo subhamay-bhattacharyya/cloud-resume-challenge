@@ -2,30 +2,30 @@ name: Terraform CI
 run-name: Build run by ${{ github.actor }} on ${{ github.ref_name }}
 
 on:
-  # push:
-  #   branches:
-  #     - 'main'
-  #     - 'feature/**'
-  #     - 'bug/**'
-  #   paths-ignore:
-  #     - 'README.md'
-  #     - '.github/**'
-  #     - 'CODEOWNERS'
-  #     - 'LICENSE'
-  #     - 'VERSION'
-  #     - 'CHANGELOG.md'
-  #     - 'CODE_OF_CONDUCT.md'
-  #     - 'CONTRIBUTING.md'
-  #     - '*.sh'
-  #     - '*.txt'
-  #     - 'package.json'
-  #     - 'package-lock.json'
-  #     - 'install-summary.json'
-  #     - 'install-tools.log'
-  #     - '.gitignore'
-  #     - '.editorconfig'
-  #     - 'utils/**'
-  #     - '.pre-commit-config.yaml'
+  push:
+    branches:
+      - 'main'
+      - 'feature/**'
+      - 'bug/**'
+    paths-ignore:
+      - 'README.md'
+      - '.github/**'
+      - 'CODEOWNERS'
+      - 'LICENSE'
+      - 'VERSION'
+      - 'CHANGELOG.md'
+      - 'CODE_OF_CONDUCT.md'
+      - 'CONTRIBUTING.md'
+      - '*.sh'
+      - '*.txt'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'install-summary.json'
+      - 'install-tools.log'
+      - '.gitignore'
+      - '.editorconfig'
+      - 'utils/**'
+      - '.pre-commit-config.yaml'
   workflow_dispatch:
 
 permissions:

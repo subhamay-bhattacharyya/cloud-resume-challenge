@@ -32,15 +32,35 @@ resource "google_storage_bucket_object" "index_html" {
 
   content_type  = "text/html; charset=utf-8"
   cache_control = "public, max-age=300"
+
+  lifecycle {
+    # Ignore changes from external uploads (Ansible)
+    ignore_changes = [
+      source,
+      metadata,
+      cache_control,
+      content_type
+    ]
+  }
 }
 
-resource "google_storage_bucket_object" "not_found_html" {
+resource "google_storage_bucket_object" "error_404_document" {
   name   = "404.html"
   bucket = google_storage_bucket.this.name
   source = "${path.module}/website-content/404.html"
 
   content_type  = "text/html; charset=utf-8"
   cache_control = "public, max-age=300"
+
+  lifecycle {
+    # Ignore changes from external uploads (Ansible)
+    ignore_changes = [
+      source,
+      metadata,
+      cache_control,
+      content_type
+    ]
+  }
 }
 
 # ✅ Required for "private bucket + Cloud CDN fill" (after Signed URL key exists)
