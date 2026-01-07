@@ -56,7 +56,7 @@ jobs:
       tf-vars-file: terraform.tfvars
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
-      aws-role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
+      aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
 
   terraform-ci-gcp:
     name: CI - GCP
