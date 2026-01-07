@@ -100,16 +100,114 @@ Include for each:
 
 - Reusable workflow usage & sample input
 - Required secrets:
-  - `GCP_PROJECT_ID_DEV`, `GCP_WIF_PROVIDER_DEV`, etc.
+  - `GCP_SERVICE_ACCOUNT`, `GCP_WIF_PROVIDER`
+
+### 7.3 Steps to get the GCP_SERVICE_ACCOUNT
+
+> Screenshot showing the Google Cloud Platform service account creation interface with fields for service account name, ID, and description, along with role assignment options for configuring permissions in the IAM and Admin console
+![](../assets/images/gcp-service-account.jpg)
+
+
+
+### 7.4 Steps to get the GCP_WIF_PROVIDER or Create one (if it does not exist)
+
+### ⚠️  Create a WIF Pool + Provider (GitHub Actions OIDC) so you have a provider 
+
+> #### Step 1 - Validate Auth Login
+```bash
+gcloud auth login
+gcloud config set project <PROJECT_ID>
+```
+
+> #### Step 2 - Create a WIF Pool + Provider (GitHub Actions OIDC) so you have a provider
+```bash
+PROJECT_ID=$(gcloud config get-value project)
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)")
+
+POOL_ID="github-pool"
+PROVIDER_ID="github-provider"
+
+gcloud iam workload-identity-pools create "$POOL_ID" \
+  --location="global" \
+  --display-name="GitHub Actions Pool"
+```
+
+> ### Step 3 - Create the provider (OIDC issuer = GitHub)
+
+```bash
+gcloud iam workload-identity-pools providers create-oidc "$PROVIDER_ID" \
+  --location="global" \
+  --workload-identity-pool="$POOL_ID" \
+  --display-name="GitHub OIDC Provider" \
+  --issuer-uri="https://token.actions.githubusercontent.com" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.ref=assertion.ref" \
+  --attribute-condition="assertion.repository == 'OWNER/REPO'"
+```
+
+**Example :**
+```bash
+gcloud iam workload-identity-pools providers create-oidc "$PROVIDER_ID" \
+--location="global" \
+--workload-identity-pool="$POOL_ID" \
+--display-name="GitHub OIDC Provider" \
+--issuer-uri="https://token.actions.githubusercontent.com" \
+--attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.ref=assertion.ref" \
+--attribute-condition="assertion.repository == 'subhamay-bhattacharyya/cloud-resume-challenge'"
+```
+
+> ### Step 4 - Create the provider (OIDC issuer = GitHub)
+
+```bash
+gcloud iam workload-identity-pools providers describe "$PROVIDER_ID" \
+  --location="global" \
+  --workload-identity-pool="$POOL_ID" \
+  --format="value(name)"
+
+```
+
+### ⚠️  Retrieve the a WIF provider (if you already have one)
+
+> #### Step 1 - Prerequisites
+
+```bash
+gcloud auth login
+gcloud config set project <PROJECT_ID>
+```
+
+> #### Step 2 - List all Workload Identity Pools
+
+```bash
+gcloud iam workload-identity-pools list \
+  --location="global"
+```
+
+> #### Step 3 - List Providers in a Specific Pool
+
+```bash
+gcloud iam workload-identity-pools providers list \
+  --workload-identity-pool="<POOL_ID>" \
+  --location="global"
+```
+
+> #### Step 4 - Get Full WIF Provider Resource Name (most commonly needed)
+
+```bash
+gcloud iam workload-identity-pools providers describe "<PROVIDER_ID>" \
+  --workload-identity-pool="<POOL_ID>" \
+  --location="global" \
+  --format="value(name)"
+```
+
+>> 💡 Example output
+```text
+projects/123456789012/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+```
 
 ## 8. Operational Notes
 
 - How to create a new project/environment with Terraform
 - How to extend IAM roles safely
 - Troubleshooting WIF / OIDC issues
-
-
-
 
 
 # Setup GCP Service Account

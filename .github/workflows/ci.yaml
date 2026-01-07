@@ -9,7 +9,7 @@ on:
       - 'bug/**'
     paths-ignore:
       - 'README.md'
-      - '.github/**'
+      # - '.github/**'
       - 'CODEOWNERS'
       - 'LICENSE'
       - 'VERSION'
@@ -26,6 +26,7 @@ on:
       - '.editorconfig'
       - 'utils/**'
       - '.pre-commit-config.yaml'
+      - '*.jpg'
   workflow_dispatch:
 
 permissions:
@@ -55,7 +56,7 @@ jobs:
       tf-vars-file: terraform.tfvars
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
-      aws-role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME_TF_CI }}
+      aws-role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
 
   terraform-ci-gcp:
     name: CI - GCP
