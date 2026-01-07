@@ -4,4 +4,5 @@ tags = {
   ProjectName = "Cloud Resume Challenge"
   Owner       = "Subhamay Bhattacharyya"
   Env         = "devl"
+  Phase       = "cicd-deployment"
 }
