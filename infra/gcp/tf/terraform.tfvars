@@ -3,8 +3,8 @@
 gcp_project_id = "cloud-resume-challenge-06902"
 gcp_region     = "us-east1"
 gcp_zone       = "us-east1-a"
-project_name   = "crc"
-environment    = "devl"
+# project_name   = "crc"
+# environment    = "devl"
 
 
 # bucket-name      = "subhamay-tf-template-bucket-06611-143"

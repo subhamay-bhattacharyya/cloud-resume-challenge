@@ -17,17 +17,17 @@ variable "gcp_zone" {
   type        = string
 }
 
-variable "project_name" {
-  description = "name of the project"
-  type        = string
-  default     = "crc"
-}
-variable "environment" {
-  description = "The project short name to be used in the resource name prefix"
-  type        = string
-  default     = "devl"
-  validation {
-    condition     = contains(["devl", "test", "prod"], var.environment)
-    error_message = "The environment must be one of: devl, test, prod."
-  }
-}
+# variable "project_name" {
+#   description = "name of the project"
+#   type        = string
+#   default     = "crc"
+# }
+# variable "environment" {
+#   description = "The project short name to be used in the resource name prefix"
+#   type        = string
+#   default     = "devl"
+#   validation {
+#     condition     = contains(["devl", "test", "prod"], var.environment)
+#     error_message = "The environment must be one of: devl, test, prod."
+#   }
+# }
