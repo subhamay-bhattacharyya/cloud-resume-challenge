@@ -108,7 +108,109 @@ Include for each:
   - `AZURE_SUBSCRIPTION_ID_DEV`
   - `AZURE_CLIENT_ID_DEV` (App registration)
 
-## 8. Operational Notes
+## 8. 🔐 Azure OIDC for GitHub Actions — Step by Step
+- #### Architecture (1-liner)
+
+  GitHub issues an OIDC token → Azure validates it via a Federated Credential → Azure AD issues an access token → GitHub Action accesses Azure.
+
+  > STEP 1️⃣ Login to Azure and select subscription
+  ```bash
+  az login
+  az account set --subscription "<SUBSCRIPTION_ID>"
+  ```
+
+
+  > ⚠️ **Verify:**
+  ```bash
+  az account show --query "{subscription:id, tenant:tenantId}" -o table
+  ```
+
+  > STEP 2️⃣ Create an Azure AD App Registration
+  ```bash
+  APP_NAME="github-oidc-app"
+
+  az ad app create \
+    --display-name "$APP_NAME"
+  ```
+
+  > ⚠️ **Get the Application (Client) ID:**
+  ```baah
+    AZURE_CLIENT_ID=$(az ad app list \
+      --display-name "$APP_NAME" \
+      --query "[0].appId" -o tsv)
+
+    echo $AZURE_CLIENT_ID
+  ```
+
+  > STEP 3️⃣ Create a Service Principal for the App
+  ```bash
+  az ad sp create --id "$AZURE_CLIENT_ID"
+  ```
+
+  > STEP 4️⃣ Assign Azure RBAC role (least privilege)
+
+  **Example: Storage Blob Contributor (adjust as needed)**
+  ```bash
+    SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
+    az role assignment create \
+      --assignee "$AZURE_CLIENT_ID" \
+      --role "Contributor" \
+      --scope "/subscriptions/$SUBSCRIPTION_ID"
+  ```
+
+  🔒 For production, scope this to:
+  - Resource Group
+  - Storage Account
+  - Specific service
+
+  > STEP 5️⃣ Create the Federated Credential (OIDC trust)
+
+  > *⚠️ *This is the most important step.**
+  ```bash
+  az ad app federated-credential create \
+    --id "$AZURE_CLIENT_ID" \
+    --parameters '{
+      "name": "github-oidc",
+      "issuer": "https://token.actions.githubusercontent.com",
+      "subject": "repo:subhamay-bhattacharyya/cloud-resume-challenge:ref:refs/heads/main",
+      "audiences": ["api://AzureADTokenExchange"]
+    }'
+  ```
+  > 🔎 What this means
+  Field	Value
+  issuer	GitHub OIDC issuer
+  subject	Restricts access to repo + branch
+  audience	Required by Azure
+
+  > 📌 You can loosen this if needed:
+
+  `repo:subhamay-bhattacharyya/cloud-resume-challenge:*`>
+
+  > STEP 6️⃣ Collect required values for GitHub
+  ```bash
+  AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
+  AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
+  echo "CLIENT_ID=$AZURE_CLIENT_ID"
+  echo "TENANT_ID=$AZURE_TENANT_ID"
+  echo "SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
+  ```
+
+> STEP 7️⃣ Add GitHub Secrets
+
+**In GitHub → Repo → Settings → Secrets → Actions, add:**
+
+  >> 💁🏼 **Secret Name	Value**
+  - AZURE_CLIENT_ID	App (client) ID
+  - AZURE_TENANT_ID	Tenant ID
+  - AZURE_SUBSCRIPTION_ID	Subscription ID**
+
+  >> Note 📝
+  - ❌ Do NOT add client secret
+  - ❌ Do NOT add password
+
+## 9. Operational Notes
 
 - How to add new resource groups/subscriptions with Terraform
 - How to rotate app registrations / federated credentials

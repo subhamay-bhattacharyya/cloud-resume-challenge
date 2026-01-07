@@ -203,6 +203,42 @@ gcloud iam workload-identity-pools providers describe "<PROVIDER_ID>" \
 projects/123456789012/locations/global/workloadIdentityPools/github-pool/providers/github-provider
 ```
 
+> #### Step 5 - to grant your GitHub OIDC principal permission to impersonate this service account and mint access tokens
+
+- ### Get the project number (needed for the principalSet string)
+```bash
+PROJECT_ID="cloud-resume-challenge-06902"
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)")
+echo "$PROJECT_NUMBER"
+```
+
+- ### Grant required roles on the Service Account 
+1. Allow Workload Identity Federation to impersonate the SA
+```bash
+gcloud iam service-accounts add-iam-policy-binding \
+  terraform-sa@cloud-resume-challenge-06902.iam.gserviceaccount.com \
+  --project="$PROJECT_ID" \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/attribute.repository/subhamay-bhattacharyya/cloud-resume-challenge"
+```
+
+2. Allow minting access tokens
+```bash
+gcloud iam service-accounts add-iam-policy-binding \
+  terraform-sa@cloud-resume-challenge-06902.iam.gserviceaccount.com \
+  --project="$PROJECT_ID" \
+  --role="roles/iam.serviceAccountTokenCreator" \
+  --member="principalSet://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/attribute.repository/subhamay-bhattacharyya/cloud-resume-challenge"
+
+```
+- ### Verify the bindings are present
+```bash
+gcloud iam service-accounts get-iam-policy \
+  terraform-sa@cloud-resume-challenge-06902.iam.gserviceaccount.com \
+  --project="$PROJECT_ID" \
+  --format="yaml"
+
+```
 ## 8. Operational Notes
 
 - How to create a new project/environment with Terraform
