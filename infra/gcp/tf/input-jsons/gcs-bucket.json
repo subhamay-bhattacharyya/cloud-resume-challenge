@@ -9,6 +9,6 @@
     "environment": "devl",
     "owner": "subhamay",
     "managed": "terraform",
-    "phase": "cicd-deployment"
+    "phase": "cicd-deployment-test"
   }
 }
