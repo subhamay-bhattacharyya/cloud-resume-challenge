@@ -9,7 +9,7 @@ on:
       - 'bug/**'
     paths-ignore:
       - 'README.md'
-      - '.github/**'
+      # - '.github/**'
       - 'CODEOWNERS'
       - 'LICENSE'
       - 'VERSION'
@@ -51,7 +51,7 @@ jobs:
       aws-region: ${{ vars.AWS_REGION }}
       tflint-ver: ${{ vars.TF_LINT_VER }}
       backend-type: remote
-      terraform-dir: infra/aws/tf
+      terraform-dir: tf
       tf-vars-file: terraform.tfvars
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
@@ -65,7 +65,7 @@ jobs:
       cloud-provider: gcp
       tflint-ver: ${{ vars.TF_LINT_VER }}
       backend-type: remote
-      terraform-dir: infra/gcp/tf
+      terraform-dir: tf
       tf-vars-file: terraform.tfvars
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
@@ -80,7 +80,7 @@ jobs:
       cloud-provider: azure
       tflint-ver: ${{ vars.TF_LINT_VER }}
       backend-type: remote
-      terraform-dir: infra/azure/tf
+      terraform-dir: tf
       tf-vars-file: terraform.tfvars
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
