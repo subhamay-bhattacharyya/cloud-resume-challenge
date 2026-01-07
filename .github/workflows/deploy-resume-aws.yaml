@@ -17,7 +17,7 @@ on:
 
 jobs:
   run-playbook:
-    uses: subhamay-bhattacharyya-gha/bootstrap-ansible-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
+    uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
       cloud-provider: ${{ inputs.cloud-provider }}
       aws-region: us-east-1

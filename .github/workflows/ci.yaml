@@ -9,7 +9,7 @@ on:
       - 'bug/**'
     paths-ignore:
       - 'README.md'
-      # - '.github/**'
+      - '.github/**'
       - 'CODEOWNERS'
       - 'LICENSE'
       - 'VERSION'
