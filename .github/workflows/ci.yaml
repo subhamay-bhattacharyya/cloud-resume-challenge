@@ -34,7 +34,7 @@ permissions:
 
 jobs:
   start-job:
-    name: Start Job
+    name: Start CI Workflow
     runs-on: ubuntu-latest
     steps:
       - name: Set CI Job Status
@@ -43,7 +43,7 @@ jobs:
           echo "ci-job-status=started" >> $GITHUB_OUTPUT
 
   terraform-ci-aws:
-    name: CI for AWS Terraform Code
+    name: CI - AWS
     needs: start-job
     uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@feature/GHA-0027-simplify-the-ci-build-wor
     with:
@@ -58,7 +58,7 @@ jobs:
       aws-role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME_TF_CI }}
 
   terraform-ci-gcp:
-    name: CI for GCP Terraform Code
+    name: CI - GCP
     needs: start-job
     uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@feature/GHA-0027-simplify-the-ci-build-wor
     with:
@@ -73,7 +73,7 @@ jobs:
       gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
   terraform-ci-azure:
-    name: CI for Azure Terraform Code
+    name: CI - Azure
     needs: start-job
     uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@feature/GHA-0027-simplify-the-ci-build-wor
     with:
