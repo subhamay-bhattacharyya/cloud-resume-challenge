@@ -42,7 +42,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    shell: bash
 
     steps:
       - name: Prepare Ansible input extra variables
