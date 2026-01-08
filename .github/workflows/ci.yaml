@@ -46,7 +46,7 @@ jobs:
   terraform-ci-aws:
     name: CI - AWS
     needs: start-job
-    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@main
+    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@bug/GHA-0031-flip-the-input-gcp-servic
     with:
       cloud-provider: aws
       aws-region: ${{ vars.AWS_REGION }}
@@ -61,7 +61,7 @@ jobs:
   terraform-ci-gcp:
     name: CI - GCP
     needs: start-job
-    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@main
+    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@bug/GHA-0031-flip-the-input-gcp-servic
     with:
       cloud-provider: gcp
       tflint-ver: ${{ vars.TF_LINT_VER }}
@@ -76,7 +76,7 @@ jobs:
   terraform-ci-azure:
     name: CI - Azure
     needs: start-job
-    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@main
+    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@bug/GHA-0031-flip-the-input-gcp-servic
     with:
       cloud-provider: azure
       tflint-ver: ${{ vars.TF_LINT_VER }}
