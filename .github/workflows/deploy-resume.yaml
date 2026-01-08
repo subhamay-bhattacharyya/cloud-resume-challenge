@@ -23,17 +23,17 @@ on:
         description: "AWS CloudFront distribution ID"
         required: false
         type: string
-        default: ""
+        default: "AAAAAA"
       google-cloud-storage-bucket:
         description: "Google Cloud Storage bucket name"
         required: false
         type: string
-        default: ""
+        default: "subhamay-crc-website"
       azure-storage-account-name:
         description: "Azure Storage account name"
         required: false
         type: string
-        default: ""
+        default: "subhamaycrcoxv15o"
 
 jobs:
   run-playbook:

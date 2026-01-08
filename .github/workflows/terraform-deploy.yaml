@@ -1,4 +1,4 @@
-name: Deploy Cloud Resume Challenge
+name: Deploy Cloud Resume Infrastructure
 run-name: >
   Deploy to ${{ github.event.inputs['cloud-provider'] }} by ${{ github.actor }} on ${{ github.ref_name }}
 

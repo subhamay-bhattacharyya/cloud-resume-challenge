@@ -1,4 +1,4 @@
-name: Destroy Cloud Resume Challenge
+name: Destroy Cloud Resume Infrastructure
 run-name: >
   Destroy ${{ github.event.inputs['cloud-provider'] }} stack by ${{ github.actor }} on ${{ github.ref_name }}
 
