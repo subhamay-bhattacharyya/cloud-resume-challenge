@@ -256,6 +256,8 @@ az rest `
   -o jsonc
 ```
 
+### Step 8.9 - Create repository secrets 
+- Create three repository secrets named `AZURE_CLIENT_ID`, `AZURE_SUBSCRIPTION_ID` and `AZURE_TENANT_ID` with the values from the steps above.
 
 ---
 

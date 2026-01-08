@@ -9,7 +9,7 @@ on:
       - 'bug/**'
     paths-ignore:
       - 'README.md'
-      # - '.github/**'
+      - '.github/**'
       - 'CODEOWNERS'
       - 'LICENSE'
       - 'VERSION'
@@ -46,7 +46,7 @@ jobs:
   terraform-ci-aws:
     name: CI - AWS
     needs: start-job
-    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@feature/GHA-0027-simplify-the-ci-build-wor
+    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@main
     with:
       cloud-provider: aws
       aws-region: ${{ vars.AWS_REGION }}
@@ -54,40 +54,40 @@ jobs:
       backend-type: remote
       terraform-dir: tf
       tf-vars-file: terraform.tfvars
-      aws-role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
 
   terraform-ci-gcp:
     name: CI - GCP
     needs: start-job
-    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@feature/GHA-0027-simplify-the-ci-build-wor
+    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@main
     with:
       cloud-provider: gcp
       tflint-ver: ${{ vars.TF_LINT_VER }}
       backend-type: remote
       terraform-dir: tf
       tf-vars-file: terraform.tfvars
-      gcp-wif-provider: ${{ vars.GCP_WIF_PROVIDER }}
-      gcp-service-account: ${{ vars.GCP_SERVICE_ACCOUNT }}
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      gcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
+      gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
   terraform-ci-azure:
     name: CI - Azure
     needs: start-job
-    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@feature/GHA-0027-simplify-the-ci-build-wor
+    uses: subhamay-bhattacharyya-gha/tf-ci-reusable-wf/.github/workflows/ci.yaml@main
     with:
       cloud-provider: azure
       tflint-ver: ${{ vars.TF_LINT_VER }}
       backend-type: remote
       terraform-dir: tf
       tf-vars-file: terraform.tfvars
-      azure-client-id: ${{ vars.AZURE_CLIENT_ID }}
-      azure-tenant-id: ${{ vars.AZURE_TENANT_ID }}
-      azure-subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
     secrets:
       tfc-token: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
+      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
   create-release:
     name: Create Release
