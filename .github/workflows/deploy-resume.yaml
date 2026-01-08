@@ -44,15 +44,22 @@ jobs:
       python-version: ${{ vars.PYTHON_VERSION || '3.12' }}
       ansible-extra-vars: |
         {
-          "aws": {
-            "s3-bucket-name": "${{ inputs.s3-bucket-name }}",
-            "cloudfront-distribution-id": "${{ inputs.cloudfront-distribution-id }}"
+          "deployment":{
+              "cloud_provider":"${{ inputs.cloud-provider }}",
+              "deployment_id":"${{ github.run_id }}",
+              "git_commit":"${{ github.sha }}",
+              "deployed_by":"${{ github.actor }}",
+              "branch":"${{ github.ref_name }}"
           },
-          "gcp": {
-            "google-cloud-storage-bucket": "${{ inputs.google-cloud-storage-bucket }}"
+          "aws":{
+              "s3_bucket_name":"${{ inputs.s3-bucket-name }}",
+              "cloudfront_distribution_id":"${{ inputs.cloudfront-distribution-id }}"
           },
-          "azure": {
-            "azure-storage-account-name": "${{ inputs.azure-storage-account-name }}"
+          "gcp":{
+              "google_cloud_storage_bucket":"${{ inputs.google-cloud-storage-bucket }}"
+          },
+          "azure":{
+              "azure_storage_account_name":"${{ inputs.azure-storage-account-name }}"
           }
         }
       ansible-playbook-path: "frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml"
