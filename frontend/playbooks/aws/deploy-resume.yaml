@@ -1,0 +1,20 @@
+---
+- name: Hello World test playbook
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Write Hello World to a file
+      ansible.builtin.copy:
+        content: "Hello World\n"
+        dest: /tmp/hello.txt
+
+    - name: Read the file
+      ansible.builtin.command: cat /tmp/hello.txt
+      register: hello_output
+      changed_when: false
+
+    - name: Print Hello World
+      ansible.builtin.debug:
+        msg: "{{ hello_output.stdout }}"
