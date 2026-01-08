@@ -1,6 +1,6 @@
 {
   "terraform": "1.14.1",
-  "awscli": "2.32.30",
+  "awscli": "2.32.31",
   "ansible": "core",
   "nodejs": "20.19.6",
   "npm": "10.8.2",
