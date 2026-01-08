@@ -108,110 +108,157 @@ Include for each:
   - `AZURE_SUBSCRIPTION_ID_DEV`
   - `AZURE_CLIENT_ID_DEV` (App registration)
 
-## 8. 🔐 Azure OIDC for GitHub Actions — Step by Step
-- #### Architecture (1-liner)
+## 8. 🔐 GitHub → Azure OIDC from Scratch — Step by Step
 
-  GitHub issues an OIDC token → Azure validates it via a Federated Credential → Azure AD issues an access token → GitHub Action accesses Azure.
+---
 
-  > STEP 1️⃣ Login to Azure and select subscription
-  ```bash
-  az login
-  az account set --subscription "<SUBSCRIPTION_ID>"
-  ```
+## Prerequisites
+
+- Azure CLI `>= 2.45.0`
+- Entra ID permissions:
+  - **Application Administrator** (or higher)
+  - Permission to assign Azure RBAC roles
+- GitHub Actions enabled
+
+---
+
+## Variables Used
+
+Update once and reuse throughout:
+
+```powershell
+$TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+$SUBSCRIPTION_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+$APP_NAME="github-oidc"
+$GITHUB_ORG="subhamay-bhattacharyya"
+
+$ISSUER="https://token.actions.githubusercontent.com"
+$AUDIENCE="api://AzureADTokenExchange"
+```
+
+This section recreates GitHub OIDC authentication **from a clean slate**, starting with a **new Azure Entra App Registration** and ending with a **scalable OIDC setup** that supports **any repository / any branch** in a GitHub organization.
+
+### Step 8.1 — Login to Azure
+
+```powershell
+az cloud set --name AzureCloud
+az login --tenant $TENANT_ID
+az account set --subscription $SUBSCRIPTION_ID
+
+az account show --query "{tenantId:tenantId, subscriptionId:id, user:user.name}" -o table
+```
+
+### Step 8.2 - Create a New App Registration
+
+```powershell
+$CLIENT_ID = az ad app create `
+  --display-name $APP_NAME `
+  --query appId -o tsv
+
+$CLIENT_ID
+```
+➡️ Save this value as AZURE_CLIENT_ID.
+
+### Step 8.3 - Get the Application Object ID
+
+```powershell
+$APP_OBJECT_ID = az ad app show `
+  --id $CLIENT_ID `
+  --query id -o tsv
+
+$APP_OBJECT_ID
+```
+
+### Step 8.4 - Create the Service Principal (Enterprise App)
+
+```powershell
+az ad sp create --id $CLIENT_ID
+
+$SP_OBJECT_ID = az ad sp show `
+  --id $CLIENT_ID `
+  --query id -o tsv
+
+$SP_OBJECT_ID
+```
+
+### Step 8.5 - Assign Azure RBAC Permissions
+
+```powershell
+$SCOPE="/subscriptions/$SUBSCRIPTION_ID"
+
+az role assignment create `
+  --assignee-object-id $SP_OBJECT_ID `
+  --assignee-principal-type ServicePrincipal `
+  --role "Contributor" `
+  --scope $SCOPE
+```
+
+> 💡 Verify:
+
+```powershell
+
+az role assignment list `
+  --assignee-object-id $SP_OBJECT_ID `
+  --all -o table
+```
+
+### Step 8.6 - Ensure No Classic Federated Credentials Exist
+
+```powershell
+az ad app federated-credential list --id $CLIENT_ID -o table
+```
+
+> 💡 If any exist, delete them:
+```powershell
+$classicIds = az ad app federated-credential list `
+  --id $CLIENT_ID `
+  --query "[].id" -o tsv
+
+foreach ($id in $classicIds) {
+  az ad app federated-credential delete `
+    --id $CLIENT_ID `
+    --federated-credential-id $id
+}
+```
+
+### Step 8.7 - Create Scalable GitHub OIDC Trust (Flexible Federated Credential)
+```powershell
+$expression = "claims['sub'] matches 'repo:$GITHUB_ORG/*:ref:refs/heads/*'"
+```
+
+> 💡 Create Flexible Federated Identity Credential
+
+```powershell
+$body = @{
+  name      = "github-any-repo-any-branch"
+  issuer    = $ISSUER
+  audiences = @($AUDIENCE)
+  claimsMatchingExpression = @{
+    value           = $expression
+    languageVersion = 1
+  }
+} | ConvertTo-Json -Depth 10
+
+az rest `
+  --method POST `
+  --uri "https://graph.microsoft.com/beta/applications/$APP_OBJECT_ID/federatedIdentityCredentials" `
+  --headers "Content-Type=application/json" `
+  --body $body
+```
+
+### Step 8.8 - Verify Federated Identity Credentials
+
+```powershell
+az rest `
+  --method GET `
+  --uri "https://graph.microsoft.com/beta/applications/$APP_OBJECT_ID/federatedIdentityCredentials" `
+  -o jsonc
+```
 
 
-  > ⚠️ **Verify:**
-  ```bash
-  az account show --query "{subscription:id, tenant:tenantId}" -o table
-  ```
+---
 
-  > STEP 2️⃣ Create an Azure AD App Registration
-  ```bash
-  APP_NAME="github-oidc-app"
-
-  az ad app create \
-    --display-name "$APP_NAME"
-  ```
-
-  > ⚠️ **Get the Application (Client) ID:**
-  ```baah
-    AZURE_CLIENT_ID=$(az ad app list \
-      --display-name "$APP_NAME" \
-      --query "[0].appId" -o tsv)
-
-    echo $AZURE_CLIENT_ID
-  ```
-
-  > STEP 3️⃣ Create a Service Principal for the App
-  ```bash
-  az ad sp create --id "$AZURE_CLIENT_ID"
-  ```
-
-  > STEP 4️⃣ Assign Azure RBAC role (least privilege)
-
-  **Example: Storage Blob Contributor (adjust as needed)**
-  ```bash
-    SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-
-    az role assignment create \
-      --assignee "$AZURE_CLIENT_ID" \
-      --role "Contributor" \
-      --scope "/subscriptions/$SUBSCRIPTION_ID"
-  ```
-
-  🔒 For production, scope this to:
-  - Resource Group
-  - Storage Account
-  - Specific service
-
-  > STEP 5️⃣ Create the Federated Credential (OIDC trust)
-
-  > *⚠️ *This is the most important step.**
-  ```bash
-    $PARAMS=@"
-    {
-      "name": "github-any-repo-any-branch",
-      "issuer": "https://token.actions.githubusercontent.com",
-      "subject": "repo:subhamay-bhattacharyya/*:ref:refs/heads/*",
-      "audiences": ["api://AzureADTokenExchange"]
-    }
-    "@
-
-    az ad app federated-credential create --id $CLIENT_ID --parameters $PARAMS
-  ```
-
-  > 🔎 What this means
-  Field	Value
-  issuer	GitHub OIDC issuer
-  subject	Restricts access to repo + branch
-  audience	Required by Azure
-
-  > 📌 You can loosen this if needed:
-
-  `repo:subhamay-bhattacharyya/cloud-resume-challenge:*`>
-
-  > STEP 6️⃣ Collect required values for GitHub
-  ```bash
-  AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
-  AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-
-  echo "CLIENT_ID=$AZURE_CLIENT_ID"
-  echo "TENANT_ID=$AZURE_TENANT_ID"
-  echo "SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
-  ```
-
-> STEP 7️⃣ Add GitHub Secrets
-
-**In GitHub → Repo → Settings → Secrets → Actions, add:**
-
-  >> 💁🏼 **Secret Name	Value**
-  - AZURE_CLIENT_ID	App (client) ID
-  - AZURE_TENANT_ID	Tenant ID
-  - AZURE_SUBSCRIPTION_ID	Subscription ID**
-
-  >> Note 📝
-  - ❌ Do NOT add client secret
-  - ❌ Do NOT add password
 
 ## 9. Operational Notes
 
