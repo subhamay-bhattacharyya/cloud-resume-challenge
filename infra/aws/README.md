@@ -127,6 +127,8 @@ aws cloudformation deploy \
   - Region
   - Assume role via OIDC
 - Multiple accounts/aliases (if applicable)
+- Create one repository secret named `AWS_OIDC_ROLE_ARN` with the AWS OIDC Role Arn.
+- Create one repository secret named `AWS_REGION` with the AWS Region where the resources will be created.
 
 ### 4.3 State & Locking
 
