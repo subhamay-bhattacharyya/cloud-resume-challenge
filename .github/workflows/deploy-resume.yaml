@@ -23,7 +23,7 @@ on:
         description: "AWS CloudFront distribution ID"
         required: false
         type: string
-        default: "AAAAAA"
+        default: "EW4CNVNO57XTH"
       google-cloud-storage-bucket:
         description: "Google Cloud Storage bucket name"
         required: false

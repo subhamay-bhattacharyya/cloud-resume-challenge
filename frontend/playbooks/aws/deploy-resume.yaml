@@ -1,13 +1,168 @@
 ---
-- name: Hello World test playbook
+- name: Deploy Cloud Resume Website to AWS
   hosts: localhost
   connection: local
   gather_facts: false
-
+  
+  vars:
+    # Set default values to prevent undefined variable errors
+    frontend_dir: "{{ ansible_env.PWD }}/frontend"
+    
   tasks:
+    # =========================================
+    # Display Deployment Information
+    # =========================================
+    - name: Display deployment information
+      debug:
+        msg: |
+          ========================================
+          🚀 DEPLOYMENT INFORMATION
+          ========================================
+          Cloud Provider: {{ deployment.cloud_provider | default('aws') }}
+          Deployment ID: {{ deployment.deployment_id | default('unknown') }}
+          Git Commit: {{ deployment.git_commit | default('unknown') }}
+          Deployed By: {{ deployment.deployed_by | default('unknown') }}
+          Branch: {{ deployment.branch | default('unknown') }}
+          ========================================
+    
+    - name: Display AWS configuration
+      debug:
+        msg: |
+          ========================================
+          ☁️  AWS CONFIGURATION
+          ========================================
+          S3 Bucket: {{ aws.s3_bucket_name | default('not-specified') }}
+          CloudFront Distribution ID: {{ aws.cloudfront_distribution_id | default('not-specified') }}
+          ========================================
+    
+    # =========================================
+    # Validate Required Variables
+    # =========================================
+    - name: Validate deployment variables
+      assert:
+        that:
+          - deployment is defined
+          - deployment.cloud_provider is defined
+          - deployment.cloud_provider == "aws"
+        fail_msg: |
+          ❌ Missing or invalid deployment configuration.
+          Expected: deployment.cloud_provider = "aws"
+          Received: {{ deployment.cloud_provider | default('undefined') }}
+    
+    - name: Validate AWS variables
+      assert:
+        that:
+          - aws is defined
+          - aws.s3_bucket_name is defined
+          - aws.s3_bucket_name != ""
+        fail_msg: |
+          ❌ Missing AWS configuration.
+          Required: aws.s3_bucket_name
+          Received: {{ aws.s3_bucket_name | default('undefined') }}
+    
+    # =========================================
+    # Frontend Build Process
+    # =========================================
+    - name: Check if frontend directory exists
+      stat:
+        path: "{{ frontend_dir }}"
+      register: frontend_dir_stat
+    
+    - name: Create frontend directory if it doesn't exist
+      file:
+        path: "{{ frontend_dir }}"
+        state: directory
+        mode: '0755'
+      when: not frontend_dir_stat.stat.exists
+    
     - name: Install Node dependencies (clean, reproducible)
       community.general.npm:
         path: "{{ frontend_dir }}"
         state: present
         production: false
         ci: true
+      register: npm_install_result
+    
+    - name: Display npm install results
+      debug:
+        msg: |
+          📦 NPM Install Results:
+          Status: {{ npm_install_result.changed | ternary('✅ Dependencies installed/updated', '✅ Dependencies already up to date') }}
+          Path: {{ frontend_dir }}
+    
+    # =========================================
+    # AWS Deployment Tasks
+    # =========================================
+    - name: Build frontend for production
+      command: npm run build
+      args:
+        chdir: "{{ frontend_dir }}"
+      register: build_result
+      changed_when: true
+    
+    - name: Display build results
+      debug:
+        msg: |
+          🔨 Build Results:
+          Status: {{ build_result.rc == 0 | ternary('✅ Build successful', '❌ Build failed') }}
+          Output: {{ build_result.stdout | default('No output') }}
+    
+    - name: Sync files to S3 bucket
+      amazon.aws.s3_sync:
+        bucket: "{{ aws.s3_bucket_name }}"
+        file_root: "{{ frontend_dir }}/dist"
+        mime_map:
+          .html: text/html
+          .css: text/css
+          .js: application/javascript
+          .json: application/json
+        delete: true
+        cache_control: "public, max-age=31536000"
+      register: s3_sync_result
+      when: aws.s3_bucket_name is defined and aws.s3_bucket_name != ""
+    
+    - name: Display S3 sync results
+      debug:
+        msg: |
+          📤 S3 Sync Results:
+          Bucket: {{ aws.s3_bucket_name }}
+          Status: {{ s3_sync_result.changed | ternary('✅ Files synced', '✅ No changes needed') }}
+          Files: {{ s3_sync_result.file_list | default([]) | length }} files processed
+      when: s3_sync_result is defined
+    
+    - name: Invalidate CloudFront distribution
+      amazon.aws.cloudfront_invalidation:
+        distribution_id: "{{ aws.cloudfront_distribution_id }}"
+        target_paths:
+          - "/*"
+      register: cloudfront_result
+      when: 
+        - aws.cloudfront_distribution_id is defined 
+        - aws.cloudfront_distribution_id != ""
+        - aws.cloudfront_distribution_id != "not-specified"
+    
+    - name: Display CloudFront invalidation results
+      debug:
+        msg: |
+          🌐 CloudFront Invalidation:
+          Distribution ID: {{ aws.cloudfront_distribution_id }}
+          Status: {{ cloudfront_result.changed | ternary('✅ Cache invalidated', '✅ No invalidation needed') }}
+          Invalidation ID: {{ cloudfront_result.invalidation.id | default('N/A') }}
+      when: cloudfront_result is defined
+    
+    # =========================================
+    # Deployment Summary
+    # =========================================
+    - name: Deployment summary
+      debug:
+        msg: |
+          ========================================
+          🎉 DEPLOYMENT COMPLETE
+          ========================================
+          Cloud Provider: {{ deployment.cloud_provider }}
+          S3 Bucket: {{ aws.s3_bucket_name }}
+          CloudFront: {{ aws.cloudfront_distribution_id | default('Not configured') }}
+          Deployment ID: {{ deployment.deployment_id }}
+          Deployed By: {{ deployment.deployed_by }}
+          Git Commit: {{ deployment.git_commit }}
+          ========================================
