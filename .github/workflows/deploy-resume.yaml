@@ -14,6 +14,26 @@ on:
           - gcp
           - azure
         default: aws
+      s3-bucket-name:
+        description: "AWS Target S3 bucket"
+        required: false
+        type: string
+        default: "subhamay-crc-website"
+      cloudfront-distribution-id:
+        description: "AWS CloudFront distribution ID"
+        required: false
+        type: string
+        default: ""
+      google-cloud-storage-bucket:
+        description: "Google Cloud Storage bucket name"
+        required: false
+        type: string
+        default: ""
+      azure-storage-account-name:
+        description: "Azure Storage account name"
+        required: false
+        type: string
+        default: ""
 
 jobs:
   run-playbook:
@@ -21,8 +41,25 @@ jobs:
     with:
       cloud-provider: ${{ inputs.cloud-provider }}
       aws-region: us-east-1
-      python-version: ${{ vars.PYTHON_VERSION || 3.12}}
-      ansible-extra-vars: "message=\"Hello from GitHub Actions!\""
+      python-version: ${{ vars.PYTHON_VERSION || '3.12' }}
+      ansible-extra-vars: |
+        {
+          "aws": {
+            "s3-bucket-name": "${{ inputs.s3-bucket-name }}",
+            "cloudfront-distribution-id": "${{ inputs.cloudfront-distribution-id }}"
+          },
+          "gcp": {
+            "google-cloud-storage-bucket": "${{ inputs.google-cloud-storage-bucket }}"
+          },
+          "azure": {
+            "azure-storage-account-name": "${{ inputs.azure-storage-account-name }}"
+          }
+        }
       ansible-playbook-path: "frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml"
     secrets:
       aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+      gcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
+      gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
