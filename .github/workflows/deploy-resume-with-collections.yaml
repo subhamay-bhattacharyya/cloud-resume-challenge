@@ -1,0 +1,129 @@
+name: Deploy Cloud Resume Website (Fixed)
+run-name: >
+  Deploy resume to ${{ github.event.inputs['cloud-provider'] }} by ${{ github.actor }} on ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      cloud-provider:
+        description: "Choose the cloud provider"
+        required: true
+        type: choice
+        options:
+          - aws
+          - gcp
+          - azure
+        default: aws
+      s3-bucket-name:
+        description: "AWS Target S3 bucket"
+        required: false
+        type: string
+        default: "subhamay-crc-website"
+      cloudfront-distribution-id:
+        description: "AWS CloudFront distribution ID"
+        required: false
+        type: string
+        default: "EW4CNVNO57XTH"
+      google-cloud-storage-bucket:
+        description: "Google Cloud Storage bucket name"
+        required: false
+        type: string
+        default: "subhamay-crc-website"
+      azure-storage-account-name:
+        description: "Azure Storage account name"
+        required: false
+        type: string
+        default: "subhamaycrcoxv15o"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ vars.PYTHON_VERSION || '3.12' }}
+      
+      - name: Install Ansible
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible
+      
+      - name: Install Ansible collections
+        run: |
+          REQUIREMENTS_FILE="frontend/playbooks/${{ inputs.cloud-provider }}/requirements.yml"
+          if [ -f "$REQUIREMENTS_FILE" ]; then
+            echo "📦 Installing Ansible collections from $REQUIREMENTS_FILE"
+            ansible-galaxy collection install -r "$REQUIREMENTS_FILE"
+          else
+            echo "⚠️  No requirements.yml found at $REQUIREMENTS_FILE"
+            echo "Installing default collections for AWS"
+            ansible-galaxy collection install amazon.aws community.general
+          fi
+      
+      - name: Configure AWS credentials
+        if: inputs.cloud-provider == 'aws'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: us-east-1
+      
+      - name: Configure Azure credentials
+        if: inputs.cloud-provider == 'azure'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Configure GCP credentials
+        if: inputs.cloud-provider == 'gcp'
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      
+      - name: Run Ansible playbook
+        run: |
+          ansible-playbook frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml \
+            --extra-vars '{
+              "deployment": {
+                "cloud_provider": "${{ inputs.cloud-provider }}",
+                "deployment_id": "${{ github.run_id }}",
+                "git_commit": "${{ github.sha }}",
+                "deployed_by": "${{ github.actor }}",
+                "branch": "${{ github.ref_name }}"
+              },
+              "aws": {
+                "s3_bucket_name": "${{ inputs.s3-bucket-name }}",
+                "cloudfront_distribution_id": "${{ inputs.cloudfront-distribution-id }}"
+              },
+              "gcp": {
+                "google_cloud_storage_bucket": "${{ inputs.google-cloud-storage-bucket }}"
+              },
+              "azure": {
+                "azure_storage_account_name": "${{ inputs.azure-storage-account-name }}"
+              }
+            }'
+      
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Cloud Provider**: ${{ inputs.cloud-provider }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployment ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Git Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployed By**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ inputs.cloud-provider }}" == "aws" ]; then
+            echo "- **S3 Bucket**: ${{ inputs.s3-bucket-name }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **CloudFront Distribution**: ${{ inputs.cloudfront-distribution-id }}" >> $GITHUB_STEP_SUMMARY
+          fi
