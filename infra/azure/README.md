@@ -168,15 +168,18 @@ Include for each:
 
   > *⚠️ *This is the most important step.**
   ```bash
-  az ad app federated-credential create \
-    --id "$AZURE_CLIENT_ID" \
-    --parameters '{
-      "name": "github-oidc",
+    $PARAMS=@"
+    {
+      "name": "github-any-repo-any-branch",
       "issuer": "https://token.actions.githubusercontent.com",
-      "subject": "repo:subhamay-bhattacharyya/cloud-resume-challenge:ref:refs/heads/main",
+      "subject": "repo:subhamay-bhattacharyya/*:ref:refs/heads/*",
       "audiences": ["api://AzureADTokenExchange"]
-    }'
+    }
+    "@
+
+    az ad app federated-credential create --id $CLIENT_ID --parameters $PARAMS
   ```
+
   > 🔎 What this means
   Field	Value
   issuer	GitHub OIDC issuer
