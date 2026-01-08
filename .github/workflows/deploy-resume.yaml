@@ -23,6 +23,6 @@ jobs:
       aws-region: us-east-1
       python-version: ${{ vars.PYTHON_VERSION || 3.12}}
       ansible-extra-vars: "message=\"Hello from GitHub Actions!\""
-      ansible-playbook-path: "frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml"
+      ansible-playbook-path: "${{ github.workspace }}/frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml"
     secrets:
       aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
