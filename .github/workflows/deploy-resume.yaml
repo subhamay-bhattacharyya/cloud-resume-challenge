@@ -25,4 +25,4 @@ jobs:
       ansible-extra-vars: "message=\"Hello from GitHub Actions!\""
       ansible-playbook-path: "frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml"
     secrets:
-      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+      aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
