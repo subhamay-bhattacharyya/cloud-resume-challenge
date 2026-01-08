@@ -36,7 +36,7 @@ on:
         default: "subhamaycrcoxv15o"
 
 jobs:
-  run-playbook:
+  ansible-playbook:
     uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
       cloud-provider: ${{ inputs.cloud-provider }}
