@@ -13,8 +13,8 @@ terraform {
 
 # Configure the Google Cloud Provider
 provider "google" {
-  credentials = file("tf-sa-key/terraform-sa-key.json")
-  project     = var.gcp_project_id
-  region      = var.gcp_region
-  zone        = var.gcp_zone
+  # credentials = file("tf-sa-key/terraform-sa-key.json")
+  project = var.gcp_project_id
+  region  = var.gcp_region
+  zone    = var.gcp_zone
 }

@@ -67,3 +67,22 @@ pkill -f http-server
 ## Serve Static Website Locally
 
 We need to serve our static website locally so we can start using stylesheets externally from our HTML page in Cloud Development Environment (Codespace)
+
+## To setup ViteJS
+
+1️⃣ Install dependencies (this installs Vite locally)
+
+From your frontend directory:
+
+npm install
+
+This installs everything listed in package.json, including vite.
+
+2️⃣ Verify Vite is installed locally
+npx vite --version
+
+
+If this prints a version → you’re good.
+
+3️⃣ Run the build again
+npm run build

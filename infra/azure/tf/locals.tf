@@ -40,7 +40,7 @@ locals {
     resource_group_name = module.base.resource_group_name
     zone_name           = local.azure_config.dns.zone_name
     default_tags        = local.azure_config.default_tags
-    front_door_target   = "${module.cdn.cdn_frontdoor_host_name}"
+    front_door_target   = module.cdn.cdn_frontdoor_host_name
     domain_name         = local.azure_config.website_domain_name
     records = [
       module.cdn.cdn_frontdoor_endpoint_name

@@ -8,6 +8,7 @@
     "project": "cloud-resume-challenge",
     "environment": "devl",
     "owner": "subhamay",
-    "managed": "terraform"
+    "managed": "terraform",
+    "phase": "cicd-deployment-2044"
   }
 }

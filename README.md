@@ -1,4 +1,4 @@
-# infra/README.md
+
 
 
 # ![CRC](https://cloudresumechallenge.dev/images/logo.svg) Cloud Resume Challenge
@@ -6,6 +6,24 @@
 **This project is my implementation of the Cloud Resume Challenge — a multi-cloud, infrastructure-as-code driven resume website that demonstrates real-world skills in AWS, GCP, Azure, CI/CD automation, serverless architecture, and DevOps tooling. It combines a modern web frontend with cloud-native services, GitHub Actions pipelines, OIDC-based secure deployments, and fully automated IaC workflows, serving as both a technical portfolio piece and a comprehensive showcase of end-to-end cloud engineering.**
 
 ---
+
+## Resume Portal Links
+
+|**Cloud Provider**| **URL**                  |
+|--                |--                        |
+|AWS               |https://resume.subhamay.us|
+|GCP               |https://resume.subhamay.com|
+|Azure             |https://www.subhamay-resume-azure.space|
+
+## Infrastructure Repo
+
+- AWS: [infra/aws](infra/aws)
+- GCP: [infra/gcp](infra/gcp)
+- Azure: [infra/azure](infra/azure)
+
+## Resume portal repo 
+- Frontend: [frontend](frontend)
+
 
 ## 1. **Tools, Services & Technologies Used**
 
@@ -41,57 +59,42 @@ This project implements the **Cloud Resume Challenge** using a modern **multi-cl
 This architecture demonstrates multi-cloud design, modern DevOps practices, and a fully automated IaC workflow — providing a scalable, secure, and reproducible environment for the Cloud Resume Challenge.
 
 ---
+### The following Mermaid mindmap shows the services used in the project
 
 ```mermaid
 mindmap
-  root((Cloud Resume Challenge))
-    Cloud Providers
-      AWS
-        S3
-        Route53(DNS Route53)
-        IAM(Identity and Access)
-        APIGW(API Gateway)
-        Lambda
-        DynamoDB
-      GCP
-        GCS(Google Cloud Storage)
-      Azure
-        AzureBlob(Azure Blob Storage)
-    DevOps and Infra
-      GitHub
-        Repository
-        GitHubActions(GitHub Actions CI/CD)
-        OIDC(Workload Identity Federation)
-      HCP(HCP Terraform)
-        RemoteState(Remote State Management)
-    Infrastructure as Code
+  root)Cloud Resume Challenge(
+    🟧 AWS
+      S3
+      Route53(DNS Route53)
+      CloudFront
+      IAM(Identity and Access)
+      API Gateway
+      Lambda
+      DynamoDB
+      ACM (AWS Certificate Manager)
+    🔵 GCP
+      Cloud Storage
+      Compute Engine
+      Cloud DNS
+    🟦 Azure
+      Blog Storage
+      DNS
+      Front Door (CDN)
+    Infrastructure As Code
       Terraform
       Ansible
       CloudFormation(AWS CloudFormation)
-    Application Stack
-      ResumePortal
-        HTML5
-        React
-        NodeJS(Node.js)
-    Devcontainer
-      IaC_Tools
-        terraform
-        terragrunt
-        terraform-docs
-        tfupdate
-        hcledit
-      Security_and_Scanning
-        tflint
-        tfsec
-        terrascan
-        trivy
-        infracost
-      CLIs_and_Runtimes
-        awscli
-        gcloud
-        azurecli
-        nodejs
-        http-server
+      🐙 GitHub
+        Repository
+        GitHubActions(GitHub Actions CI/CD)
+        OIDC(Workload Identity Federation)
+        Codespace (developement platform)
+    Resume Portal
+      HTML5
+      JavaScript
+      ViteJS
+      Node.js
 ```
 
 ## 2. OIDC Architecture (GitHub → AWS / GCP / Azure)

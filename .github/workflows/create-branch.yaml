@@ -1,4 +1,4 @@
-name: Auto Create Branch on Issue Assignment
+name: Create Branch
 run-name: Create Feature Branch by ${{ github.actor }} on ${{ github.ref_name }}
 
 on:
