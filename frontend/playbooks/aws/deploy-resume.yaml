@@ -14,10 +14,14 @@
     # =========================================
     - name: Print deployment info as JSON string
       ansible.builtin.debug:
-         {
-          'frontend_directory': frontend_dir,
-          'playbook_directory': playbook_dir
-        }
+        msg: >
+          {
+            'playbook': '{{ playbook_dir }}',
+            'frontend_directory': '{{ frontend_dir }}',
+            'playbook_directory': '{{ playbook_dir }}',
+            'S3 Bucket Name': '{{ s3_bucket_name }}',
+            'CloudFront Distribution ID': '{{ cloudfront_distribution_id }}'
+          }
 
     # =========================================
     # Validate Required Inputs
@@ -35,11 +39,11 @@
     # =========================================
     # Print Inputs in Tabular Format
     # =========================================
-    - name: Display deployment inputs as JSON
-      debug:
-        msg: |
-          S3 Bucket Name: {{ s3_bucket_name }}
-          CloudFront Distribution ID: {{ cloudfront_distribution_id }}
+    # - name: Display deployment inputs as JSON
+    #   debug:
+    #     msg: |
+    #       S3 Bucket Name: {{ s3_bucket_name }}
+    #       CloudFront Distribution ID: {{ cloudfront_distribution_id }}
 
     # - name: Display deployment inputs (table)
     #   debug:
