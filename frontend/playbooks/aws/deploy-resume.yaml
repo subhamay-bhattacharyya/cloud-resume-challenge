@@ -59,6 +59,13 @@
         msg: "Build dir {{ build_dir }} not found. Check build step or paths."
       when: not build_stat.stat.exists
 
+    - name: Install boto3 and botocore for AWS modules
+      ansible.builtin.pip:
+        name:
+          - boto3
+          - botocore
+        state: present
+
     - name: Sync static assets with long cache-control
       community.aws.s3_sync:
         bucket: "{{ s3_bucket_name }}"
