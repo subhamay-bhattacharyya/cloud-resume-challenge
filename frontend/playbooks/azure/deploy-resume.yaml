@@ -90,9 +90,6 @@
           '.jpeg': 'image/jpeg'
           '.svg': 'image/svg+xml'
           '.ico': 'image/x-icon'
-          '.woff': 'font/woff'
-          '.woff2': 'font/woff2'
-          '.ttf': 'font/ttf'
 
     - name: Upload files to Azure Blob Storage
       azure.azcollection.azure_rm_storageblob:

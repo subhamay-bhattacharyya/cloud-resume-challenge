@@ -89,9 +89,6 @@
           '.jpeg': 'image/jpeg'
           '.svg': 'image/svg+xml'
           '.ico': 'image/x-icon'
-          '.woff': 'font/woff'
-          '.woff2': 'font/woff2'
-          '.ttf': 'font/ttf'
 
     - name: Upload files to Google Cloud Storage
       google.cloud.gcp_storage_object:
