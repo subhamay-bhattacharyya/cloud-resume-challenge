@@ -72,6 +72,20 @@
         file_root: "{{ build_dir }}"
         delete: true
         cache_control: "public, max-age=31536000"
+        mime_map:
+          .html: text/html
+          .css: text/css
+          .js: application/javascript
+          .json: application/json
+          .webp: image/webp
+          .png: image/png
+          .jpg: image/jpeg
+          .jpeg: image/jpeg
+          .svg: image/svg+xml
+          .ico: image/x-icon
+          .woff: font/woff
+          .woff2: font/woff2
+          .ttf: font/ttf
       register: sync_result
 
     - name: Display sync results

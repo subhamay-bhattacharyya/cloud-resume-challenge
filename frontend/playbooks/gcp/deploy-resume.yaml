@@ -76,12 +76,31 @@
           - google-auth
         state: present
 
+    - name: Determine content type for file
+      ansible.builtin.set_fact:
+        content_type_map:
+          '.html': 'text/html'
+          '.css': 'text/css'
+          '.js': 'application/javascript'
+          '.json': 'application/json'
+          '.webp': 'image/webp'
+          '.png': 'image/png'
+          '.jpg': 'image/jpeg'
+          '.jpeg': 'image/jpeg'
+          '.svg': 'image/svg+xml'
+          '.ico': 'image/x-icon'
+          '.woff': 'font/woff'
+          '.woff2': 'font/woff2'
+          '.ttf': 'font/ttf'
+
     - name: Upload files to Google Cloud Storage
       google.cloud.gcp_storage_object:
         action: upload
         bucket: "{{ gcs_bucket_name }}"
         src: "{{ item.src }}"
         dest: "{{ item.path }}"
+        content_type: "{{ content_type_map[item.path | regex_search('\\.[^.]*$')] | default('application/octet-stream') }}"
+        cache_control: "public, max-age=31536000"
         auth_kind: application
         project: "{{ gcp_project_id | default(omit) }}"
       with_filetree: "{{ build_dir }}"
