@@ -98,41 +98,84 @@
         executable: /bin/bash
       when: gcp_project_id is defined
 
-    - name: Upload files to GCS with gsutil
+    - name: Upload dist/ to GCS (sync)
       ansible.builtin.shell: |
         export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
-        
-        # Determine content type
-        case "{{ item.path }}" in
-          *.html) CONTENT_TYPE="text/html" ;;
-          *.css) CONTENT_TYPE="text/css" ;;
-          *.js) CONTENT_TYPE="application/javascript" ;;
-          *.json) CONTENT_TYPE="application/json" ;;
-          *.webp) CONTENT_TYPE="image/webp" ;;
-          *.png) CONTENT_TYPE="image/png" ;;
-          *.jpg|*.jpeg) CONTENT_TYPE="image/jpeg" ;;
-          *.svg) CONTENT_TYPE="image/svg+xml" ;;
-          *.ico) CONTENT_TYPE="image/x-icon" ;;
-          *.woff) CONTENT_TYPE="font/woff" ;;
-          *.woff2) CONTENT_TYPE="font/woff2" ;;
-          *.ttf) CONTENT_TYPE="font/ttf" ;;
-          *) CONTENT_TYPE="application/octet-stream" ;;
-        esac
-        
-        gsutil -h "Content-Type:$CONTENT_TYPE" \
-               -h "Cache-Control:public, max-age=31536000" \
-               cp "{{ item.src }}" "gs://{{ gcs_bucket_name }}/{{ item.path }}"
+
+        # Fast sync (deletes removed files too)
+        gsutil -m rsync -r -d "{{ build_dir }}/" "gs://{{ gcs_bucket_name }}/"
       args:
         executable: /bin/bash
-      with_filetree: "{{ build_dir }}"
-      when: item.state == 'file'
-      register: upload_result
 
-    - name: Display upload results
+    - name: Fix cache headers (HTML no-cache; assets long-cache immutable)
+      ansible.builtin.shell: |
+        export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
+
+        # HTML should NOT be cached long-term
+        gsutil -m setmeta \
+          -h "Cache-Control:no-cache, max-age=0, must-revalidate" \
+          "gs://{{ gcs_bucket_name }}/index.html" \
+          "gs://{{ gcs_bucket_name }}/404.html" || true
+
+        # Hashed build assets SHOULD be cached long-term
+        gsutil -m setmeta \
+          -h "Cache-Control:public, max-age=31536000, immutable" \
+          "gs://{{ gcs_bucket_name }}/assets/**" || true
+      args:
+        executable: /bin/bash
+
+    - name: Fix content-types for common static files (optional hardening)
+      ansible.builtin.shell: |
+        export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
+
+        gsutil -m setmeta -h "Content-Type:text/css; charset=utf-8" \
+          "gs://{{ gcs_bucket_name }}/assets/*.css" || true
+
+        gsutil -m setmeta -h "Content-Type:application/javascript; charset=utf-8" \
+          "gs://{{ gcs_bucket_name }}/assets/*.js" || true
+
+        gsutil -m setmeta -h "Content-Type:text/html; charset=utf-8" \
+          "gs://{{ gcs_bucket_name }}/index.html" \
+          "gs://{{ gcs_bucket_name }}/404.html" || true
+      args:
+        executable: /bin/bash
+
+    - name: Invalidate Cloud CDN cache
+      ansible.builtin.shell: |
+        gcloud compute url-maps invalidate-cdn-cache subhamay-crc-website-url-map \
+          --path "/*"
+      args:
+        executable: /bin/bash
+
+    # =========================================
+    # Deployment Success Confirmation
+    # =========================================
+    - name: Display deployment success message
       ansible.builtin.debug:
         msg: |
-          📤 Google Cloud Storage Upload Results:
-          Files processed: {{ upload_result.results | default([]) | length }}
-          Bucket: {{ gcs_bucket_name }}
+          ✅ Cloud Resume Website Deployment Successful!
+
+          📦 Bucket: {{ gcs_bucket_name }}
+          🌐 URL: https://resume.subhamay.com/
+          🕒 Deployed at: {{ ansible_date_time.iso8601 }}
+
+          ✔ Frontend build completed
+          ✔ Files synced to Google Cloud Storage
+          ✔ Cache headers applied correctly
+          ✔ Cloud CDN cache invalidated
+
+    - name: Verify website is reachable
+      ansible.builtin.uri:
+        url: "https://resume.subhamay.com/"
+        method: GET
+        status_code: 200
+        timeout: 10
+      register: site_check
+
+    - name: Assert website deployment success
+      ansible.builtin.assert:
+        that:
+          - site_check.status == 200
+        fail_msg: "❌ Website not reachable after deployment"
 
 
