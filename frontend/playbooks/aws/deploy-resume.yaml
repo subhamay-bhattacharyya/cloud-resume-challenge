@@ -6,7 +6,7 @@
 
   vars:
     # Default frontend directory
-    frontend_dir: "{{ ansible_env.PWD }}/frontend"
+    frontend_dir: "{{ playbook_dir }}/frontend"
 
   tasks:
     # =========================================
