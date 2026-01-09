@@ -81,11 +81,7 @@
           .png: image/png
           .jpg: image/jpeg
           .jpeg: image/jpeg
-          .svg: image/svg+xml
-          .ico: image/x-icon
-          .woff: font/woff
-          .woff2: font/woff2
-          .ttf: font/ttf
+
       register: sync_result
 
     - name: Display sync results

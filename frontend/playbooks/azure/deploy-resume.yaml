@@ -88,8 +88,6 @@
           '.png': 'image/png'
           '.jpg': 'image/jpeg'
           '.jpeg': 'image/jpeg'
-          '.svg': 'image/svg+xml'
-          '.ico': 'image/x-icon'
 
     - name: Upload files to Azure Blob Storage
       azure.azcollection.azure_rm_storageblob:
