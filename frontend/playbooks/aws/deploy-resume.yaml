@@ -3,11 +3,11 @@
   hosts: localhost
   connection: local
   gather_facts: false
-  
+
   vars:
-    # Set default values to prevent undefined variable errors
+    # Default frontend directory
     frontend_dir: "{{ ansible_env.PWD }}/frontend"
-    
+
   tasks:
     # =========================================
     # Display Deployment Information
@@ -19,22 +19,46 @@
           🚀 DEPLOYMENT INFORMATION
           ========================================
           Frontend Directory: {{ frontend_dir }}
-          Cloud Provider: {{ deployment.cloud_provider | default('aws') }}
-          Deployment ID: {{ deployment.deployment_id | default('unknown') }}
-          Git Commit: {{ deployment.git_commit | default('unknown') }}
-          Deployed By: {{ deployment.deployed_by | default('unknown') }}
-          Branch: {{ deployment.branch | default('unknown') }}
           ========================================
-    
-    - name: Display AWS configuration
+
+    # =========================================
+    # Validate Required Inputs
+    # =========================================
+    - name: Validate required inputs are provided
+      assert:
+        that:
+          - s3_bucket_name is defined
+          - cloudfront_distribution_id is defined
+        fail_msg: >
+          Required inputs missing.
+          Ensure s3_bucket_name and cloudfront_distribution_id
+          are passed as JSON via --extra-vars.
+
+    # =========================================
+    # Print Inputs in Tabular Format
+    # =========================================
+    - name: Display deployment inputs (table)
       debug:
         msg: |
           ========================================
-          ☁️  AWS CONFIGURATION
+          📦 DEPLOYMENT INPUTS
           ========================================
-          S3 Bucket: {{ aws.s3_bucket_name | default('not-specified') }}
-          CloudFront Distribution ID: {{ aws.cloudfront_distribution_id | default('not-specified') }}
+          | Parameter                     | Value |
+          |-------------------------------|-------|
+          | S3 Bucket Name                | {{ s3_bucket_name }} |
+          | CloudFront Distribution ID    | {{ cloudfront_distribution_id }} |
           ========================================
+
+    
+    # - name: Display AWS configuration
+    #   debug:
+    #     msg: |
+    #       ========================================
+    #       ☁️  AWS CONFIGURATION
+    #       ========================================
+    #       S3 Bucket: {{ aws.s3_bucket_name | default('not-specified') }}
+    #       CloudFront Distribution ID: {{ aws.cloudfront_distribution_id | default('not-specified') }}
+    #       ========================================
     
     # # =========================================
     # # Validate Required Variables
