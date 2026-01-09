@@ -49,7 +49,7 @@ jobs:
           "cloudfront_distribution_id": "${{ inputs.cloudfront-distribution-id }}"
         }
     secrets:
-      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+      aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
 # jobs:
 #   deploy:
 #     runs-on: ubuntu-latest
