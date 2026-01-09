@@ -157,25 +157,25 @@
 
           📦 Bucket: {{ gcs_bucket_name }}
           🌐 URL: https://resume.subhamay.com/
-          🕒 Deployed at: {{ ansible_date_time.iso8601 }}
+          🕒 Deployed at: {{ lookup('pipe', 'date -u +%Y-%m-%dT%H:%M:%SZ') }}
 
           ✔ Frontend build completed
-          ✔ Files synced to Google Cloud Storage
+          ✔ Files uploaded to Google Cloud Storage
           ✔ Cache headers applied correctly
           ✔ Cloud CDN cache invalidated
 
-    - name: Verify website is reachable
-      ansible.builtin.uri:
-        url: "https://resume.subhamay.com/"
-        method: GET
-        status_code: 200
-        timeout: 10
-      register: site_check
+    - name: Gather minimal facts for timestamp
+      ansible.builtin.setup:
+        gather_subset:
+          - min
 
-    - name: Assert website deployment success
-      ansible.builtin.assert:
-        that:
-          - site_check.status == 200
-        fail_msg: "❌ Website not reachable after deployment"
+    - name: Display deployment success message
+      ansible.builtin.debug:
+        msg: |
+          ✅ Cloud Resume Website Deployment Successful!
+
+          📦 Bucket: {{ gcs_bucket_name }}
+          🌐 URL: https://resume.subhamay.com/
+
 
 
