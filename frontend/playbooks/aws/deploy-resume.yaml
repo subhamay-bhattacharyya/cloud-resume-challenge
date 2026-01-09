@@ -58,6 +58,18 @@
       ansible.builtin.fail:
         msg: "Build dir {{ build_dir }} not found. Check build step or paths."
       when: not build_stat.stat.exists
+
+    - name: Sync static assets with long cache-control
+      community.aws.s3_sync:
+        bucket: "{{ s3_bucket_name }}"
+        file_root: "{{ build_dir }}"
+        include: "assets/**"
+        delete: true
+        cache_control: "public, max-age=31536000"
+        # For website buckets that are public:
+        # permission: public-read
+      register: sync_assets
+
     # =========================================
     # Validate Required Variables
     # =========================================
