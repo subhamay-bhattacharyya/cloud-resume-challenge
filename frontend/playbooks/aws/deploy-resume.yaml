@@ -15,11 +15,8 @@
     - name: Display deployment information
       debug:
         msg: |
-          ========================================
-          🚀 DEPLOYMENT INFORMATION
-          ========================================
           Frontend Directory: {{ frontend_dir }}
-          ========================================
+          Playbook Directory: {{ playbook_dir }}
 
     # =========================================
     # Validate Required Inputs
@@ -40,15 +37,8 @@
     - name: Display deployment inputs (table)
       debug:
         msg: |
-          ========================================
-          📦 DEPLOYMENT INPUTS
-          ========================================
-          | Parameter                     | Value |
-          |-------------------------------|-------|
-          | S3 Bucket Name                | {{ s3_bucket_name }} |
-          | CloudFront Distribution ID    | {{ cloudfront_distribution_id }} |
-          ========================================
-
+          S3 Bucket Name : {{ s3_bucket_name }}
+          CloudFront Distribution ID  : {{ cloudfront_distribution_id }}
     
     # =========================================
     # Validate Required Variables
