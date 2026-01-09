@@ -104,26 +104,13 @@ jobs:
       #     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       
       - name: Run Ansible playbook
+        id: run-ansible-playbook-aws
+        if: ${ inputs.cloud-provider == 'aws' }
         run: |
           ansible-playbook frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml \
             --extra-vars '{
-              "deployment": {
-                "cloud_provider": "${{ inputs.cloud-provider }}",
-                "deployment_id": "${{ github.run_id }}",
-                "git_commit": "${{ github.sha }}",
-                "deployed_by": "${{ github.actor }}",
-                "branch": "${{ github.ref_name }}"
-              },
-              "aws": {
                 "s3_bucket_name": "${{ inputs.s3-bucket-name }}",
                 "cloudfront_distribution_id": "${{ inputs.cloudfront-distribution-id }}"
-              },
-              "gcp": {
-                "google_cloud_storage_bucket": "${{ inputs.google-cloud-storage-bucket }}"
-              },
-              "azure": {
-                "azure_storage_account_name": "${{ inputs.azure-storage-account-name }}"
-              }
             }'
       
       # - name: Deployment summary
