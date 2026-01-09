@@ -1,0 +1,95 @@
+---
+- name: Deploy Cloud Resume Website to GCP
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    # Default frontend directory - playbook is in frontend/playbooks/gcp, so go up 2 levels
+    frontend_dir: "{{ playbook_dir }}/../../"
+    build_dir: "{{ frontend_dir }}/dist"
+
+  tasks:
+    # =========================================
+    # Display Deployment Information
+    # =========================================
+    - name: Print deployment info as JSON string
+      ansible.builtin.debug:
+        msg: >
+          {
+            'playbook': '{{ playbook_dir }}',
+            'frontend_directory': '{{ frontend_dir }}',
+            'playbook_directory': '{{ playbook_dir }}',
+            'GCS Bucket Name': '{{ gcs_bucket_name }}'
+          }
+
+    # =========================================
+    # Validate Required Inputs
+    # =========================================
+    - name: Validate required inputs are provided
+      ansible.builtin.assert:
+        that:
+          - gcs_bucket_name is defined
+          - gcs_bucket_name != ""
+        fail_msg: >
+          Required inputs missing.
+          Ensure gcs_bucket_name is passed as JSON via --extra-vars.
+
+    # =========================================
+    # Build Frontend
+    # =========================================
+    - name: Install Node dependencies (clean, reproducible)
+      community.general.npm:
+        path: "{{ frontend_dir }}"
+        state: present
+        production: false
+        ci: true
+
+    - name: Build Vite app for GCP
+      ansible.builtin.shell: npm run build_gcp
+      args:
+        chdir: "{{ frontend_dir }}"
+      register: build_result
+
+    - name: Display build output
+      ansible.builtin.debug:
+        msg: "{{ build_result.stdout_lines }}"
+
+    - name: Confirm build dir exists
+      ansible.builtin.stat:
+        path: "{{ build_dir }}"
+      register: build_stat
+
+    - name: Fail if build output missing
+      ansible.builtin.fail:
+        msg: "Build dir {{ build_dir }} not found. Check build step or paths."
+      when: not build_stat.stat.exists
+
+    # =========================================
+    # Upload to Google Cloud Storage
+    # =========================================
+    - name: Install Google Cloud Storage Python SDK
+      ansible.builtin.pip:
+        name:
+          - google-cloud-storage
+        state: present
+
+    - name: Upload files to Google Cloud Storage
+      google.cloud.gcp_storage_object:
+        action: upload
+        bucket: "{{ gcs_bucket_name }}"
+        src: "{{ item.path }}"
+        dest: "{{ item.path | regex_replace('^' + build_dir + '/', '') }}"
+        cache_control: "public, max-age=31536000"
+      with_filetree: "{{ build_dir }}"
+      when: item.state == 'file'
+      register: upload_result
+
+    - name: Display upload results
+      ansible.builtin.debug:
+        msg: |
+          📤 Google Cloud Storage Upload Results:
+          Files processed: {{ upload_result.results | default([]) | length }}
+          Bucket: {{ gcs_bucket_name }}
+
+

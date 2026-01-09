@@ -1,0 +1,99 @@
+---
+- name: Deploy Cloud Resume Website to Azure
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    # Default frontend directory - playbook is in frontend/playbooks/azure, so go up 2 levels
+    frontend_dir: "{{ playbook_dir }}/../../"
+    build_dir: "{{ frontend_dir }}/dist"
+
+  tasks:
+    # =========================================
+    # Display Deployment Information
+    # =========================================
+    - name: Print deployment info as JSON string
+      ansible.builtin.debug:
+        msg: >
+          {
+            'playbook': '{{ playbook_dir }}',
+            'frontend_directory': '{{ frontend_dir }}',
+            'playbook_directory': '{{ playbook_dir }}',
+            'Azure Storage Account': '{{ storage_account_name }}'
+          }
+
+    # =========================================
+    # Validate Required Inputs
+    # =========================================
+    - name: Validate required inputs are provided
+      ansible.builtin.assert:
+        that:
+          - storage_account_name is defined
+          - storage_account_name != ""
+        fail_msg: >
+          Required inputs missing.
+          Ensure storage_account_name is passed as JSON via --extra-vars.
+
+    # =========================================
+    # Build Frontend
+    # =========================================
+    - name: Install Node dependencies (clean, reproducible)
+      community.general.npm:
+        path: "{{ frontend_dir }}"
+        state: present
+        production: false
+        ci: true
+
+    - name: Build Vite app for Azure
+      ansible.builtin.shell: npm run build_azure
+      args:
+        chdir: "{{ frontend_dir }}"
+      register: build_result
+
+    - name: Display build output
+      ansible.builtin.debug:
+        msg: "{{ build_result.stdout_lines }}"
+
+    - name: Confirm build dir exists
+      ansible.builtin.stat:
+        path: "{{ build_dir }}"
+      register: build_stat
+
+    - name: Fail if build output missing
+      ansible.builtin.fail:
+        msg: "Build dir {{ build_dir }} not found. Check build step or paths."
+      when: not build_stat.stat.exists
+
+    # =========================================
+    # Upload to Azure Blob Storage
+    # =========================================
+    - name: Install Azure CLI Python SDK
+      ansible.builtin.pip:
+        name:
+          - azure-storage-blob
+          - azure-identity
+        state: present
+
+    - name: Upload files to Azure Blob Storage
+      azure.azcollection.azure_rm_storageblob:
+        resource_group: "{{ resource_group_name | default('crc-rg') }}"
+        storage_account_name: "{{ storage_account_name }}"
+        container: "$web"
+        blob: "{{ item.path | regex_replace('^' + build_dir + '/', '') }}"
+        src: "{{ item.path }}"
+        content_type: "{{ item.path | regex_replace('.*\\.', '') | regex_replace('html', 'text/html') | regex_replace('css', 'text/css') | regex_replace('js', 'application/javascript') | regex_replace('json', 'application/json') | regex_replace('webp', 'image/webp') | regex_replace('png', 'image/png') | regex_replace('jpg|jpeg', 'image/jpeg') }}"
+        cache_control: "public, max-age=31536000"
+      with_filetree: "{{ build_dir }}"
+      when: item.state == 'file'
+      register: upload_result
+
+    - name: Display upload results
+      ansible.builtin.debug:
+        msg: |
+          📤 Azure Blob Storage Upload Results:
+          Files processed: {{ upload_result.results | default([]) | length }}
+          Storage Account: {{ storage_account_name }}
+          Container: $web
+
+
