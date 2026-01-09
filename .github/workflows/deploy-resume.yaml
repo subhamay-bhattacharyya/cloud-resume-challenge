@@ -38,7 +38,7 @@ on:
 jobs:
   deploy-aws:
     if : github.event.inputs['cloud-provider'] == 'aws'
-    uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@main
+    uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
       cloud-provider: "aws"
       aws-region: "${{ vars.AWS_REGION || 'us-east-1' }}"
