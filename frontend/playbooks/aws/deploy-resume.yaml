@@ -1,0 +1,110 @@
+---
+- name: Deploy Cloud Resume Website to AWS
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    # Default frontend directory - playbook is in frontend/playbooks/aws, so go up 2 levels
+    frontend_dir: "{{ playbook_dir }}/../../"
+    build_dir: "{{ frontend_dir }}/dist"
+
+  tasks:
+    # =========================================
+    # Display Deployment Information
+    # =========================================
+    - name: Print deployment info as JSON string
+      ansible.builtin.debug:
+        msg: >
+          {
+            'playbook': '{{ playbook_dir }}',
+            'frontend_directory': '{{ frontend_dir }}',
+            'playbook_directory': '{{ playbook_dir }}',
+            'S3 Bucket Name': '{{ s3_bucket_name }}',
+            'CloudFront Distribution ID': '{{ cloudfront_distribution_id }}'
+          }
+
+    # =========================================
+    # Validate Required Inputs
+    # =========================================
+    - name: Validate required inputs are provided
+      assert:
+        that:
+          - s3_bucket_name is defined
+          - cloudfront_distribution_id is defined
+        fail_msg: >
+          Required inputs missing.
+          Ensure s3_bucket_name and cloudfront_distribution_id
+          are passed as JSON via --extra-vars.
+
+    - name: Install Node dependencies (clean, reproducible)
+      community.general.npm:
+        path: "{{ frontend_dir }}"
+        state: present
+        production: false
+        ci: true
+
+    - name: Build Vite app
+      shell: npm run build_aws
+      args:
+        chdir: "{{ frontend_dir }}"
+
+    - name: Confirm build dir exists
+      ansible.builtin.stat:
+        path: "{{ build_dir }}"
+      register: build_stat
+
+    - name: Fail if build output missing
+      ansible.builtin.fail:
+        msg: "Build dir {{ build_dir }} not found. Check build step or paths."
+      when: not build_stat.stat.exists
+
+    - name: Install boto3 and botocore for AWS modules
+      ansible.builtin.pip:
+        name:
+          - boto3
+          - botocore
+        state: present
+
+    - name: Sync dist directory to S3
+      community.aws.s3_sync:
+        bucket: "{{ s3_bucket_name }}"
+        file_root: "{{ build_dir }}"
+        delete: true
+        cache_control: "public, max-age=31536000"
+        mime_map:
+          .html: text/html
+          .css: text/css
+          .js: application/javascript
+          .json: application/json
+          .webp: image/webp
+          .png: image/png
+          .jpg: image/jpeg
+          .jpeg: image/jpeg
+
+      register: sync_result
+
+    - name: Display sync results
+      ansible.builtin.debug:
+        msg: |
+          📤 S3 Sync Results:
+          Files uploaded: {{ sync_result.uploads | default([]) | length }}
+          Files deleted: {{ sync_result.removed | default([]) | length }}
+
+    - name: Invalidate CloudFront distribution
+      community.aws.cloudfront_invalidation:
+        distribution_id: "{{ cloudfront_distribution_id }}"
+        target_paths:
+          - "/*"
+      register: cloudfront_result
+      when: cloudfront_distribution_id is defined and cloudfront_distribution_id != ""
+
+    - name: Display CloudFront invalidation results
+      ansible.builtin.debug:
+        msg: |
+          🌐 CloudFront Invalidation:
+          Distribution ID: {{ cloudfront_distribution_id }}
+          Status: {{ cloudfront_result.changed | ternary('✅ Cache invalidated', '✅ No invalidation needed') }}
+          Invalidation ID: {{ cloudfront_result.invalidation.id | default('N/A') }}
+      when: cloudfront_result is defined
+

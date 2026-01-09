@@ -1,0 +1,181 @@
+---
+- name: Deploy Cloud Resume Website to GCP
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    # Default frontend directory - playbook is in frontend/playbooks/gcp, so go up 2 levels
+    frontend_dir: "{{ playbook_dir }}/../../"
+    build_dir: "{{ frontend_dir }}/dist"
+
+  tasks:
+    # =========================================
+    # Display Deployment Information
+    # =========================================
+    - name: Print deployment info as JSON string
+      ansible.builtin.debug:
+        msg: >
+          {
+            'playbook': '{{ playbook_dir }}',
+            'frontend_directory': '{{ frontend_dir }}',
+            'playbook_directory': '{{ playbook_dir }}',
+            'GCP Project ID': '{{ gcp_project_id }}',
+            'GCS Bucket Name': '{{ gcs_bucket_name }}'
+          }
+
+    # =========================================
+    # Validate Required Inputs
+    # =========================================
+    - name: Validate required inputs are provided
+      ansible.builtin.assert:
+        that:
+          - gcs_bucket_name is defined
+          - gcs_bucket_name != ""
+        fail_msg: >
+          Required inputs missing.
+          Ensure gcs_bucket_name is passed as JSON via --extra-vars.
+
+    # =========================================
+    # Build Frontend
+    # =========================================
+    - name: Install Node dependencies (clean, reproducible)
+      community.general.npm:
+        path: "{{ frontend_dir }}"
+        state: present
+        production: false
+        ci: true
+
+    - name: Build Vite app for GCP
+      ansible.builtin.shell: npm run build_gcp
+      args:
+        chdir: "{{ frontend_dir }}"
+      register: build_result
+
+    - name: Display build output
+      ansible.builtin.debug:
+        msg: "{{ build_result.stdout_lines }}"
+
+    - name: Confirm build dir exists
+      ansible.builtin.stat:
+        path: "{{ build_dir }}"
+      register: build_stat
+
+    - name: Fail if build output missing
+      ansible.builtin.fail:
+        msg: "Build dir {{ build_dir }} not found. Check build step or paths."
+      when: not build_stat.stat.exists
+
+    # =========================================
+    # Upload to Google Cloud Storage
+    # =========================================
+    - name: Install Google Cloud Storage Python SDK
+      ansible.builtin.pip:
+        name:
+          - google-cloud-storage
+          - google-auth
+        state: present
+
+    - name: Install gcloud CLI (for gsutil)
+      ansible.builtin.shell: |
+        if ! command -v gcloud &> /dev/null; then
+          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz
+          tar -xf google-cloud-cli-linux-x86_64.tar.gz
+          ./google-cloud-sdk/install.sh --quiet --usage-reporting=false --path-update=true
+          export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
+        fi
+        gcloud --version
+      args:
+        executable: /bin/bash
+      register: gcloud_install
+      changed_when: "'already installed' not in gcloud_install.stdout"
+
+    - name: Set Google Cloud project
+      ansible.builtin.shell: |
+        export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
+        gcloud config set project {{ gcp_project_id }}
+      args:
+        executable: /bin/bash
+      when: gcp_project_id is defined
+
+    - name: Upload dist/ to GCS (sync)
+      ansible.builtin.shell: |
+        export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
+
+        # Fast sync (deletes removed files too)
+        gsutil -m rsync -r -d "{{ build_dir }}/" "gs://{{ gcs_bucket_name }}/"
+      args:
+        executable: /bin/bash
+
+    - name: Fix cache headers (HTML no-cache; assets long-cache immutable)
+      ansible.builtin.shell: |
+        export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
+
+        # HTML should NOT be cached long-term
+        gsutil -m setmeta \
+          -h "Cache-Control:no-cache, max-age=0, must-revalidate" \
+          "gs://{{ gcs_bucket_name }}/index.html" \
+          "gs://{{ gcs_bucket_name }}/404.html" || true
+
+        # Hashed build assets SHOULD be cached long-term
+        gsutil -m setmeta \
+          -h "Cache-Control:public, max-age=31536000, immutable" \
+          "gs://{{ gcs_bucket_name }}/assets/**" || true
+      args:
+        executable: /bin/bash
+
+    - name: Fix content-types for common static files (optional hardening)
+      ansible.builtin.shell: |
+        export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
+
+        gsutil -m setmeta -h "Content-Type:text/css; charset=utf-8" \
+          "gs://{{ gcs_bucket_name }}/assets/*.css" || true
+
+        gsutil -m setmeta -h "Content-Type:application/javascript; charset=utf-8" \
+          "gs://{{ gcs_bucket_name }}/assets/*.js" || true
+
+        gsutil -m setmeta -h "Content-Type:text/html; charset=utf-8" \
+          "gs://{{ gcs_bucket_name }}/index.html" \
+          "gs://{{ gcs_bucket_name }}/404.html" || true
+      args:
+        executable: /bin/bash
+
+    - name: Invalidate Cloud CDN cache
+      ansible.builtin.shell: |
+        gcloud compute url-maps invalidate-cdn-cache subhamay-crc-website-url-map \
+          --path "/*"
+      args:
+        executable: /bin/bash
+
+    # =========================================
+    # Deployment Success Confirmation
+    # =========================================
+    - name: Display deployment success message
+      ansible.builtin.debug:
+        msg: |
+          ✅ Cloud Resume Website Deployment Successful!
+
+          📦 Bucket: {{ gcs_bucket_name }}
+          🌐 URL: https://resume.subhamay.com/
+          🕒 Deployed at: {{ lookup('pipe', 'date -u +%Y-%m-%dT%H:%M:%SZ') }}
+
+          ✔ Frontend build completed
+          ✔ Files uploaded to Google Cloud Storage
+          ✔ Cache headers applied correctly
+          ✔ Cloud CDN cache invalidated
+
+    - name: Gather minimal facts for timestamp
+      ansible.builtin.setup:
+        gather_subset:
+          - min
+
+    - name: Display deployment success message
+      ansible.builtin.debug:
+        msg: |
+          ✅ Cloud Resume Website Deployment Successful!
+
+          📦 Bucket: {{ gcs_bucket_name }}
+          🌐 URL: https://resume.subhamay.com/
+
+
+

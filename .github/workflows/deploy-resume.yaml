@@ -5,24 +5,121 @@ run-name: >
 on:
   workflow_dispatch:
     inputs:
-      cloud-provider:
-        description: "Choose the cloud provider"
-        required: true
-        type: choice
-        options:
-          - aws
-          - gcp
-          - azure
-        default: aws
+      s3-bucket-name:
+        description: "AWS Target S3 bucket"
+        required: false
+        type: string
+        default: "subhamay-crc-website"
+      cloudfront-distribution-id:
+        description: "AWS CloudFront distribution ID"
+        required: false
+        type: string
+        default: "EW4CNVNO57XTH"
+      gcp-project-id:
+        description: "Google Project ID"
+        required: false
+        type: string
+        default: "cloud-resume-challenge-06902"
+      google-cloud-storage-bucket:
+        description: "Google Cloud Storage bucket name"
+        required: false
+        type: string
+        default: "subhamay-crc-website"
+      azure-storage-account-name:
+        description: "Azure Storage account name"
+        required: false
+        type: string
+        default: "subhamaycrcoxv15o"
 
 jobs:
-  run-playbook:
+  prepare-vars:
+    name: Prepare Ansible Variables
+    runs-on: ubuntu-latest
+    outputs:
+      ansible-extra-vars-aws: ${{ steps.set-vars.outputs.ansible-extra-vars-aws }}
+      ansible-extra-vars-gcp: ${{ steps.set-vars.outputs.ansible-extra-vars-gcp }}
+      ansible-extra-vars-azure: ${{ steps.set-vars.outputs.ansible-extra-vars-azure }}
+    steps:
+      - name: Set Ansible extra vars based on cloud provider
+        id: set-vars
+        run: |
+          # Prepare AWS variables
+          EXTRA_VARS_AWS=$(cat <<EOF
+          {
+            "s3_bucket_name": "${{ inputs.s3-bucket-name }}",
+            "cloudfront_distribution_id": "${{ inputs.cloudfront-distribution-id }}"
+          }
+          EOF
+          )
+          EXTRA_VARS_AWS=$(echo "$EXTRA_VARS_AWS" | jq -c .)
+          echo "ansible-extra-vars-aws=$EXTRA_VARS_AWS" >> $GITHUB_OUTPUT
+          echo "::notice::Prepared AWS vars: $EXTRA_VARS_AWS"
+          
+          # Prepare GCP variables
+          EXTRA_VARS_GCP=$(cat <<EOF
+          {
+            "gcs_bucket_name": "${{ inputs.google-cloud-storage-bucket }}",
+            "gcp_project_id": "${{ inputs.gcp-project-id }}"
+          }
+          EOF
+          )
+          EXTRA_VARS_GCP=$(echo "$EXTRA_VARS_GCP" | jq -c .)
+          echo "ansible-extra-vars-gcp=$EXTRA_VARS_GCP" >> $GITHUB_OUTPUT
+          echo "::notice::Prepared GCP vars: $EXTRA_VARS_GCP"
+          
+          # Prepare Azure variables
+          EXTRA_VARS_AZURE=$(cat <<EOF
+          {
+            "storage_account_name": "${{ inputs.azure-storage-account-name }}"
+          }
+          EOF
+          )
+          EXTRA_VARS_AZURE=$(echo "$EXTRA_VARS_AZURE" | jq -c .)
+          echo "ansible-extra-vars-azure=$EXTRA_VARS_AZURE" >> $GITHUB_OUTPUT
+          echo "::notice::Prepared Azure vars: $EXTRA_VARS_AZURE"
+
+  aws:
+    needs: prepare-vars
     uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
-      cloud-provider: ${{ inputs.cloud-provider }}
-      aws-region: us-east-1
-      python-version: "3.12"
-      ansible-extra-vars: "message=\"Hello from GitHub Actions!\"
-      ansible-playbook-path=frontend/playbook/deploy-resume-${{ inputs.cloud-provider }}.yaml"
+      cloud-provider: "aws"
+      aws-region: "${{ vars.AWS_REGION || 'us-east-1' }}"
+      ansible-playbook-path: "frontend/playbooks/aws/deploy-resume.yaml"
+      ansible-extra-vars: ${{ needs.prepare-vars.outputs.ansible-extra-vars-aws }}
     secrets:
-      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+      aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+
+  gcp:
+    needs: prepare-vars
+    uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
+    with:
+      cloud-provider: "gcp"
+      ansible-playbook-path: "frontend/playbooks/gcp/deploy-resume.yaml"
+      ansible-extra-vars: ${{ needs.prepare-vars.outputs.ansible-extra-vars-gcp }}
+    secrets:
+      gcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
+      gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+  azure:
+    needs: prepare-vars
+    uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
+    with:
+      cloud-provider: "azure"
+      ansible-playbook-path: "frontend/playbooks/azure/deploy-resume.yaml"
+      ansible-extra-vars: ${{ needs.prepare-vars.outputs.ansible-extra-vars-azure }}
+    secrets:
+      azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  success:
+    name: Deployment Successful
+    needs:
+      - aws
+      - gcp
+      - azure
+    if: ${{ needs.aws.result == 'success' && needs.gcp.result == 'success' && needs.azure.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: All Deployments Completed
+        run: echo "All deployment jobs have completed successfully."

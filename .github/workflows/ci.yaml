@@ -7,27 +7,11 @@ on:
       - 'main'
       - 'feature/**'
       - 'bug/**'
-    paths-ignore:
-      - 'README.md'
-      - '.github/**'
-      - 'CODEOWNERS'
-      - 'LICENSE'
-      - 'VERSION'
-      - 'CHANGELOG.md'
-      - 'CODE_OF_CONDUCT.md'
-      - 'CONTRIBUTING.md'
-      - '*.sh'
-      - '*.txt'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'install-summary.json'
-      - 'install-tools.log'
-      - '.gitignore'
-      - '.editorconfig'
-      - 'utils/**'
-      - '.pre-commit-config.yaml'
-      - '*.jpg'
-  workflow_dispatch:
+    paths:
+      - infra/aws/tf/**
+      - infra/gcp/tf/**
+      - infra/azure/tf/**
+
 
 permissions:
   contents: write
