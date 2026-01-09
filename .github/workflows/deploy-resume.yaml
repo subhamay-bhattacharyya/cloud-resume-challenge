@@ -16,7 +16,7 @@ on:
         type: string
         default: "EW4CNVNO57XTH"
       gcp-project-id:
-        description: "GCP Project ID"
+        description: "Google Project ID"
         required: false
         type: string
         default: "cloud-resume-challenge-06902"
