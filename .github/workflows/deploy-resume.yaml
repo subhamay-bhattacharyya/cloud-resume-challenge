@@ -53,7 +53,8 @@ jobs:
           # Prepare GCP variables
           EXTRA_VARS_GCP=$(cat <<EOF
           {
-            "gcs_bucket_name": "${{ inputs.google-cloud-storage-bucket }}"
+            "gcs_bucket_name": "${{ inputs.google-cloud-storage-bucket }}",
+            "gcp_project_id": "${{ vars.GCP_PROJECT_ID }}"
           }
           EOF
           )
