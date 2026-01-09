@@ -108,7 +108,7 @@
           --file "{{ item.src }}" \
           --content-type "$CONTENT_TYPE" \
           --content-cache-control "public, max-age=31536000" \
-          --auth-mode login \
+          --auth-mode key \
           --overwrite true
       args:
         executable: /bin/bash
