@@ -15,6 +15,11 @@ on:
         required: false
         type: string
         default: "EW4CNVNO57XTH"
+      gcp-project-id:
+        description: "GCP Project ID"
+        required: false
+        type: string
+        default: "cloud-resume-challenge-06902"
       google-cloud-storage-bucket:
         description: "Google Cloud Storage bucket name"
         required: false
@@ -54,7 +59,7 @@ jobs:
           EXTRA_VARS_GCP=$(cat <<EOF
           {
             "gcs_bucket_name": "${{ inputs.google-cloud-storage-bucket }}",
-            "gcp_project_id": "${{ vars.GCP_PROJECT_ID }}"
+            "gcp_project_id": "${{ inputs.gcp-project-id }}"
           }
           EOF
           )

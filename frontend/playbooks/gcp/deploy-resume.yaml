@@ -20,6 +20,7 @@
             'playbook': '{{ playbook_dir }}',
             'frontend_directory': '{{ frontend_dir }}',
             'playbook_directory': '{{ playbook_dir }}',
+            'GCP Project ID': '{{ gcp_project_id }}',
             'GCS Bucket Name': '{{ gcs_bucket_name }}'
           }
 
@@ -79,10 +80,10 @@
       google.cloud.gcp_storage_object:
         action: upload
         bucket: "{{ gcs_bucket_name }}"
-        src: "{{ item.path }}"
-        dest: "{{ item.path | regex_replace('^' + build_dir + '/', '') }}"
+        src: "{{ item.src }}"
+        dest: "{{ item.path }}"
         auth_kind: application
-        project: "{{ gcp_project_id | default(lookup('env', 'GCP_PROJECT') | default(omit)) }}"
+        project: "{{ gcp_project_id | default(omit) }}"
       with_filetree: "{{ build_dir }}"
       when: item.state == 'file'
       register: upload_result
