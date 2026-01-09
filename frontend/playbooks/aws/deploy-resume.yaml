@@ -5,9 +5,9 @@
   gather_facts: false
 
   vars:
-    # Default frontend directory
-    frontend_dir: "{{ playbook_dir }}/frontend"
-    build_dir: "{{ frontend_dir }}/dist"
+    # Default frontend directory - playbook is in frontend/playbooks/aws, so go up 2 levels
+    frontend_dir: "{{ playbook_dir }}/../../"
+    build_dir: "{{ frontend_dir }}"
 
   tasks:
     # =========================================
