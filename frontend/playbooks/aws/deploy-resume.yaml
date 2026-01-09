@@ -14,6 +14,7 @@
     # =========================================
     - name: Print deployment info as JSON string
       ansible.builtin.debug:
+        msg: >
           {
             'playbook': '{{ playbook_dir }}',
             'frontend_directory': '{{ frontend_dir }}',
