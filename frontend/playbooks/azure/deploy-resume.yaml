@@ -68,36 +68,47 @@
     # =========================================
     # Upload to Azure Blob Storage
     # =========================================
-    - name: Install Azure Python SDK for Ansible
-      ansible.builtin.pip:
-        name:
-          - azure-storage-blob>=12.0.0
-          - azure-identity
-          - azure-mgmt-storage
-          - azure-mgmt-resource
-        state: present
+    - name: Install Azure CLI
+      ansible.builtin.shell: |
+        if ! command -v az &> /dev/null; then
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+        fi
+        az --version
+      args:
+        executable: /bin/bash
+      register: az_install
+      changed_when: "'already installed' not in az_install.stdout"
 
-    - name: Define content type mapping
-      ansible.builtin.set_fact:
-        content_type_map:
-          '.html': 'text/html'
-          '.css': 'text/css'
-          '.js': 'application/javascript'
-          '.json': 'application/json'
-          '.webp': 'image/webp'
-          '.png': 'image/png'
-          '.jpg': 'image/jpeg'
-          '.jpeg': 'image/jpeg'
-
-    - name: Upload files to Azure Blob Storage
-      azure.azcollection.azure_rm_storageblob:
-        resource_group: "{{ resource_group_name | default('crc-rg') }}"
-        storage_account_name: "{{ storage_account_name }}"
-        container: "$web"
-        blob: "{{ item.path }}"
-        src: "{{ item.src }}"
-        content_type: "{{ content_type_map[item.path | regex_search('\\.[^.]*$')] | default('application/octet-stream') }}"
-        cache_control: "public, max-age=31536000"
+    - name: Upload files to Azure Blob Storage with az CLI
+      ansible.builtin.shell: |
+        # Determine content type
+        case "{{ item.path }}" in
+          *.html) CONTENT_TYPE="text/html" ;;
+          *.css) CONTENT_TYPE="text/css" ;;
+          *.js) CONTENT_TYPE="application/javascript" ;;
+          *.json) CONTENT_TYPE="application/json" ;;
+          *.webp) CONTENT_TYPE="image/webp" ;;
+          *.png) CONTENT_TYPE="image/png" ;;
+          *.jpg|*.jpeg) CONTENT_TYPE="image/jpeg" ;;
+          *.svg) CONTENT_TYPE="image/svg+xml" ;;
+          *.ico) CONTENT_TYPE="image/x-icon" ;;
+          *.woff) CONTENT_TYPE="font/woff" ;;
+          *.woff2) CONTENT_TYPE="font/woff2" ;;
+          *.ttf) CONTENT_TYPE="font/ttf" ;;
+          *) CONTENT_TYPE="application/octet-stream" ;;
+        esac
+        
+        az storage blob upload \
+          --account-name "{{ storage_account_name }}" \
+          --container-name "\$web" \
+          --name "{{ item.path }}" \
+          --file "{{ item.src }}" \
+          --content-type "$CONTENT_TYPE" \
+          --content-cache-control "public, max-age=31536000" \
+          --auth-mode login \
+          --overwrite
+      args:
+        executable: /bin/bash
       with_filetree: "{{ build_dir }}"
       when: item.state == 'file'
       register: upload_result
