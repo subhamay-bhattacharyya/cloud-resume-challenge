@@ -118,8 +118,8 @@ jobs:
       - aws
       - gcp
       - azure
+    if: ${{ needs.aws.result == 'success' && needs.gcp.result == 'success' && needs.azure.result == 'success' }}
     runs-on: ubuntu-latest
-    if: ${{ always() }}
     steps:
       - name: All Deployments Completed
         run: echo "All deployment jobs have completed successfully."

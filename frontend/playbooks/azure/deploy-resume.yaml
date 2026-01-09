@@ -81,7 +81,7 @@
 
     - name: Upload files to Azure Blob Storage with az CLI
       ansible.builtin.shell: |
-        set -e
+        set -x
         
         # Determine content type
         case "{{ item.path }}" in
@@ -110,14 +110,24 @@
           --content-type "$CONTENT_TYPE" \
           --content-cache-control "public, max-age=31536000" \
           --auth-mode login \
-          --overwrite true
+          --overwrite true 2>&1 || {
+            echo "Upload failed for {{ item.path }}"
+            echo "Account: {{ storage_account_name }}"
+            echo "Container: \$web"
+            echo "File: {{ item.src }}"
+            exit 1
+          }
       args:
         executable: /bin/bash
       with_filetree: "{{ build_dir }}"
       when: item.state == 'file'
       register: upload_result
-      failed_when: upload_result.rc != 0
-      ignore_errors: false
+
+    - name: Display failed uploads
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop: "{{ upload_result.results | default([]) }}"
+      when: item.rc is defined and item.rc != 0
 
     - name: Display upload results
       ansible.builtin.debug:
