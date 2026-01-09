@@ -127,7 +127,10 @@
       ansible.builtin.debug:
         msg: "{{ item }}"
       loop: "{{ upload_result.results | default([]) }}"
-      when: item.rc is defined and item.rc != 0
+      when: 
+        - item.rc is defined 
+        - item.rc != 0
+        - not item.skipped | default(false)
 
     - name: Display upload results
       ansible.builtin.debug:
