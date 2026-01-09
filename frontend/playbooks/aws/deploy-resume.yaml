@@ -14,10 +14,10 @@
     # =========================================
     - name: Print deployment info as JSON string
       ansible.builtin.debug:
-        msg: "{{ {
+         {
           'frontend_directory': frontend_dir,
           'playbook_directory': playbook_dir
-        } | to_json }}"
+        }
 
     # =========================================
     # Validate Required Inputs
