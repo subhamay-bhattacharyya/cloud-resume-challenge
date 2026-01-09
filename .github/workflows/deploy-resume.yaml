@@ -105,7 +105,7 @@ jobs:
       
       - name: Run Ansible playbook
         id: run-ansible-playbook-aws
-        if: ${ inputs.cloud-provider == 'aws' }
+        if: ${{ inputs.cloud-provider == 'aws' }}
         run: |
           ansible-playbook frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml \
             --extra-vars '{
