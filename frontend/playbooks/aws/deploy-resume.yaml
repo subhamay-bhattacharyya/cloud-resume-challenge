@@ -36,21 +36,27 @@
           Ensure s3_bucket_name and cloudfront_distribution_id
           are passed as JSON via --extra-vars.
 
-    # =========================================
-    # Print Inputs in Tabular Format
-    # =========================================
-    # - name: Display deployment inputs as JSON
-    #   debug:
-    #     msg: |
-    #       S3 Bucket Name: {{ s3_bucket_name }}
-    #       CloudFront Distribution ID: {{ cloudfront_distribution_id }}
+    - name: Install Node dependencies (clean, reproducible)
+      community.general.npm:
+        path: "{{ frontend_dir }}"
+        state: present
+        production: false
+        ci: true
 
-    # - name: Display deployment inputs (table)
-    #   debug:
-    #     msg: |
-    #       S3 Bucket Name : {{ s3_bucket_name }}
-    #       CloudFront Distribution ID  : {{ cloudfront_distribution_id }}
-    
+    - name: Build Vite app
+      shell: npm run build_aws
+      args:
+        chdir: "{{ frontend_dir }}"
+
+    - name: Confirm build dir exists
+      ansible.builtin.stat:
+        path: "{{ build_dir }}"
+      register: build_stat
+
+    - name: Fail if build output missing
+      ansible.builtin.fail:
+        msg: "Build dir {{ build_dir }} not found. Check build step or paths."
+      when: not build_stat.stat.exists
     # =========================================
     # Validate Required Variables
     # =========================================
