@@ -11,6 +11,13 @@ on:
       - infra/aws/tf/**
       - infra/gcp/tf/**
       - infra/azure/tf/**
+  pull_request:
+    branches: [ main ]
+    paths:
+      - infra/aws/tf/**
+      - infra/gcp/tf/**
+      - infra/azure/tf/**
+      - frontend/**
 
 
 permissions:
