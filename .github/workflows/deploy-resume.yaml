@@ -73,7 +73,6 @@ jobs:
           echo "::notice::Prepared Azure vars: $EXTRA_VARS_AZURE"
 
   aws:
-    if : github.event.inputs['cloud-provider'] == 'aws'
     needs: prepare-vars
     uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
@@ -85,7 +84,6 @@ jobs:
       aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
 
   gcp:
-    if: github.event.inputs['cloud-provider'] == 'gcp'
     needs: prepare-vars
     uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
@@ -97,7 +95,6 @@ jobs:
       gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
   azure:
-    if: github.event.inputs['cloud-provider'] == 'azure'
     needs: prepare-vars
     uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
@@ -108,3 +105,15 @@ jobs:
       azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
       azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
       azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  success:
+    name: Deployment Successful
+    needs:
+      - aws
+      - gcp
+      - azure
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: All Deployments Completed
+        run: echo "All deployment jobs have completed successfully."
