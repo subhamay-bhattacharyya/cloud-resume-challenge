@@ -90,7 +90,7 @@ jobs:
     with:
       cloud-provider: "aws"
       aws-region: "${{ vars.AWS_REGION || 'us-east-1' }}"
-      ansible-playbook-path: "frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml"
+      ansible-playbook-path: "frontend/playbooks/aws/deploy-resume.yaml"
       ansible-extra-vars: ${{ needs.prepare-vars.outputs.ansible-extra-vars }}
     secrets:
       aws-role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
@@ -101,11 +101,11 @@ jobs:
     uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
       cloud-provider: "gcp"
-      gcp-region: "${{ vars.GCP_REGION || 'us-central1' }}"
-      ansible-playbook-path: "frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml"
+      # gcp-region: "${{ vars.GCP_REGION || 'us-central1' }}"
+      ansible-playbook-path: "frontend/playbooks/gcp/deploy-resume.yaml"
       ansible-extra-vars: ${{ needs.prepare-vars.outputs.ansible-extra-vars }}
     secrets:
-      gcp-workload-identity-provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+      ggcp-wif-provider: ${{ secrets.GCP_WIF_PROVIDER }}
       gcp-service-account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
   azure:
@@ -114,8 +114,8 @@ jobs:
     uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@feature/GHA-0006-add-step-to-run-ansible-p
     with:
       cloud-provider: "azure"
-      azure-region: "${{ vars.AZURE_REGION || 'eastus' }}"
-      ansible-playbook-path: "frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml"
+      # azure-region: "${{ vars.AZURE_REGION || 'eastus' }}"
+      ansible-playbook-path: "frontend/playbooks/azure/deploy-resume.yaml"
       ansible-extra-vars: ${{ needs.prepare-vars.outputs.ansible-extra-vars }}
     secrets:
       azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
