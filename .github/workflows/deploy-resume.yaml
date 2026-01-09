@@ -1,4 +1,4 @@
-name: Deploy Cloud Resume Website (Fixed)
+name: Deploy Cloud Resume Website
 run-name: >
   Deploy resume to ${{ github.event.inputs['cloud-provider'] }} by ${{ github.actor }} on ${{ github.ref_name }}
 
