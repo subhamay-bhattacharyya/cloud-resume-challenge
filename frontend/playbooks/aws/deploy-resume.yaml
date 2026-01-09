@@ -66,10 +66,6 @@
           - botocore
         state: present
 
-    - name: Display build directory contents
-      ansible.builtin.debug:
-        msg: "{{ build_files.stdout_lines }}"
-
     - name: Sync static assets with long cache-control
       community.aws.s3_sync:
         bucket: "{{ s3_bucket_name }}"
