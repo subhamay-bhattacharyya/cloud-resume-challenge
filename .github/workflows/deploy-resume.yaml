@@ -42,7 +42,7 @@ jobs:
     with:
       cloud-provider: "aws"
       aws-region: "${{ vars.AWS_REGION || 'us-east-1' }}"
-      ansible-playbook-path: "infrastructure/aws-deploy.yml"
+      ansible-playbook-path: "frontend/playbook/${{ inputs.cloud-provider }}/deploy-resume.yaml"
       ansible-extra-vars: |
         {
           "s3_bucket_name": "${{ inputs.s3-bucket-name }}",
