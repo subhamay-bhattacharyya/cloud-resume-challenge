@@ -4,22 +4,22 @@
   connection: local
   gather_facts: false
 
-  vars:
-    # Default frontend directory
-    frontend_dir: "{{ ansible_env.PWD }}/frontend"
+  # vars:
+  #   # Default frontend directory
+  #   frontend_dir: "{{ ansible_env.PWD }}/frontend"
 
   tasks:
     # =========================================
     # Display Deployment Information
     # =========================================
-    - name: Display deployment information
-      debug:
-        msg: |
-          ========================================
-          🚀 DEPLOYMENT INFORMATION
-          ========================================
-          Frontend Directory: {{ frontend_dir }}
-          ========================================
+    # - name: Display deployment information
+    #   debug:
+    #     msg: |
+    #       ========================================
+    #       🚀 DEPLOYMENT INFORMATION
+    #       ========================================
+    #       Frontend Directory: {{ frontend_dir }}
+    #       ========================================
 
     # =========================================
     # Validate Required Inputs
