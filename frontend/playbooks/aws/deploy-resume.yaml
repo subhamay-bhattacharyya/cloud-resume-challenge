@@ -7,7 +7,7 @@
   vars:
     # Default frontend directory - playbook is in frontend/playbooks/aws, so go up 2 levels
     frontend_dir: "{{ playbook_dir }}/../../"
-    build_dir: "{{ frontend_dir }}"
+    build_dir: "{{ frontend_dir }}/dist"
 
   tasks:
     # =========================================
@@ -65,11 +65,6 @@
           - boto3
           - botocore
         state: present
-
-    - name: List files in build directory
-      ansible.builtin.command:
-        cmd: "find {{ build_dir }} -type f"
-      register: build_files
 
     - name: Display build directory contents
       ansible.builtin.debug:
