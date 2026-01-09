@@ -36,21 +36,36 @@ on:
         default: "subhamaycrcoxv15o"
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    outputs:
-      extra-vars: ${{ steps.prepare-ansible-vars.outputs.extra-vars }}
+  deploy-aws:
+    if : github.event.inputs['cloud-provider'] == 'aws'
+    uses: subhamay-bhattacharyya-gha/run-ansible-playbook-wf/.github/workflows/run-ansible-playbook.yaml@main
+    with:
+      cloud-provider: "aws"
+      aws-region: "${{ vars.AWS_REGION || 'us-east-1' }}"
+      ansible-playbook-path: "infrastructure/aws-deploy.yml"
+      ansible-extra-vars: |
+        {
+          "s3_bucket_name": "${{ inputs.s3-bucket-name }}",
+          "cloudfront_distribution_id": "${{ inputs.cloudfront-distribution-id }}"
+        }
+    secrets:
+      aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       extra-vars: ${{ steps.prepare-ansible-vars.outputs.extra-vars }}
 
-    steps:
-      - name: Prepare Ansible input extra variables
-        id: prepare-ansible-vars
-        run: |
-          EXTRA_VARS='{"aws":{"s3_bucket_name":"${{ inputs.s3-bucket-name }}","cloudfront_distribution_id":"${{ inputs.cloudfront-distribution-id }}"},"gcp":{"google_cloud_storage_bucket":"${{ inputs.google-cloud-storage-bucket }}"},"azure":{"azure_storage_account_name":"${{ inputs.azure-storage-account-name }}"}}'
-          echo "extra-vars=$EXTRA_VARS" >> $GITHUB_OUTPUT
+#     steps:
+#       - name: Prepare Ansible input extra variables
+#         id: prepare-ansible-vars
+#         run: |
+#           EXTRA_VARS='{"aws":{"s3_bucket_name":"${{ inputs.s3-bucket-name }}","cloudfront_distribution_id":"${{ inputs.cloudfront-distribution-id }}"},"gcp":{"google_cloud_storage_bucket":"${{ inputs.google-cloud-storage-bucket }}"},"azure":{"azure_storage_account_name":"${{ inputs.azure-storage-account-name }}"}}'
+#           echo "extra-vars=$EXTRA_VARS" >> $GITHUB_OUTPUT
 
-      - name: Print prepared Ansible extra variables
-        run: |
-          echo "Ansible Extra Vars: ${{ steps.prepare-ansible-vars.outputs.extra-vars }}"
+#       - name: Print prepared Ansible extra variables
+#         run: |
+#           echo "Ansible Extra Vars: ${{ steps.prepare-ansible-vars.outputs.extra-vars }}"
   #   permissions:
   #     id-token: write
   #     contents: read
@@ -103,15 +118,15 @@ jobs:
       #     workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
       #     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       
-      - name: Run Ansible playbook
-        id: run-ansible-playbook-aws
-        if: ${{ inputs.cloud-provider == 'aws' }}
-        run: |
-          ansible-playbook frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml \
-            --extra-vars '{
-                "s3_bucket_name": "${{ inputs.s3-bucket-name }}",
-                "cloudfront_distribution_id": "${{ inputs.cloudfront-distribution-id }}"
-            }'
+      # - name: Run Ansible playbook
+      #   id: run-ansible-playbook-aws
+      #   if: ${{ inputs.cloud-provider == 'aws' }}
+      #   run: |
+      #     ansible-playbook frontend/playbooks/${{ inputs.cloud-provider }}/deploy-resume.yaml \
+            # --extra-vars '{
+            #     "s3_bucket_name": "${{ inputs.s3-bucket-name }}",
+            #     "cloudfront_distribution_id": "${{ inputs.cloudfront-distribution-id }}"
+            # }'
       
       # - name: Deployment summary
       #   if: always()
