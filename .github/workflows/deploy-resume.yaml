@@ -34,20 +34,18 @@ on:
         required: false
         type: string
         default: "subhamaycrcoxv15o"
-    outputs:
-      extra-vars:
-        description: "The extra variables for Ansible"
-        value: ${{ steps.prepare-ansible-vars.outputs.extra-vars }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    outputs:
+      extra-vars: ${{ steps.prepare-ansible-vars.outputs.extra-vars }}
 
     steps:
       - name: Prepare Ansible input extra variables
         id: prepare-ansible-vars
         run: |
-          echo '{
+          EXTRA_VARS='{
               "deployment": {
                 "cloud_provider": "${{ inputs.cloud-provider }}",
                 "deployment_id": "${{ github.run_id }}",
@@ -65,7 +63,8 @@ jobs:
               "azure": {
                 "azure_storage_account_name": "${{ inputs.azure-storage-account-name }}"
               }
-            }' >> $GITHUB_ENV
+            }'
+          echo "extra-vars=$EXTRA_VARS" >> $GITHUB_OUTPUT
 
       - name: Print prepared Ansible extra variables
         run: |
