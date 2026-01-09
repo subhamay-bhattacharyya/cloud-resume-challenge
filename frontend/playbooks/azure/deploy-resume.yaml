@@ -68,21 +68,40 @@
     # =========================================
     # Upload to Azure Blob Storage
     # =========================================
-    - name: Install Azure CLI Python SDK
+    - name: Install Azure Python SDK for Ansible
       ansible.builtin.pip:
         name:
-          - azure-storage-blob
+          - azure-storage-blob>=12.0.0
           - azure-identity
+          - azure-mgmt-storage
+          - azure-mgmt-resource
         state: present
+
+    - name: Define content type mapping
+      ansible.builtin.set_fact:
+        content_type_map:
+          '.html': 'text/html'
+          '.css': 'text/css'
+          '.js': 'application/javascript'
+          '.json': 'application/json'
+          '.webp': 'image/webp'
+          '.png': 'image/png'
+          '.jpg': 'image/jpeg'
+          '.jpeg': 'image/jpeg'
+          '.svg': 'image/svg+xml'
+          '.ico': 'image/x-icon'
+          '.woff': 'font/woff'
+          '.woff2': 'font/woff2'
+          '.ttf': 'font/ttf'
 
     - name: Upload files to Azure Blob Storage
       azure.azcollection.azure_rm_storageblob:
         resource_group: "{{ resource_group_name | default('crc-rg') }}"
         storage_account_name: "{{ storage_account_name }}"
         container: "$web"
-        blob: "{{ item.path | regex_replace('^' + build_dir + '/', '') }}"
-        src: "{{ item.path }}"
-        content_type: "{{ item.path | regex_replace('.*\\.', '') | regex_replace('html', 'text/html') | regex_replace('css', 'text/css') | regex_replace('js', 'application/javascript') | regex_replace('json', 'application/json') | regex_replace('webp', 'image/webp') | regex_replace('png', 'image/png') | regex_replace('jpg|jpeg', 'image/jpeg') }}"
+        blob: "{{ item.path }}"
+        src: "{{ item.src }}"
+        content_type: "{{ content_type_map[item.path | regex_search('\\.[^.]*$')] | default('application/octet-stream') }}"
         cache_control: "public, max-age=31536000"
       with_filetree: "{{ build_dir }}"
       when: item.state == 'file'
